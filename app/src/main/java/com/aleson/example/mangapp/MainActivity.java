@@ -2,8 +2,9 @@ package com.aleson.example.mangapp;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.net.Uri;
+import android.app.WallpaperManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.io.IOException;
@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.aleson.example.mangapp.R.drawable.placeholder_image;
 import static com.aleson.example.mangapp.R.id.page;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView{
@@ -60,6 +61,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private void init(){
 
         imageView = (ImageView) findViewById(page);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_image);
+                    myWallpaperManager.setBitmap(bitmap);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         copyright = (TextView) findViewById(R.id.copyright);
@@ -117,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     }
 
     private void clear(){
-        Glide.with(mActivity).load(R.drawable.placeholder_image).into(imageView);
+        Glide.with(mActivity).load(placeholder_image).into(imageView);
         title.setText("");
         explanation.setText("");
         copyright.setText("");
