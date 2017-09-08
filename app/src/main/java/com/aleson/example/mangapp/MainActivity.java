@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             copyright.setText(model.getCopyright()+"©");
         if(model.getDate() != null) {
             android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("dd/MMMM/yyyy");
+            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMMM yyyy");
             try {
                 date.setText(outFormat.format(inFormat.parse(model.getDate())));
             } catch (ParseException e) {
