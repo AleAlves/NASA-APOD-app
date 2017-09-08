@@ -2,6 +2,8 @@ package com.aleson.example.mangapp;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.io.IOException;
@@ -22,6 +25,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.aleson.example.mangapp.R.id.page;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView{
 
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     private void init(){
 
-        imageView = (ImageView) findViewById(R.id.page);
+        imageView = (ImageView) findViewById(page);
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         copyright = (TextView) findViewById(R.id.copyright);
@@ -108,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     }
 
     private void onInvalidDate(){
+        clear();
+    }
+
+    private void clear(){
         Glide.with(mActivity).load(R.drawable.placeholder_image).into(imageView);
         title.setText("");
         explanation.setText("");
@@ -116,14 +125,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     }
 
     private void loadAPOD(APODModel model){
-        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
-        if(model.getTitle() != null)
+        if(!model.getMedia_type().contains("video")){
+            Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+        }
+        if (model.getTitle() != null)
             title.setText(model.getTitle());
-        if(model.getExplanation() != null)
+        if (model.getExplanation() != null)
             explanation.setText(model.getExplanation());
-        if(model.getCopyright() != null)
-            copyright.setText(model.getCopyright()+"©");
-        if(model.getDate() != null) {
+        if (model.getCopyright() != null)
+            copyright.setText(model.getCopyright() + "©");
+        if (model.getDate() != null) {
             android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
             android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMMM yyyy");
             try {
@@ -144,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                     calendarAgendada.set(year, monthOfYear, dayOfMonth);
                     dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
                     date.setText(dataSelecionada);
+                    clear();
                     Service service = new Service(mActivity, key, dataSelecionada);
                     linearLayoutLoading.setVisibility(View.VISIBLE);
                     scrollView.setVisibility(View.GONE);
