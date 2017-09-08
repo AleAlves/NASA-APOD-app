@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         service.execute();
     }
 
+    private float xCoOrdinate, yCoOrdinate;
+
     private void init(){
 
         imageView = (ImageView) findViewById(page);
@@ -69,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             @Override
             public void onClick(View v) {
 
+                Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
+                findViewById(R.id.page).startAnimation(shake);
 
                 Target target = new Target() {
                     @Override
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
-
+                        Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -113,11 +119,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     Bitmap bitmap = null;
 
     private void setBackground(Bitmap bitmap){
-        WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
         try {
+            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
             myWallpaperManager.setBitmap(bitmap);
-            Toast.makeText(mActivity, "Done",Toast.LENGTH_SHORT);
+            Toast.makeText(mActivity, "Set as background",Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
+            Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
