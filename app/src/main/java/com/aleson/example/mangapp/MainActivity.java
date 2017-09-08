@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.WallpaperManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.io.IOException;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private Calendar calendarAgendada;
     private String dataSelecionada;
     private String key;
+    private static String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +68,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_image);
-                    myWallpaperManager.setBitmap(bitmap);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+
+
+                Target target = new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        setBackground(bitmap);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                };
+
+                Picasso.with(mActivity).load(url).into(target);
+
             }
         });
         title = (TextView) findViewById(R.id.title);
@@ -91,6 +108,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                 getDatePickerDialog.show();
             }
         });
+    }
+
+    Bitmap bitmap = null;
+
+    private void setBackground(Bitmap bitmap){
+        WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+        try {
+            myWallpaperManager.setBitmap(bitmap);
+            Toast.makeText(mActivity, "Done",Toast.LENGTH_SHORT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String loadJSONFromAsset(String file) {
@@ -139,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     }
 
     private void loadAPOD(APODModel model){
+        url = model.getUrl();
         if(!model.getMedia_type().contains("video")){
             Glide.with(mActivity).load(model.getHdurl()).into(imageView);
         }
