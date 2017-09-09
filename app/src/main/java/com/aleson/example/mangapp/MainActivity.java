@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private String dataSelecionada;
     private String key;
     private static String url = "";
+    private boolean lockWallpaper = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,27 +96,34 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
-                findViewById(R.id.page).startAnimation(shake);
+                if(!lockWallpaper) {
+                    Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
+                    findViewById(R.id.page).startAnimation(shake);
 
-                Target target = new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        setBackground(bitmap);
-                    }
+                    Target target = new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            setBackground(bitmap);
+                        }
 
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
-                    }
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                            Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                    }
-                };
+                        }
 
-                Picasso.with(mActivity).load(url).into(target);
+                    };
+
+                    Picasso.with(mActivity).load(url).into(target);
+
+                }
+                else{
+                    Toast.makeText(mActivity, "Already set as Wallpaper", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -131,8 +139,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private void setBackground(Bitmap bitmap){
         try {
             WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-            myWallpaperManager.setBitmap(bitmap);
-            Toast.makeText(mActivity, "Set as background",Toast.LENGTH_SHORT).show();
+            if(bitmap != null && myWallpaperManager.isWallpaperSupported()) {
+                myWallpaperManager.setBitmap(bitmap);
+                Toast.makeText(mActivity, "Set as Wallpaper", Toast.LENGTH_SHORT).show();
+                lockWallpaper = true;
+            }
+            else{
+                Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
+            }
         } catch (IOException e) {
             Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -157,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     @Override
     public void onSucess(String response) {
+        lockWallpaper = false;
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
         Gson gson = new Gson();
