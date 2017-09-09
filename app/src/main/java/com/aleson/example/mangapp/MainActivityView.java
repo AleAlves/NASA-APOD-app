@@ -6,4 +6,6 @@ package com.aleson.example.mangapp;
 
 public interface MainActivityView {
     void onSucess(String response);
+
+    void onError(String response);
 }

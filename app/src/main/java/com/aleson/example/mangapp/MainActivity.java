@@ -91,7 +91,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
+                String s = randomDate.getRandomDate();
+                clear();
+                date.setText(s);
+                dataSelecionada = s;
+                Service service = new Service(mActivity, key, dataSelecionada);
+                linearLayoutLoading.setVisibility(View.VISIBLE);
+                scrollView.setVisibility(View.GONE);
+                service.execute();
             }
         });
 
@@ -182,6 +190,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         }
     }
 
+    @Override
+    public void onError(String response) {
+        lockWallpaper = false;
+        scrollView.setVisibility(View.VISIBLE);
+        linearLayoutLoading.setVisibility(View.GONE);
+        clear();
+        date.setText("Try again another day now");
+    }
+
     private void onInvalidDate(){
         clear();
     }
@@ -245,6 +262,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         }
         if(dateFormat != null)
         getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
+
+        String string_date = "1995-06-16";
+        long dateLong = 0;
+
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date d = f.parse(string_date);
+            dateLong = d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        getDatePickerDialog.getDatePicker().setMinDate(dateLong);
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DAY_OF_MONTH, 1);
         getDatePickerDialog.setTitle("data");

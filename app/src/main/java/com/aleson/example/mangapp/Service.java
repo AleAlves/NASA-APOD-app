@@ -20,6 +20,7 @@ public class Service extends AsyncTask<URL, Integer, String>{
     String key;
     String date;
 
+
     public Service(Activity mainActivityView, String key, String date){
         this.mainActivityView = (MainActivityView) mainActivityView;
         this.key = key;
@@ -30,7 +31,7 @@ public class Service extends AsyncTask<URL, Integer, String>{
     protected String doInBackground(URL... params) {
         try {
             http = new HttpHelper();
-            String json = http.doGet(url+key+"&date="+date);
+             String json = http.doGet(url+key+"&date="+date);
             return json;
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,6 +41,11 @@ public class Service extends AsyncTask<URL, Integer, String>{
 
     @Override
     protected void onPostExecute(String s) {
-        mainActivityView.onSucess(s);
+        if(s.contains("Internal Service Error")){
+            mainActivityView.onError(s);
+        }
+        else {
+            mainActivityView.onSucess(s);
+        }
     }
 }
