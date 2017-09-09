@@ -19,6 +19,12 @@
             android:id="@+id/video"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/wallpaper_set"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -31,7 +37,7 @@
             android:id="@+id/copyright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
+            android:textSize="8dp"
             android:padding="4dp"
             android:text=""
             android:singleLine="true"/>

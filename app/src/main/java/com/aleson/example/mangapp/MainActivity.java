@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.WallpaperManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,8 +20,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.io.IOException;
@@ -37,6 +37,7 @@ import static com.aleson.example.mangapp.R.id.page;
 public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     private ImageView imageView;
+    private ImageView imageViewWallpaperSet;
     private TextView title, copyright, date;
     private JustifiedTextView explanation;
     private LinearLayout linearLayoutLoading;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private void init(){
 
         imageView = (ImageView) findViewById(page);
+        imageViewWallpaperSet = (ImageView) findViewById(R.id.wallpaper_set);
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         copyright = (TextView) findViewById(R.id.copyright);
@@ -97,28 +99,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             @Override
             public void onClick(View v) {
                 if(!lockWallpaper) {
-                    Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
-                    findViewById(R.id.page).startAnimation(shake);
-
-                    Target target = new Target() {
+                    Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
                         @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        public void onSuccess() {
+                            BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
+                            Bitmap bitmap = drawable.getBitmap();
                             setBackground(bitmap);
                         }
 
                         @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
+                        public void onError() {
                             Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
                         }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-
-                    };
-
-                    Picasso.with(mActivity).load(url).into(target);
+                    });
 
                 }
                 else{
@@ -138,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     private void setBackground(Bitmap bitmap){
         try {
+            Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
+            findViewById(R.id.page).startAnimation(shake);
             WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
             if(bitmap != null && myWallpaperManager.isWallpaperSupported()) {
                 myWallpaperManager.setBitmap(bitmap);
@@ -212,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             copyright.setText(model.getCopyright() + "©");
         if (model.getDate() != null) {
             android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd M yyyy");
+            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
             try {
                 date.setText(outFormat.format(inFormat.parse(model.getDate())));
             } catch (ParseException e) {
