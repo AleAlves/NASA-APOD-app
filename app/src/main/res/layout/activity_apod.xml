@@ -38,41 +38,80 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="4dp">
-
-        <ImageButton
-            android:id="@+id/imagebutton_calendar"
-            android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_calendario"
-            android:background="@null"
-            android:foreground="?attr/selectableItemBackground"
-            android:scaleType="fitCenter" />
+            android:orientation="vertical"
+            android:gravity="left"
+            android:padding="4dp"
+            android:layout_marginLeft="5dp">
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="4dp">
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/image_button_wallpaper"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_image_black_24dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wallpaper"
+                android:textSize="10dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:text=""
-            android:padding="4dp"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="4dp">
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/image_button_calendar"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_today_black_24dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quarta, 25 ago 1993"
+                android:textSize="10dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:padding="4dp"
+            android:layout_marginRight="5dp">
+
+            <ImageButton
+                android:id="@+id/image_button_random"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_casino_black_24dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="random"
+                android:textSize="10dp"/>
+        </LinearLayout>
+    </FrameLayout>
     <View
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"

@@ -40,11 +40,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private TextView title, copyright, date;
     private JustifiedTextView explanation;
     private LinearLayout linearLayoutLoading;
-    private LinearLayout main;
     private ScrollView scrollView;
     private Activity mActivity;
     private DatePickerDialog getDatePickerDialog;
-    private ImageButton imagebuttonCalendar;
+    private ImageButton imageButtonCalendar;
+    private ImageButton imageButtonRandom;
+    private ImageButton imageButtonWallpaper;
     private Calendar calendarAgendada;
     private String dataSelecionada;
     private String key;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         setContentView(R.layout.activity_main);
         mActivity = this;
         init();
+        initListeners();
         Gson gson = new Gson();
         ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
         this.key = config.getKey();
@@ -64,15 +66,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         service.execute();
     }
 
-    private float xCoOrdinate, yCoOrdinate;
-
     private void init(){
 
         imageView = (ImageView) findViewById(page);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        title = (TextView) findViewById(R.id.title);
+        explanation = (JustifiedTextView) findViewById(R.id.explanation);
+        copyright = (TextView) findViewById(R.id.copyright);
+        linearLayoutLoading = (LinearLayout) findViewById(R.id.loading);
+        scrollView = (ScrollView) findViewById(R.id.main);
+        montarDatePickerDialog();
+        date = (TextView) findViewById(R.id.date);
+        imageButtonCalendar = (ImageButton) findViewById(R.id.image_button_calendar);
+        imageButtonRandom = (ImageButton) findViewById(R.id.image_button_random);
+        imageButtonWallpaper = (ImageButton) findViewById(R.id.image_button_wallpaper);
+        calendarAgendada = Calendar.getInstance();
+        dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
+        date.setText(dataSelecionada);
+    }
+
+    private void initListeners(){
+        imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
                 findViewById(R.id.page).startAnimation(shake);
 
@@ -94,29 +116,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                 };
 
                 Picasso.with(mActivity).load(url).into(target);
-
             }
         });
-        title = (TextView) findViewById(R.id.title);
-        explanation = (JustifiedTextView) findViewById(R.id.explanation);
-        copyright = (TextView) findViewById(R.id.copyright);
-        linearLayoutLoading = (LinearLayout) findViewById(R.id.loading);
-        scrollView = (ScrollView) findViewById(R.id.main);
-        montarDatePickerDialog();
-        date = (TextView) findViewById(R.id.date);
-        imagebuttonCalendar = (ImageButton) findViewById(R.id.imagebutton_calendar);
-        calendarAgendada = Calendar.getInstance();
-        dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
-        date.setText(dataSelecionada);
-        imagebuttonCalendar.setOnClickListener(new View.OnClickListener() {
+
+        imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getDatePickerDialog.show();
             }
         });
-    }
 
-    Bitmap bitmap = null;
+    }
 
     private void setBackground(Bitmap bitmap){
         try {
@@ -187,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             copyright.setText(model.getCopyright() + "©");
         if (model.getDate() != null) {
             android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMMM yyyy");
+            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd M yyyy");
             try {
                 date.setText(outFormat.format(inFormat.parse(model.getDate())));
             } catch (ParseException e) {
