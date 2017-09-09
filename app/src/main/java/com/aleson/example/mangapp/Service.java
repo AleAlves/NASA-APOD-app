@@ -20,6 +20,7 @@ public class Service extends AsyncTask<URL, Integer, String>{
     String key;
     String date;
 
+    
     public Service(Activity mainActivityView, String key, String date){
         this.mainActivityView = (MainActivityView) mainActivityView;
         this.key = key;
