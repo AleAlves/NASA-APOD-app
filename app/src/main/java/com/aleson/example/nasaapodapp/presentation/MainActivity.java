@@ -177,23 +177,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void onSucess(ApodModel model) {
-//        lockWallpaper = false;
-//        scrollView.setVisibility(View.VISIBLE);
-//        linearLayoutLoading.setVisibility(View.GONE);
-//
-//        if(model != null) {
-//            if(model.getCode() != null && model.getCode().contains("400")){
-//                onInvalidDate();
-//            }
-//            else{
-//                loadAPOD(model);
-//            }
-//
-//        }
-    }
-
-    @Override
     public void onError(String response) {
         lockWallpaper = false;
         scrollView.setVisibility(View.VISIBLE);

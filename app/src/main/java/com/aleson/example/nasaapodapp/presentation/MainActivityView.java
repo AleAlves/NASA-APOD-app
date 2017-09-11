@@ -5,8 +5,6 @@ import com.aleson.example.nasaapodapp.domain.ApodModel;
 
 public interface MainActivityView {
 
-    void onSucess(ApodModel response);
-
     void onError(String response);
 
     void onServiceError();

@@ -8,9 +8,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by Santander on 11/09/17.
- */
 
 public class Config {
 

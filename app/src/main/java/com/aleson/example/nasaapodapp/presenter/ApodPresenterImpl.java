@@ -5,10 +5,6 @@ import android.app.Activity;
 import com.aleson.example.nasaapodapp.repository.ApodRepository;
 import com.aleson.example.nasaapodapp.repository.ApodRepositoryImpl;
 
-/**
- * Created by Santander on 11/09/17.
- */
-
 public class ApodPresenterImpl implements ApodPresenter {
 
     private String date;
