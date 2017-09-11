@@ -18,7 +18,7 @@ public class ApodRepositoryImpl implements ApodRepository {
     }
 
     @Override
-    public void requestData(Activity mActivity, String date) {
+    public void requestData(String date) {
         Service service = new Service(mActivity, date, this);
         service.execute();
     }
@@ -50,6 +50,6 @@ public class ApodRepositoryImpl implements ApodRepository {
     @Override
     public void serviceError() {
         mainActivityView.onFinishLoad();
-        mainActivityView.onError("");
+        mainActivityView.onServiceError();
     }
 }

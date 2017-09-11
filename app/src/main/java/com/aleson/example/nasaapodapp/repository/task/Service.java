@@ -47,12 +47,12 @@ public class Service extends AsyncTask<URL, Integer, String>{
         if(s == null){
             apodRepository.serviceError();
         }
-        else
-            if(s.contains("Internal Service Error")){
+        else {
+            if (s.contains("Internal Service Error")) {
                 apodRepository.onError(s);
-            }
-            else {
+            } else {
                 apodRepository.onSucess(s);
             }
+        }
     }
 }
