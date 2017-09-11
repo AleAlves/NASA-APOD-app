@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MangApp.iml" filepath="$PROJECT_DIR$/MangApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/NASA-APOD-app.iml" filepath="$PROJECT_DIR$/NASA-APOD-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NASA-APOD-app.iml" filepath="$PROJECT_DIR$/NASA-APOD-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

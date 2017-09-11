@@ -1,4 +1,4 @@
-package com.aleson.example.mangapp;
+package com.aleson.example.nasaapodapp.utils;
 
 import java.util.Random;
 

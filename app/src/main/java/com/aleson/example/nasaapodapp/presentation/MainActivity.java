@@ -1,4 +1,4 @@
-package com.aleson.example.mangapp;
+package com.aleson.example.nasaapodapp.presentation;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -18,6 +18,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aleson.example.nasaapodapp.R;
+import com.aleson.example.nasaapodapp.domain.ApodModel;
+import com.aleson.example.nasaapodapp.domain.ConfigModel;
+import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
+import com.aleson.example.nasaapodapp.presenter.ApodPresenterImpl;
+import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
@@ -31,10 +37,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.aleson.example.mangapp.R.drawable.placeholder_image;
-import static com.aleson.example.mangapp.R.id.page;
+import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
+import static com.aleson.example.nasaapodapp.R.id.page;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView{
+public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     private ImageView imageView;
     private ImageView imageViewWallpaperSet;
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private String key;
     private static String url = "";
     private boolean lockWallpaper = false;
+    private ApodPresenter apodPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +67,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         mActivity = this;
         init();
         initListeners();
-        Gson gson = new Gson();
-        ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
-        this.key = config.getKey();
-        Service service = new Service(mActivity, key, dataSelecionada);
-        linearLayoutLoading.setVisibility(View.VISIBLE);
-        service.execute();
+        config();
+        apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
+        apodPresenter.getTodayApod();
     }
 
     private void init(){
@@ -91,15 +95,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onLoading();
                 RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
-                String s = randomDate.getRandomDate();
-                clear();
-                date.setText(s);
-                dataSelecionada = s;
-                Service service = new Service(mActivity, key, dataSelecionada);
-                linearLayoutLoading.setVisibility(View.VISIBLE);
-                scrollView.setVisibility(View.GONE);
-                service.execute();
+                apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
         });
 
@@ -135,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             }
         });
 
+    }
+
+    private void config(){
+        Gson gson = new Gson();
+        ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
+        this.key = config.getKey();
     }
 
     private void setBackground(Bitmap bitmap){
@@ -173,21 +177,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     }
 
     @Override
-    public void onSucess(String response) {
-        lockWallpaper = false;
-        scrollView.setVisibility(View.VISIBLE);
-        linearLayoutLoading.setVisibility(View.GONE);
-        Gson gson = new Gson();
-        APODModel model = gson.fromJson(response, APODModel.class);
-        if(model != null) {
-            if(model.getCode() != null && model.getCode().contains("400")){
-                onInvalidDate();
-            }
-            else{
-                loadAPOD(model);
-            }
-
-        }
+    public void onSucess(ApodModel model) {
+//        lockWallpaper = false;
+//        scrollView.setVisibility(View.VISIBLE);
+//        linearLayoutLoading.setVisibility(View.GONE);
+//
+//        if(model != null) {
+//            if(model.getCode() != null && model.getCode().contains("400")){
+//                onInvalidDate();
+//            }
+//            else{
+//                loadAPOD(model);
+//            }
+//
+//        }
     }
 
     @Override
@@ -199,23 +202,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         date.setText("Try again another day now");
     }
 
-    private void onInvalidDate(){
+    @Override
+    public void onServiceError() {
         clear();
     }
 
-    private void clear(){
-        Glide.with(mActivity).load(placeholder_image).into(imageView);
-        title.setText("");
-        explanation.setText("");
-        copyright.setText("");
-        date.setText("");
+    @Override
+    public void onLoading() {
+        scrollView.setVisibility(View.GONE);
+        linearLayoutLoading.setVisibility(View.VISIBLE);
     }
 
-    private void loadAPOD(APODModel model){
+    @Override
+    public void onFinishLoad() {
+        scrollView.setVisibility(View.VISIBLE);
+        linearLayoutLoading.setVisibility(View.GONE);
+        lockWallpaper = false;
+    }
+
+    @Override
+    public void loadImage(ApodModel model) {
+        scrollView.setVisibility(View.VISIBLE);
+        clear();
         url = model.getUrl();
-        if(!model.getMedia_type().contains("video")){
-            Glide.with(mActivity).load(model.getHdurl()).into(imageView);
-        }
+        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
         if (model.getTitle() != null)
             title.setText(model.getTitle());
         if (model.getExplanation() != null)
@@ -233,6 +243,86 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         }
     }
 
+    @Override
+    public void loadGif(ApodModel model) {
+        scrollView.setVisibility(View.VISIBLE);
+        clear();
+        url = model.getUrl();
+        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+        if (model.getTitle() != null)
+            title.setText(model.getTitle());
+        if (model.getExplanation() != null)
+            explanation.setText(model.getExplanation());
+        if (model.getCopyright() != null)
+            copyright.setText(model.getCopyright() + "©");
+        if (model.getDate() != null) {
+            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
+            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
+            try {
+                date.setText(outFormat.format(inFormat.parse(model.getDate())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void loadVideo(ApodModel model) {
+        scrollView.setVisibility(View.VISIBLE);
+        clear();
+        url = model.getUrl();
+        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+        if (model.getTitle() != null)
+            title.setText(model.getTitle());
+        if (model.getExplanation() != null)
+            explanation.setText(model.getExplanation());
+        if (model.getCopyright() != null)
+            copyright.setText(model.getCopyright() + "©");
+        if (model.getDate() != null) {
+            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
+            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
+            try {
+                date.setText(outFormat.format(inFormat.parse(model.getDate())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void onInvalidDate(){
+        clear();
+    }
+
+    private void clear(){
+        Glide.with(mActivity).load(placeholder_image).into(imageView);
+        title.setText("");
+        explanation.setText("");
+        copyright.setText("");
+        date.setText("");
+    }
+
+//    private void loadAPOD(ApodModel model){
+//        url = model.getUrl();
+//        if(!model.getMedia_type().contains("video")){
+//            Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+//        }
+//        if (model.getTitle() != null)
+//            title.setText(model.getTitle());
+//        if (model.getExplanation() != null)
+//            explanation.setText(model.getExplanation());
+//        if (model.getCopyright() != null)
+//            copyright.setText(model.getCopyright() + "©");
+//        if (model.getDate() != null) {
+//            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
+//            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
+//            try {
+//                date.setText(outFormat.format(inFormat.parse(model.getDate())));
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     public void montarDatePickerDialog() {
         getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme,new DatePickerDialog.OnDateSetListener() {
 
@@ -244,10 +334,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                     dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
                     date.setText(dataSelecionada);
                     clear();
-                    Service service = new Service(mActivity, key, dataSelecionada);
-                    linearLayoutLoading.setVisibility(View.VISIBLE);
                     scrollView.setVisibility(View.GONE);
-                    service.execute();
+                    apodPresenter.getChosenApod(dataSelecionada);
                 }
 
             }

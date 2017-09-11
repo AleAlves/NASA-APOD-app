@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aleson.example.mangapp.MainActivity"
+    tools:context="com.aleson.example.nasaapodapp.presentation.MainActivity"
     android:background="#9e9e9e">
 
     <LinearLayout
