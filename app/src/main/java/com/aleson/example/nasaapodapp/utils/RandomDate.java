@@ -1,10 +1,7 @@
-package com.aleson.example.mangapp;
+package com.aleson.example.nasaapodapp.utils;
 
 import java.util.Random;
 
-/**
- * Created by GAMER on 09/09/2017.
- */
 
 public class RandomDate {
 

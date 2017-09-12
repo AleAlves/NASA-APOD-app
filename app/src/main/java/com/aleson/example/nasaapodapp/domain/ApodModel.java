@@ -1,12 +1,8 @@
-package com.aleson.example.mangapp;
+package com.aleson.example.nasaapodapp.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Santander on 05/09/1.
- */
-
-public class APODModel {
+public class ApodModel {
 
     @SerializedName("code")
     private String code;
@@ -37,6 +33,16 @@ public class APODModel {
 
     @SerializedName("url")
     private String url;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
 
     public String getCopyright() {
         return copyright;
