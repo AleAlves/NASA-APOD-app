@@ -28,6 +28,10 @@ public class ApodRepositoryImpl implements ApodRepository {
         Gson gson = new Gson();
         ApodModel model = gson.fromJson(response, ApodModel.class);
         mainActivityView.onFinishLoad();
+        if(model.getUrl() ==  null){
+            mainActivityView.onError("");
+        }
+        else
         if(model.getUrl().contains(".gif")){
             mainActivityView.loadGif(model);
         }
