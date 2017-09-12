@@ -3,8 +3,10 @@ package com.aleson.example.nasaapodapp.presentation;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.WallpaperManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -250,11 +252,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void loadVideo(ApodModel model) {
+    public void loadVideo(final ApodModel model) {
         scrollView.setVisibility(View.VISIBLE);
         clear();
         url = model.getUrl();
-        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+        Glide.with(mActivity).load(R.drawable.placeholder_image).into(imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(model.getUrl())));
+            }
+        });
         if (model.getTitle() != null)
             title.setText(model.getTitle());
         if (model.getExplanation() != null)
@@ -283,28 +291,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         copyright.setText("");
         date.setText("");
     }
-
-//    private void loadAPOD(ApodModel model){
-//        url = model.getUrl();
-//        if(!model.getMedia_type().contains("video")){
-//            Glide.with(mActivity).load(model.getHdurl()).into(imageView);
-//        }
-//        if (model.getTitle() != null)
-//            title.setText(model.getTitle());
-//        if (model.getExplanation() != null)
-//            explanation.setText(model.getExplanation());
-//        if (model.getCopyright() != null)
-//            copyright.setText(model.getCopyright() + "©");
-//        if (model.getDate() != null) {
-//            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-//            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
-//            try {
-//                date.setText(outFormat.format(inFormat.parse(model.getDate())));
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     public void montarDatePickerDialog() {
         getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme,new DatePickerDialog.OnDateSetListener() {
