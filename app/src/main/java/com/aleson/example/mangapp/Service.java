@@ -41,6 +41,10 @@ public class Service extends AsyncTask<URL, Integer, String>{
 
     @Override
     protected void onPostExecute(String s) {
+        if(s == null){
+            mainActivityView.onConnectionError();
+        }
+        else
         if(s.contains("Internal Service Error")){
             mainActivityView.onError(s);
         }

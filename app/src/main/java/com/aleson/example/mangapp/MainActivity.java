@@ -107,20 +107,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             @Override
             public void onClick(View v) {
                 if(!lockWallpaper) {
-                    Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
-                            Bitmap bitmap = drawable.getBitmap();
-                            setBackground(bitmap);
-                        }
+                        Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
+                                Bitmap bitmap = drawable.getBitmap();
+                                setBackground(bitmap);
+                            }
 
-                        @Override
-                        public void onError() {
-                            Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+                            @Override
+                            public void onError() {
+                                Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 }
                 else{
                     Toast.makeText(mActivity, "Already set as Wallpaper", Toast.LENGTH_SHORT).show();
@@ -197,6 +196,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         linearLayoutLoading.setVisibility(View.GONE);
         clear();
         date.setText("Try again another day now");
+    }
+
+    @Override
+    public void onConnectionError() {
+        lockWallpaper = false;
+        scrollView.setVisibility(View.VISIBLE);
+        linearLayoutLoading.setVisibility(View.GONE);
+        clear();
+        title.setText("Could not connect to the server");
     }
 
     private void onInvalidDate(){
