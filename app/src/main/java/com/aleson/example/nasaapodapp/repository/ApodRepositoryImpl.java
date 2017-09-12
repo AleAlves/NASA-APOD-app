@@ -12,7 +12,7 @@ public class ApodRepositoryImpl implements ApodRepository {
     private Activity mActivity;
     private MainActivityView mainActivityView;
 
-    public ApodRepositoryImpl(Activity mActivity){
+    public ApodRepositoryImpl(Activity mActivity) {
         this.mActivity = mActivity;
         mainActivityView = (MainActivityView) mActivity;
     }
@@ -29,11 +29,12 @@ public class ApodRepositoryImpl implements ApodRepository {
         Gson gson = new Gson();
         ApodModel model = gson.fromJson(response, ApodModel.class);
         mainActivityView.onFinishLoad();
-        if(model.getUrl().contains(".gif")){
+        if (model.getUrl() == null) {
+            mainActivityView.onError("Erro");
+        } else if (model.getUrl().contains(".gif")) {
             mainActivityView.loadGif(model);
-        }
-        else {
-            if(model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")){
+        } else {
+            if (model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")) {
                 mainActivityView.loadImage(model);
             }
             else{
