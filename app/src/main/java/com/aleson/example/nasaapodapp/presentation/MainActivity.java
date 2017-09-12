@@ -105,19 +105,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             @Override
             public void onClick(View v) {
                 if(!lockWallpaper) {
-                        Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
-                                Bitmap bitmap = drawable.getBitmap();
-                                setBackground(bitmap);
-                            }
+                    Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
+                            Bitmap bitmap = drawable.getBitmap();
+                            setBackground(bitmap);
+                        }
 
-                            @Override
-                            public void onError() {
-                                Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        @Override
+                        public void onError() {
+                            Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
                 else{
                     Toast.makeText(mActivity, "Already set as Wallpaper", Toast.LENGTH_SHORT).show();
@@ -203,20 +204,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-<<<<<<< HEAD:app/src/main/java/com/aleson/example/mangapp/MainActivity.java
-    public void onConnectionError() {
-        lockWallpaper = false;
-        scrollView.setVisibility(View.VISIBLE);
-        linearLayoutLoading.setVisibility(View.GONE);
-        clear();
-        title.setText("Could not connect to the server");
-    }
-
-    private void onInvalidDate(){
-=======
     public void loadImage(ApodModel model) {
         scrollView.setVisibility(View.VISIBLE);
->>>>>>> master:app/src/main/java/com/aleson/example/nasaapodapp/presentation/MainActivity.java
         clear();
         url = model.getUrl();
         Glide.with(mActivity).load(model.getHdurl()).into(imageView);
@@ -343,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             e.printStackTrace();
         }
         if(dateFormat != null)
-        getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
+            getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
 
         String string_date = "1995-06-16";
         long dateLong = 0;

@@ -19,6 +19,7 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void requestData(String date) {
+        mainActivityView.onLoading();
         Service service = new Service(mActivity, date, this);
         service.execute();
     }
