@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.aleson.example.nasaapodapp.domain.ApodModel;
 import com.aleson.example.nasaapodapp.presentation.MainActivityView;
+import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.repository.task.Service;
 import com.google.gson.Gson;
 
@@ -11,10 +12,12 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     private Activity mActivity;
     private MainActivityView mainActivityView;
+    private ApodPresenter apodPresenter;
 
-    public ApodRepositoryImpl(Activity mActivity) {
+    public ApodRepositoryImpl(Activity mActivity, ApodPresenter apodPresenter) {
         this.mActivity = mActivity;
         mainActivityView = (MainActivityView) mActivity;
+        this.apodPresenter = apodPresenter;
     }
 
     @Override
@@ -31,18 +34,10 @@ public class ApodRepositoryImpl implements ApodRepository {
         mainActivityView.onFinishLoad();
 
         if(model.getUrl() ==  null){
-            mainActivityView.onError("");
+            apodPresenter.responseError(model);
         }
-        else
-        if(model.getUrl().contains(".gif")){
-            mainActivityView.loadGif(model);
-        } else {
-            if (model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")) {
-                mainActivityView.loadImage(model);
-            }
-            else{
-                mainActivityView.loadVideo(model);
-            }
+        else{
+            apodPresenter.responseSucess(model);
         }
     }
 

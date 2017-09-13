@@ -14,8 +14,4 @@ public interface MainActivityView {
     void onFinishLoad();
 
     void loadImage(ApodModel model);
-
-    void loadGif(ApodModel model);
-
-    void loadVideo(ApodModel model);
 }
