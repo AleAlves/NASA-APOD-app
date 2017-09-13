@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clear();
                 onLoading();
                 RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 Glide.with(mActivity).load(model.getHdurl()).into(imageView);
                 break;
             case VIDEO:
-                Glide.with(mActivity).load(R.drawable.placeholder_image).into(imageView);
+                Glide.with(mActivity).load(R.drawable.videopholder).into(imageView);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
