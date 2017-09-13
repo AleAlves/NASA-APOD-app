@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clear();
                 onLoading();
                 RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
@@ -210,59 +211,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         scrollView.setVisibility(View.VISIBLE);
         clear();
         url = model.getUrl();
-        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
-        if (model.getTitle() != null)
-            title.setText(model.getTitle());
-        if (model.getExplanation() != null)
-            explanation.setText(model.getExplanation());
-        if (model.getCopyright() != null)
-            copyright.setText(model.getCopyright() + "©");
-        if (model.getDate() != null) {
-            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
-            try {
-                date.setText(outFormat.format(inFormat.parse(model.getDate())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        switch (apodPresenter.getMediaType()){
+            case IMAGE:
+            case GIF:
+                Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+                break;
+            case VIDEO:
+                Glide.with(mActivity).load(R.drawable.videopholder).into(imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(apodPresenter.getMediaType() == ApodPresenterImpl.MEDIA.VIDEO)
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    }
+                });
+                break;
         }
-    }
-
-    @Override
-    public void loadGif(ApodModel model) {
-        scrollView.setVisibility(View.VISIBLE);
-        clear();
-        url = model.getUrl();
-        Glide.with(mActivity).load(model.getHdurl()).into(imageView);
-        if (model.getTitle() != null)
-            title.setText(model.getTitle());
-        if (model.getExplanation() != null)
-            explanation.setText(model.getExplanation());
-        if (model.getCopyright() != null)
-            copyright.setText(model.getCopyright() + "©");
-        if (model.getDate() != null) {
-            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
-            try {
-                date.setText(outFormat.format(inFormat.parse(model.getDate())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void loadVideo(final ApodModel model) {
-        scrollView.setVisibility(View.VISIBLE);
-        clear();
-        url = model.getUrl();
-        Glide.with(mActivity).load(R.drawable.placeholder_image).into(imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(model.getUrl())));
-            }
-        });
         if (model.getTitle() != null)
             title.setText(model.getTitle());
         if (model.getExplanation() != null)
@@ -318,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             e.printStackTrace();
         }
         if(dateFormat != null)
-        getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
+            getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
 
         String string_date = "1995-06-16";
         long dateLong = 0;
