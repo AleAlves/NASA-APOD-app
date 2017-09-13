@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                     Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
                         @Override
                         public void onSuccess() {
+                            imageViewWallpaperSet.setScaleType(ImageView.ScaleType.CENTER);
                             BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
                             Bitmap bitmap = drawable.getBitmap();
                             setBackground(bitmap);
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             findViewById(R.id.page).startAnimation(shake);
             WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
             if(bitmap != null && myWallpaperManager.isWallpaperSupported()) {
+                myWallpaperManager.getBuiltInDrawable(1,1,true,1.0f,1.0f);
                 myWallpaperManager.setBitmap(bitmap);
                 Toast.makeText(mActivity, "Set as Wallpaper", Toast.LENGTH_SHORT).show();
                 lockWallpaper = true;
