@@ -16,9 +16,7 @@ public class ApodPresenterImpl implements ApodPresenter {
 
     public enum MEDIA {
 
-        IMAGE(1),
-        GIF(2),
-        VIDEO(3);
+        IMAGE(1), GIF(2), VIDEO(3);
 
         public int media;
         MEDIA(int valor) {
