@@ -3,7 +3,6 @@ package com.aleson.example.nasaapodapp.presentation;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,12 +10,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private ImageButton imageButtonWallpaper;
     private Calendar calendarAgendada;
     private String dataSelecionada;
+    private String dataSelecionadaTitulo;
     private String key;
     private static String url = "";
     private boolean lockWallpaper = false;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         apodPresenter.getTodayApod();
     }
 
-    private void init(){
+    private void init() {
 
         imageView = (ImageView) findViewById(R.id.page);
         imageViewWallpaperSet = (ImageView) findViewById(R.id.wallpaper_set);
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         date.setText(dataSelecionada);
     }
 
-    private void initListeners(){
+    private void initListeners() {
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,10 +112,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!lockWallpaper) {
+                if (!lockWallpaper) {
                     Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
                         @Override
                         public void onSuccess() {
+
                             imageViewWallpaperSet.setScaleType(ImageView.ScaleType.CENTER);
                             BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
                             Bitmap bitmap = drawable.getBitmap();
@@ -130,8 +130,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                         }
                     });
 
-                }
-                else{
+                } else {
                     Toast.makeText(mActivity, "Already set as Wallpaper", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -146,37 +145,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     }
 
-    private void config(){
+    private void config() {
         Gson gson = new Gson();
         ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
         this.key = config.getKey();
     }
 
-    private void setBackground(Bitmap bitmap){
-        try {
-
-            Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
-            findViewById(R.id.page).startAnimation(shake);
-            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-            if(bitmap != null && myWallpaperManager.isWallpaperSupported()) {
-                myWallpaperManager.getBuiltInDrawable(1,1,true,1.0f,1.0f);
-                myWallpaperManager.setBitmap(bitmap);
-                Toast.makeText(mActivity, "Set as Wallpaper", Toast.LENGTH_SHORT).show();
-                lockWallpaper = true;
-            }
-            else{
-                Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
-            }
-        } catch (IOException e) {
-            Toast.makeText(mActivity, "Failed",Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
-
     public String loadJSONFromAsset(String file) {
         String json = null;
         try {
-            InputStream is = mActivity.getAssets().open("jsons/"+file+".json");
+            InputStream is = mActivity.getAssets().open("jsons/" + file + ".json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -221,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         scrollView.setVisibility(View.VISIBLE);
         clear();
         url = model.getUrl();
-        switch (apodPresenter.getMediaType()){
+        switch (apodPresenter.getMediaType()) {
             case IMAGE:
             case GIF:
                 Glide.with(mActivity).load(model.getHdurl()).into(imageView);
@@ -231,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(apodPresenter.getMediaType() == ApodPresenterImpl.MEDIA.VIDEO)
+                        if (apodPresenter.getMediaType() == ApodPresenterImpl.MEDIA.VIDEO)
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     }
                 });
@@ -244,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         if (model.getCopyright() != null)
             copyright.setText(model.getCopyright() + "©");
         if (model.getDate() != null) {
+            dataSelecionadaTitulo = model.getDate();
             android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
             android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
             try {
@@ -254,11 +233,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
-    private void onInvalidDate(){
+    private void onInvalidDate() {
         clear();
     }
 
-    private void clear(){
+    private void clear() {
         Glide.with(mActivity).load(placeholder_image).into(imageView);
         title.setText("");
         explanation.setText("");
@@ -267,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     public void montarDatePickerDialog() {
-        getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme,new DatePickerDialog.OnDateSetListener() {
+        getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // Tratativa para nao executar duas vezes
@@ -291,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(dateFormat != null)
+        if (dateFormat != null)
             getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
 
         String string_date = "1995-06-16";
@@ -311,38 +290,41 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         getDatePickerDialog.setTitle("data");
     }
 
-    public static String sumDate(){
+    public static String sumDate() {
         Calendar calendarData = Calendar.getInstance();
         calendarData.setTime(new Date());
-        calendarData.add(Calendar.DATE,0);
+        calendarData.add(Calendar.DATE, 0);
         Date dataInicial = calendarData.getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         return df.format(dataInicial);
     }
 
-    private void saveSD(Bitmap bitMapImg){
+    private void saveSD(Bitmap bitMapImg) {
 
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/NASA APOD App");
-        myDir.mkdirs();
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES+"/NASA APOD App/");
+        mediaStorageDir.mkdirs();
 
         try {
-        String fname = "image.jpg";
-        File file = new File (myDir, fname);
-        if (file.exists ()) file.delete ();
-        file.createNewFile();
-
+//            MediaStore.Images.Media.insertImage(getContentResolver(), bitMapImg, dataSelecionada , "NASA APOD");
+            String fname = dataSelecionadaTitulo + "." + url.substring(url.length() - 3, url.length());
+            File file = new File(mediaStorageDir, fname);
+            if (file.exists()) file.delete();
+            file.createNewFile();
+            Date currentTime = Calendar.getInstance().getTime();
+            file.setLastModified(currentTime.getTime());
             FileOutputStream out = new FileOutputStream(file);
             bitMapImg.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
-            setBackground(bitMapImg);
+            MediaStore.Images.Media.insertImage(getContentResolver(), mediaStorageDir +"/"+ fname, dataSelecionada , "NASA APOD");
+            Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+            startActivity(Intent.createChooser(intent, "Select Wallpaper"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void permission(){
+    private void permission() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(mActivity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
