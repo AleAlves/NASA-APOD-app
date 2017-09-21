@@ -10,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -316,7 +315,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             bitMapImg.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
-            MediaStore.Images.Media.insertImage(getContentResolver(), mediaStorageDir +"/"+ fname, dataSelecionada , "NASA APOD");
             Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
             startActivity(Intent.createChooser(intent, "Select Wallpaper"));
         } catch (Exception e) {
