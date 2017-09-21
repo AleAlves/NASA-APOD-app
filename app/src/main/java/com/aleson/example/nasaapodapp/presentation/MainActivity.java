@@ -1,13 +1,18 @@
 package com.aleson.example.nasaapodapp.presentation;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.WallpaperManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,6 +37,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -40,7 +47,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
-import static com.aleson.example.nasaapodapp.R.id.page;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
 
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void init(){
 
-        imageView = (ImageView) findViewById(page);
+        imageView = (ImageView) findViewById(R.id.page);
         imageViewWallpaperSet = (ImageView) findViewById(R.id.wallpaper_set);
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
@@ -114,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                             imageViewWallpaperSet.setScaleType(ImageView.ScaleType.CENTER);
                             BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
                             Bitmap bitmap = drawable.getBitmap();
-                            setBackground(bitmap);
+                            permission();
+                            saveSD(bitmap);
                         }
 
                         @Override
@@ -147,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void setBackground(Bitmap bitmap){
         try {
+
             Animation shake = AnimationUtils.loadAnimation(mActivity, R.anim.fab_in);
             findViewById(R.id.page).startAnimation(shake);
             WallpaperManager myWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
@@ -310,5 +318,55 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         Date dataInicial = calendarData.getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         return df.format(dataInicial);
+    }
+
+    private void saveSD(Bitmap bitMapImg){
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/NASA APOD App");
+        myDir.mkdirs();
+
+        try {
+        String fname = "image.jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        file.createNewFile();
+
+            FileOutputStream out = new FileOutputStream(file);
+            bitMapImg.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            setBackground(bitMapImg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void permission(){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(mActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(mActivity,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
     }
 }
