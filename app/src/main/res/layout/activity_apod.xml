@@ -24,8 +24,8 @@
             <ImageView
                 android:id="@+id/wallpaper_set"
                 android:visibility="gone"
-                android:layout_width="1000dp"
-                android:layout_height="1000dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout

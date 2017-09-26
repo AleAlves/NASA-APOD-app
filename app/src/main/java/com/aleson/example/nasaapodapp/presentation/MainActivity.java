@@ -3,16 +3,23 @@ package com.aleson.example.nasaapodapp.presentation;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Point;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -38,6 +45,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -115,12 +124,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                     Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
                         @Override
                         public void onSuccess() {
-
-                            imageViewWallpaperSet.setScaleType(ImageView.ScaleType.CENTER);
-                            BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
-                            Bitmap bitmap = drawable.getBitmap();
+//                            imageViewWallpaperSet.setScaleType(ImageView.ScaleType.CENTER);
+//                            BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
+//                            Bitmap bitmap = drawable.getBitmap();
                             permission();
-                            saveSD(bitmap);
+                            saveSD(getBitmapFromURL(url));
                         }
 
                         @Override
@@ -142,6 +150,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });
 
+    }
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void config() {
@@ -300,26 +323,61 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void saveSD(Bitmap bitMapImg) {
 
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES+"/NASA APOD App/");
-        mediaStorageDir.mkdirs();
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        Matrix m = new Matrix();
+        m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
+        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, true);
+//        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight());
+
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
+        if (!mediaStorageDir.exists())
+            mediaStorageDir.mkdirs();
 
         try {
-//            MediaStore.Images.Media.insertImage(getContentResolver(), bitMapImg, dataSelecionada , "NASA APOD");
-            String fname = dataSelecionadaTitulo + "." + url.substring(url.length() - 3, url.length());
+            String format = url.substring(url.length() - 3, url.length());
+            Bitmap.CompressFormat bcf = null;
+            switch (format){
+                case "jpg":
+                case "jpeg":
+                    bcf = Bitmap.CompressFormat.JPEG;
+                    break;
+                case "png":
+                    bcf = Bitmap.CompressFormat.PNG;
+                    break;
+            }
+            String fname = dataSelecionadaTitulo + "." + format;
             File file = new File(mediaStorageDir, fname);
-            if (file.exists()) file.delete();
+            if (file.exists()) {
+                file.delete();
+            }
             file.createNewFile();
             Date currentTime = Calendar.getInstance().getTime();
             file.setLastModified(currentTime.getTime());
             FileOutputStream out = new FileOutputStream(file);
-            bitMapImg.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitMapImg.compress(bcf, 100, out);
             out.flush();
             out.close();
+            addImageToGallery(file.toString(), mActivity);
             Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
             startActivity(Intent.createChooser(intent, "Select Wallpaper"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void addImageToGallery(final String filePath, final Context context) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        values.put(MediaStore.MediaColumns.DATA, filePath);
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
     private void permission() {
