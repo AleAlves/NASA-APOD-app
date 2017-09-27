@@ -7,7 +7,7 @@ public class ConfigModel {
 
     @SerializedName("url")
     private String url;
-
+    
     @SerializedName("key")
     private String key;
 

@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aleson.example.nasaapodapp.presentation.MainActivity"
-    android:background="#9e9e9e">
+    android:background="#9e9e9e"
+    tools:context="com.aleson.example.nasaapodapp.presentation.MainActivity">
 
     <LinearLayout
         android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
         <ProgressBar
             android:layout_width="50dp"
             android:layout_height="50dp" />
@@ -20,9 +23,12 @@
 
     <ScrollView
         android:id="@+id/main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
         <include layout="@layout/activity_apod" />
     </ScrollView>
 

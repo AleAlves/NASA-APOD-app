@@ -11,18 +11,17 @@ import java.net.URL;
 
 import livroandroid.lib.utils.HttpHelper;
 
-public class Service extends AsyncTask<URL, Integer, String>{
+public class Service extends AsyncTask<URL, Integer, String> {
+
+    private Config config;
+    private String url;
+    private HttpHelper http;
+    private String key;
+    private String date;
+    private ApodRepository apodRepository;
 
 
-    Config config;
-    String url;
-    HttpHelper http;
-    String key;
-    String date;
-    ApodRepository apodRepository;
-
-
-    public Service(Activity mainActivityView, String date, ApodRepository apodRepository){
+    public Service(Activity mainActivityView, String date, ApodRepository apodRepository) {
         config = new Config(mainActivityView);
         this.apodRepository = apodRepository;
         this.date = date;
@@ -34,7 +33,7 @@ public class Service extends AsyncTask<URL, Integer, String>{
     protected String doInBackground(URL... params) {
         try {
             http = new HttpHelper();
-             String json = http.doGet(url+key+"&date="+date);
+            String json = http.doGet(url + key + "&date=" + date);
             return json;
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,10 +43,9 @@ public class Service extends AsyncTask<URL, Integer, String>{
 
     @Override
     protected void onPostExecute(String s) {
-        if(s == null){
+        if (s == null) {
             apodRepository.serviceError();
-        }
-        else {
+        } else {
             if (s.contains("Internal Service Error")) {
                 apodRepository.onError(s);
             } else {

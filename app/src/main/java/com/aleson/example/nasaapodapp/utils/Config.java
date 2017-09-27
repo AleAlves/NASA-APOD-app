@@ -32,7 +32,7 @@ public class Config {
     private String url;
     private Activity mActivity;
 
-    public Config(Activity mActivity){
+    public Config(Activity mActivity) {
         this.mActivity = mActivity;
         Gson gson = new Gson();
         ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
@@ -43,7 +43,7 @@ public class Config {
     public String loadJSONFromAsset(String file) {
         String json = null;
         try {
-            InputStream is = mActivity.getAssets().open("jsons/"+file+".json");
+            InputStream is = mActivity.getAssets().open("jsons/" + file + ".json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

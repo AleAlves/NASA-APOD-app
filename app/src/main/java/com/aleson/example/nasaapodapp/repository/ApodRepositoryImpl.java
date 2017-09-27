@@ -33,10 +33,9 @@ public class ApodRepositoryImpl implements ApodRepository {
         ApodModel model = gson.fromJson(response, ApodModel.class);
         mainActivityView.onFinishLoad();
 
-        if(model.getUrl() ==  null){
+        if (model.getUrl() == null) {
             apodPresenter.responseError(model);
-        }
-        else{
+        } else {
             apodPresenter.responseSucess(model);
         }
     }

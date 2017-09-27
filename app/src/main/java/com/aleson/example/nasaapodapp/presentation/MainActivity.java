@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (apodPresenter.getMediaType() == ApodPresenterImpl.MEDIA.VIDEO)
+                        if (apodPresenter.getMediaType() == MEDIA.VIDEO)
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     }
                 });
@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         try {
             String format = url.substring(url.length() - 3, url.length());
             Bitmap.CompressFormat bcf = null;
-            switch (format){
+            switch (format) {
                 case "jpg":
                 case "jpeg":
                     bcf = Bitmap.CompressFormat.JPEG;
