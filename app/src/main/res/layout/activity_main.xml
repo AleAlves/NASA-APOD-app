@@ -7,18 +7,6 @@
     android:background="#9e9e9e"
     tools:context="com.aleson.example.nasaapodapp.presentation.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-    </LinearLayout>
-
     <ScrollView
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -27,5 +15,17 @@
 
         <include layout="@layout/activity_apod" />
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

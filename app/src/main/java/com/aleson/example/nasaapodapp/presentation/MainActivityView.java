@@ -1,6 +1,8 @@
 package com.aleson.example.nasaapodapp.presentation;
 
 
+import android.graphics.Bitmap;
+
 import com.aleson.example.nasaapodapp.domain.ApodModel;
 
 public interface MainActivityView {
@@ -9,9 +11,11 @@ public interface MainActivityView {
 
     void onServiceError();
 
-    void onLoading();
+    void onLoading(boolean content);
 
     void onFinishLoad();
 
     void loadImage(ApodModel model);
+
+    void setWallpaper(Bitmap bitmap);
 }

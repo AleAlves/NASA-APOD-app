@@ -56,6 +56,11 @@ public class ApodPresenterImpl implements ApodPresenter {
     }
 
     @Override
+    public void getBitmap(String url) {
+        apodRepository.requestBitamp(url);
+    }
+
+    @Override
     public MEDIA getMediaType() {
         return mediaType;
     }

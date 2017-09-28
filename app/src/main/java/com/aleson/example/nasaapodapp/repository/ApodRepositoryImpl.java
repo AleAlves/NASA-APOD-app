@@ -1,10 +1,12 @@
 package com.aleson.example.nasaapodapp.repository;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 
 import com.aleson.example.nasaapodapp.domain.ApodModel;
 import com.aleson.example.nasaapodapp.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
+import com.aleson.example.nasaapodapp.repository.task.BitmapService;
 import com.aleson.example.nasaapodapp.repository.task.Service;
 import com.google.gson.Gson;
 
@@ -22,9 +24,16 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void requestData(String date) {
-        mainActivityView.onLoading();
+        mainActivityView.onLoading(false);
         Service service = new Service(mActivity, date, this);
         service.execute();
+    }
+
+    @Override
+    public void requestBitamp(String url) {
+        mainActivityView.onLoading(true);
+        BitmapService bitmapService = new BitmapService(url, this);
+        bitmapService.execute();
     }
 
     @Override
@@ -50,5 +59,11 @@ public class ApodRepositoryImpl implements ApodRepository {
     public void serviceError() {
         mainActivityView.onFinishLoad();
         mainActivityView.onServiceError();
+    }
+
+    @Override
+    public void setWallpaper(Bitmap bitmap) {
+        mainActivityView.onFinishLoad();
+        mainActivityView.setWallpaper(bitmap);
     }
 }

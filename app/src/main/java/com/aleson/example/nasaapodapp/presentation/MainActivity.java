@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
@@ -25,9 +24,9 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.domain.ApodModel;
@@ -37,16 +36,12 @@ import com.aleson.example.nasaapodapp.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,13 +49,13 @@ import java.util.Date;
 
 import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     private ImageView imageView;
-    private ImageView imageViewWallpaperSet;
     private TextView title, copyright, date;
     private JustifiedTextView explanation;
     private LinearLayout linearLayoutLoading;
+    private RelativeLayout linearLayoutImageLoading;
     private ScrollView scrollView;
     private Activity mActivity;
     private DatePickerDialog getDatePickerDialog;
@@ -72,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private String dataSelecionadaTitulo;
     private String key;
     private static String url = "";
-    private boolean lockWallpaper = false;
     private ApodPresenter apodPresenter;
 
     @Override
@@ -90,11 +84,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private void init() {
 
         imageView = (ImageView) findViewById(R.id.page);
-        imageViewWallpaperSet = (ImageView) findViewById(R.id.wallpaper_set);
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         copyright = (TextView) findViewById(R.id.copyright);
         linearLayoutLoading = (LinearLayout) findViewById(R.id.loading);
+        linearLayoutImageLoading = (RelativeLayout) findViewById(R.id.loading_image);
         scrollView = (ScrollView) findViewById(R.id.main);
         montarDatePickerDialog();
         date = (TextView) findViewById(R.id.date);
@@ -111,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             @Override
             public void onClick(View v) {
                 clear();
-                onLoading();
+                onLoading(true);
                 RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
@@ -120,26 +114,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!lockWallpaper) {
-                    Picasso.with(mActivity).load(url).into(imageViewWallpaperSet, new Callback() {
-                        @Override
-                        public void onSuccess() {
-//                            imageViewWallpaperSet.setScaleType(ImageView.ScaleType.CENTER);
-//                            BitmapDrawable drawable = (BitmapDrawable) imageViewWallpaperSet.getDrawable();
-//                            Bitmap bitmap = drawable.getBitmap();
-                            permission();
-                            saveSD(getBitmapFromURL(url));
-                        }
-
-                        @Override
-                        public void onError() {
-                            Toast.makeText(mActivity, "Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                } else {
-                    Toast.makeText(mActivity, "Already set as Wallpaper", Toast.LENGTH_SHORT).show();
-                }
+                permission();
+                apodPresenter.getBitmap(url);
+//                saveSD(bitmap);
             }
         });
 
@@ -150,21 +127,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });
 
-    }
-
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private void config() {
@@ -191,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void onError(String response) {
-        lockWallpaper = false;
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
         clear();
@@ -204,16 +165,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void onLoading() {
-        scrollView.setVisibility(View.GONE);
-        linearLayoutLoading.setVisibility(View.VISIBLE);
+    public void onLoading(boolean content) {
+        if(content){
+            scrollView.setVisibility(View.VISIBLE);
+            linearLayoutImageLoading.setVisibility(View.VISIBLE);
+        }
+        else {
+            scrollView.setVisibility(View.GONE);
+            linearLayoutLoading.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onFinishLoad() {
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
-        lockWallpaper = false;
+        linearLayoutImageLoading.setVisibility(View.GONE);
     }
 
     @Override
@@ -252,6 +219,56 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void setWallpaper(Bitmap bitMapImg) {
+        scrollView.setVisibility(View.VISIBLE);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        Matrix m = new Matrix();
+        m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
+        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, true);
+//        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight());
+
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
+        if (!mediaStorageDir.exists())
+            mediaStorageDir.mkdirs();
+
+        try {
+            String format = url.substring(url.length() - 3, url.length());
+            Bitmap.CompressFormat bcf = null;
+            switch (format) {
+                case "jpg":
+                case "jpeg":
+                    bcf = Bitmap.CompressFormat.JPEG;
+                    break;
+                case "png":
+                    bcf = Bitmap.CompressFormat.PNG;
+                    break;
+            }
+            String fname = dataSelecionadaTitulo + "." + format;
+            File file = new File(mediaStorageDir, fname);
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+            Date currentTime = Calendar.getInstance().getTime();
+            file.setLastModified(currentTime.getTime());
+            FileOutputStream out = new FileOutputStream(file);
+            bitMapImg.compress(bcf, 100, out);
+            out.flush();
+            out.close();
+            addImageToGallery(file.toString(), mActivity);
+            Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+            startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -321,55 +338,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         return df.format(dataInicial);
     }
 
-    private void saveSD(Bitmap bitMapImg) {
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
-        Matrix m = new Matrix();
-        m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
-        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, true);
-//        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight());
-
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
-        if (!mediaStorageDir.exists())
-            mediaStorageDir.mkdirs();
-
-        try {
-            String format = url.substring(url.length() - 3, url.length());
-            Bitmap.CompressFormat bcf = null;
-            switch (format) {
-                case "jpg":
-                case "jpeg":
-                    bcf = Bitmap.CompressFormat.JPEG;
-                    break;
-                case "png":
-                    bcf = Bitmap.CompressFormat.PNG;
-                    break;
-            }
-            String fname = dataSelecionadaTitulo + "." + format;
-            File file = new File(mediaStorageDir, fname);
-            if (file.exists()) {
-                file.delete();
-            }
-            file.createNewFile();
-            Date currentTime = Calendar.getInstance().getTime();
-            file.setLastModified(currentTime.getTime());
-            FileOutputStream out = new FileOutputStream(file);
-            bitMapImg.compress(bcf, 100, out);
-            out.flush();
-            out.close();
-            addImageToGallery(file.toString(), mActivity);
-            Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
-            startActivity(Intent.createChooser(intent, "Select Wallpaper"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void addImageToGallery(final String filePath, final Context context) {
 
         ContentValues values = new ContentValues();
@@ -382,9 +350,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void permission() {
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(mActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
@@ -393,18 +359,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 // Show an expanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-
             } else {
 
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(mActivity,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
+                    Manifest.permission.INTERNET)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(mActivity,
+                        new String[]{Manifest.permission.INTERNET}, 1);
             }
         }
     }
+
 }

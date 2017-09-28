@@ -15,5 +15,7 @@ public interface ApodPresenter {
 
     void responseError(ApodModel model);
 
+    void getBitmap(String url);
+
     MEDIA getMediaType();
 }
