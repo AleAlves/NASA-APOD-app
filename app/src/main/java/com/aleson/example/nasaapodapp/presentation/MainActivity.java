@@ -114,9 +114,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                permission();
-                apodPresenter.getBitmap(url);
-//                saveSD(bitmap);
+                if(url != null && !"".equals(url)) {
+                    permission();
+                    apodPresenter.getBitmap(url);
+                }
             }
         });
 
