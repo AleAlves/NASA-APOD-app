@@ -48,7 +48,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
             apodRepository.serviceError();
             Crashlytics.log(s);
         } else {
-            if (s.contains("Internal Service Error")) {
+            if (s.contains("Internal Service Error") || s.contains("502 Bad Gateway")) {
                 Crashlytics.log(s);
                 apodRepository.onError(s);
             } else {
