@@ -1,7 +1,6 @@
 package com.aleson.example.nasaapodapp.presenter;
 
 import com.aleson.example.nasaapodapp.domain.ApodModel;
-import com.aleson.example.nasaapodapp.presentation.MEDIA;
 
 public interface ApodPresenter {
 
@@ -15,7 +14,7 @@ public interface ApodPresenter {
 
     void responseError(ApodModel model);
 
-    void getBitmap(String url);
+    void chooseWallpaper(String url);
 
-    MEDIA getMediaType();
+    int getMediaType();
 }

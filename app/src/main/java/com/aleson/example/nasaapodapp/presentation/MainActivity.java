@@ -11,10 +11,12 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,10 +33,15 @@ import android.widget.TextView;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.domain.ApodModel;
 import com.aleson.example.nasaapodapp.domain.ConfigModel;
+import com.aleson.example.nasaapodapp.domain.Media;
 import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
@@ -120,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             public void onClick(View v) {
                 if(url != null && !"".equals(url)) {
                     permission();
-                    apodPresenter.getBitmap(url);
+                    apodPresenter.chooseWallpaper(url);
                 }
             }
         });
@@ -194,16 +201,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         clear();
         url = model.getUrl();
         switch (apodPresenter.getMediaType()) {
-            case IMAGE:
-            case GIF:
-                Glide.with(mActivity).load(model.getHdurl()).into(imageView);
+            case Media.IMAGE:
+            case Media.GIF:
+                linearLayoutImageLoading.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(model.getHdurl())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                linearLayoutImageLoading.setVisibility(View.GONE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                linearLayoutImageLoading.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(imageView);
                 break;
-            case VIDEO:
+            case Media.VIDEO:
                 Glide.with(mActivity).load(R.drawable.videopholder).into(imageView);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (apodPresenter.getMediaType() == MEDIA.VIDEO)
+                        if (apodPresenter.getMediaType() == Media.VIDEO)
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     }
                 });
@@ -275,10 +298,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void onInvalidDate() {
-        clear();
     }
 
     private void clear() {

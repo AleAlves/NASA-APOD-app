@@ -3,7 +3,7 @@ package com.aleson.example.nasaapodapp.presenter;
 import android.app.Activity;
 
 import com.aleson.example.nasaapodapp.domain.ApodModel;
-import com.aleson.example.nasaapodapp.presentation.MEDIA;
+import com.aleson.example.nasaapodapp.domain.Media;
 import com.aleson.example.nasaapodapp.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.repository.ApodRepository;
 import com.aleson.example.nasaapodapp.repository.ApodRepositoryImpl;
@@ -13,7 +13,7 @@ public class ApodPresenterImpl implements ApodPresenter {
     private String date;
     private ApodRepository apodRepository;
     private MainActivityView mainActivityView;
-    private MEDIA mediaType;
+    private int mediaType;
 
     public ApodPresenterImpl(Activity mActivity, String date) {
         this.apodRepository = new ApodRepositoryImpl(mActivity, this);
@@ -39,12 +39,12 @@ public class ApodPresenterImpl implements ApodPresenter {
     @Override
     public void responseSucess(ApodModel model) {
         if (model.getUrl().contains(".gif")) {
-            this.mediaType = MEDIA.GIF;
+            this.mediaType = Media.GIF;
         } else {
             if (model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")) {
-                this.mediaType = MEDIA.IMAGE;
+                this.mediaType = Media.IMAGE;
             } else {
-                this.mediaType = MEDIA.VIDEO;
+                this.mediaType = Media.VIDEO;
             }
         }
         mainActivityView.loadImage(model);
@@ -56,12 +56,12 @@ public class ApodPresenterImpl implements ApodPresenter {
     }
 
     @Override
-    public void getBitmap(String url) {
+    public void chooseWallpaper(String url) {
         apodRepository.requestBitamp(url);
     }
 
     @Override
-    public MEDIA getMediaType() {
+    public int getMediaType() {
         return mediaType;
     }
 }
