@@ -15,6 +15,7 @@ public class ApodPresenterImpl implements ApodPresenter {
     private MainActivityView mainActivityView;
     private int mediaType;
 
+
     public ApodPresenterImpl(Activity mActivity, String date) {
         this.apodRepository = new ApodRepositoryImpl(mActivity, this);
         mainActivityView = (MainActivityView) mActivity;
@@ -63,5 +64,10 @@ public class ApodPresenterImpl implements ApodPresenter {
     @Override
     public int getMediaType() {
         return mediaType;
+    }
+
+    @Override
+    public String getDataSelecionada() {
+        return date;
     }
 }

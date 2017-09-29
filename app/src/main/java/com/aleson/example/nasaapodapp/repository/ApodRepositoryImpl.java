@@ -42,7 +42,7 @@ public class ApodRepositoryImpl implements ApodRepository {
         ApodModel model = gson.fromJson(response, ApodModel.class);
         mainActivityView.onFinishLoad();
 
-        if (model.getUrl() == null) {
+        if (model.getUrl() == null || model.getCode() == "400") {
             apodPresenter.responseError(model);
         } else {
             apodPresenter.responseSucess(model);

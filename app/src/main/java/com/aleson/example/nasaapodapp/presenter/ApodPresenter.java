@@ -17,4 +17,6 @@ public interface ApodPresenter {
     void chooseWallpaper(String url);
 
     int getMediaType();
+
+    String getDataSelecionada();
 }
