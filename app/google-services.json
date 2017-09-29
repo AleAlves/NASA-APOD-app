@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "177069242173",
+    "firebase_url": "https://nasa-apod-app-9c140.firebaseio.com",
+    "project_id": "nasa-apod-app-9c140",
+    "storage_bucket": "nasa-apod-app-9c140.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177069242173:android:85cd049f32758b53",
+        "android_client_info": {
+          "package_name": "com.aleson.example.mangapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177069242173-dnnunljjifchg68cbd86co3ievsssglj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleson.example.mangapp",
+            "certificate_hash": "77894a1451cb16140fc2609ef3c5c4e83f5f69bc"
+          }
+        },
+        {
+          "client_id": "177069242173-39jhd929rnvpm8u1ttflo4jgu2qvqaqk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMzQGwsU7NCSK7rmO96YMZgXDZd3TmkPI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177069242173-39jhd929rnvpm8u1ttflo4jgu2qvqaqk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.aleson.example.nasaapodapp.repository.ApodRepository;
 import com.aleson.example.nasaapodapp.utils.Config;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.IOException;
 import java.net.URL;
@@ -45,8 +46,10 @@ public class Service extends AsyncTask<URL, Integer, String> {
     protected void onPostExecute(String s) {
         if (s == null) {
             apodRepository.serviceError();
+            Crashlytics.log(s);
         } else {
             if (s.contains("Internal Service Error")) {
+                Crashlytics.log(s);
                 apodRepository.onError(s);
             } else {
                 apodRepository.onSucess(s);

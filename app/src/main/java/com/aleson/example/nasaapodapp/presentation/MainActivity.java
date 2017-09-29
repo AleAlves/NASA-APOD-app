@@ -35,6 +35,7 @@ import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
@@ -46,6 +47,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Fabric.with(this, new Crashlytics());
         mActivity = this;
         init();
         initListeners();
