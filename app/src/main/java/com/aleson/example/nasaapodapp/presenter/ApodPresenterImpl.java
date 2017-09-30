@@ -29,6 +29,7 @@ public class ApodPresenterImpl implements ApodPresenter {
 
     @Override
     public void getRandomApod(String date) {
+        this.date = date;
         apodRepository.requestData(date);
     }
 

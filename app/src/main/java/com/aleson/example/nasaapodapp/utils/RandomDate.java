@@ -52,6 +52,12 @@ public class RandomDate {
         if (!validateMonth(monthR, dayR)) {
             this.generate();
         }
+        if(todayDay == dayR && todayMonth == monthR && todayYear == yearR){
+            this.generate();
+        }
+        if(todayDay >= dayR && todayMonth > monthR && todayYear == yearR){
+            this.generate();
+        }
         setRandomDate(yearR + "-" + String.format("%01d", monthR) + "-" + String.format("%01d", dayR));
     }
 

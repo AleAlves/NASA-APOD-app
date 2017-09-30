@@ -12,7 +12,7 @@ public interface ApodRepository {
 
     void onError(String response);
 
-    void serviceError();
+    void serviceError(String date);
 
     void setWallpaper(Bitmap bitmap);
 

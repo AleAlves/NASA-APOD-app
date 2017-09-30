@@ -56,9 +56,8 @@ public class ApodRepositoryImpl implements ApodRepository {
     }
 
     @Override
-    public void serviceError() {
-        mainActivityView.onFinishLoad();
-        mainActivityView.onServiceError();
+    public void serviceError(String date) {
+        requestData(date);
     }
 
     @Override

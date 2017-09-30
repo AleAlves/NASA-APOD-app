@@ -45,7 +45,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
     @Override
     protected void onPostExecute(String s) {
         if (s == null) {
-            apodRepository.serviceError();
+            apodRepository.serviceError(date);
         } else {
             if (s.contains("Internal Service Error") || s.contains("502 Bad Gateway") ||  s.contains("<html>")) {
                 apodRepository.onError(s);
