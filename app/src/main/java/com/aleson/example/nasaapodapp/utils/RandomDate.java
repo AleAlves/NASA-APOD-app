@@ -28,7 +28,7 @@ public class RandomDate {
     }
 
     private void generate() {
-        Random year = new Random(System.currentTimeMillis());
+        Random year = new Random(Double.doubleToLongBits(Math.random()));
         Random month = new Random(System.currentTimeMillis());
         Random day = new Random(System.currentTimeMillis());
         int yearR = 1995 + year.nextInt((todayYear - 1995) + 1);
