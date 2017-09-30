@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.DatePicker;
@@ -225,7 +226,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                     @Override
                     public void onClick(View v) {
                         if (apodPresenter.getMediaType() == Media.VIDEO)
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                            }catch (Exception e){
+                                Log.e("Error",e.getMessage());
+                            }
                     }
                 });
                 break;
