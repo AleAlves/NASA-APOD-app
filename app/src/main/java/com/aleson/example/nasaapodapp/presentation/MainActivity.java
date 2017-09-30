@@ -166,12 +166,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     public void onError(String response) {
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
+        imageButtonWallpaper.setEnabled(false);
         clear();
         date.setText("Try again another day now");
     }
 
     @Override
     public void onServiceError() {
+        imageButtonWallpaper.setEnabled(false);
         clear();
     }
 
@@ -197,59 +199,65 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     @Override
     public void loadImage(ApodModel model) {
         scrollView.setVisibility(View.VISIBLE);
-        clear();
         url = model.getUrl();
-        switch (apodPresenter.getMediaType()) {
-            case Media.IMAGE:
-            case Media.GIF:
-                linearLayoutImageLoading.setVisibility(View.VISIBLE);
-                Glide.with(this)
-                        .load(model.getHdurl())
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                linearLayoutImageLoading.setVisibility(View.GONE);
-                                return false;
-                            }
+        if(url != null) {
+            clear();
+            imageButtonWallpaper.setEnabled(true);
+            switch (apodPresenter.getMediaType()) {
+                case Media.IMAGE:
+                case Media.GIF:
+                    linearLayoutImageLoading.setVisibility(View.VISIBLE);
+                    Glide.with(this)
+                            .load(model.getHdurl())
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    linearLayoutImageLoading.setVisibility(View.GONE);
+                                    return false;
+                                }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                linearLayoutImageLoading.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(imageView);
-                break;
-            case Media.VIDEO:
-                Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (apodPresenter.getMediaType() == Media.VIDEO)
-                            try {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                            }catch (Exception e){
-                                Log.e("Error",e.getMessage());
-                            }
-                    }
-                });
-                break;
-        }
-        if (model.getTitle() != null)
-            title.setText(model.getTitle());
-        if (model.getExplanation() != null)
-            explanation.setText(model.getExplanation());
-        if (model.getCopyright() != null)
-            copyright.setText(model.getCopyright() + "©");
-        if (model.getDate() != null) {
-            dataSelecionadaTitulo = model.getDate();
-            android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-            android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
-            try {
-                date.setText(outFormat.format(inFormat.parse(model.getDate())));
-            } catch (ParseException e) {
-                e.printStackTrace();
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    linearLayoutImageLoading.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            })
+                            .into(imageView);
+                    break;
+                case Media.VIDEO:
+                    Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (apodPresenter.getMediaType() == Media.VIDEO)
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                                } catch (Exception e) {
+                                    Log.e("Error", e.getMessage());
+                                }
+                        }
+                    });
+                    break;
             }
+            if (model.getTitle() != null)
+                title.setText(model.getTitle());
+            if (model.getExplanation() != null)
+                explanation.setText(model.getExplanation());
+            if (model.getCopyright() != null)
+                copyright.setText(model.getCopyright() + "©");
+            if (model.getDate() != null) {
+                dataSelecionadaTitulo = model.getDate();
+                android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
+                android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
+                try {
+                    date.setText(outFormat.format(inFormat.parse(model.getDate())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else{
+            Log.e("Data: ",dataSelecionada);
         }
     }
 
