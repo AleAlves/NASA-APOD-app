@@ -28,11 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|center_vertical|center_horizontal"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:padding="25dp">
 
             <ProgressBar
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
         </RelativeLayout>
 
         <LinearLayout

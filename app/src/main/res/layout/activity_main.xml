@@ -16,16 +16,16 @@
         <include layout="@layout/activity_apod" />
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/loading"
+    <RelativeLayout
+        android:id="@+id/translucid_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#88676767"
         android:gravity="center"
         android:visibility="gone">
-
         <ProgressBar
             android:layout_width="40dp"
             android:layout_height="40dp" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

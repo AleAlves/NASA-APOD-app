@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private ImageView imageView;
     private TextView title, copyright, date;
     private JustifiedTextView explanation;
-    private LinearLayout linearLayoutLoading;
+    private RelativeLayout linearLayoutLoading;
     private RelativeLayout linearLayoutImageLoading;
     private ScrollView scrollView;
     private Activity mActivity;
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         copyright = (TextView) findViewById(R.id.copyright);
-        linearLayoutLoading = (LinearLayout) findViewById(R.id.loading);
+        linearLayoutLoading = (RelativeLayout) findViewById(R.id.translucid_loading);
         linearLayoutImageLoading = (RelativeLayout) findViewById(R.id.loading_image);
         scrollView = (ScrollView) findViewById(R.id.main);
         montarDatePickerDialog();
@@ -115,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clear();
                 onLoading(true);
                 RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
@@ -180,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     public void onLoading(boolean content) {
         if(content){
             scrollView.setVisibility(View.VISIBLE);
-            linearLayoutImageLoading.setVisibility(View.VISIBLE);
+            linearLayoutLoading.setVisibility(View.VISIBLE);
         }
         else {
             scrollView.setVisibility(View.GONE);
@@ -222,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                         .into(imageView);
                 break;
             case Media.VIDEO:
-                Glide.with(mActivity).load(R.drawable.videopholder).into(imageView);
+                Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -258,16 +256,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-
         Matrix m = new Matrix();
         m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
         bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, true);
-//        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight());
-
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
         if (!mediaStorageDir.exists())
             mediaStorageDir.mkdirs();
-
         try {
             String format = url.substring(url.length() - 3, url.length());
             Bitmap.CompressFormat bcf = null;
@@ -318,7 +312,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                     calendarAgendada.set(year, monthOfYear, dayOfMonth);
                     dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
                     date.setText(dataSelecionada);
-                    clear();
                     scrollView.setVisibility(View.GONE);
                     apodPresenter.getChosenApod(dataSelecionada);
                 }
