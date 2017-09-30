@@ -50,6 +50,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private String key;
     private static String url = "";
     private ApodPresenter apodPresenter;
+    Process process;
+    File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         config();
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         apodPresenter.getTodayApod();
+
+        try {
+            permission();
+            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "LOG");
+            if (!mediaStorageDir.exists())
+                mediaStorageDir.mkdirs();
+            file = new File(mediaStorageDir + File.separator + "log.txt");
+            file.createNewFile();
+            byte[] data1 = {1, 1, 0, 0};
+            if (file.exists()) {
+                OutputStream fo = new FileOutputStream(file);
+                fo.write(data1);
+                fo.close();
+                System.out.println("file created: " + file);
+            }
+            process = Runtime.getRuntime().exec("logcat -f " + file);
+        }catch (Exception e){
+            Log.e("WOW","WOW");
+        };
     }
 
     private void init() {
