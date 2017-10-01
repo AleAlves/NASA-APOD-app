@@ -1,4 +1,5 @@
 {
   "key":"NTZlQrZD1ugcnmBxdBPa56kbYXut0sEhZen5fMbN",
-  "url":"https://api.nasa.gov/planetary/apod?api_key="
+  "url":"https://api.nasa.gov/planetary/apod?api_key=",
+  "logcat":"logcat -f "
 }

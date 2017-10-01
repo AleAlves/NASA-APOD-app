@@ -2,6 +2,7 @@ package com.aleson.example.nasaapodapp.repository.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.aleson.example.nasaapodapp.repository.ApodRepository;
 import com.aleson.example.nasaapodapp.utils.Config;
@@ -27,7 +28,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
         this.date = date;
         this.key = config.getKey();
         this.url = config.getUrl();
-
+        Log.w("CHOOSEN_DATE",date);
     }
 
     @Override

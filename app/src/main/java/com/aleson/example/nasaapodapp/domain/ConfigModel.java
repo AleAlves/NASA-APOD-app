@@ -11,6 +11,18 @@ public class ConfigModel {
     @SerializedName("key")
     private String key;
 
+
+    @SerializedName("logcat")
+    private String logcat;
+
+    public String getLogcat() {
+        return logcat;
+    }
+
+    public void setLogcat(String logcat) {
+        this.logcat = logcat;
+    }
+
     public String getKey() {
         return key;
     }

@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.domain.ApodModel;
@@ -50,7 +52,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,7 +61,7 @@ import io.fabric.sdk.android.Fabric;
 
 import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView{
+public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     private ImageView imageView;
     private TextView title, copyright, date;
@@ -78,9 +79,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private String dataSelecionadaTitulo;
     private String key;
     private static String url = "";
+    private ConfigModel config;
     private ApodPresenter apodPresenter;
-    Process process;
-    File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,25 +93,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         config();
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         apodPresenter.getTodayApod();
-
         try {
             permission();
             File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "LOG");
             if (!mediaStorageDir.exists())
                 mediaStorageDir.mkdirs();
-            file = new File(mediaStorageDir + File.separator + "log.txt");
-            file.createNewFile();
-            byte[] data1 = {1, 1, 0, 0};
+            File file = new File(mediaStorageDir, "log.txt");
             if (file.exists()) {
-                OutputStream fo = new FileOutputStream(file);
-                fo.write(data1);
-                fo.close();
-                System.out.println("file created: " + file);
+                file.delete();
             }
-            process = Runtime.getRuntime().exec("logcat -f " + file);
-        }catch (Exception e){
-            Log.e("WOW","WOW");
-        };
+            file.createNewFile();
+            Date currentTime = Calendar.getInstance().getTime();
+            file.setLastModified(currentTime.getTime());
+            FileOutputStream out = new FileOutputStream(file);
+            out.flush();
+            out.close();
+            Runtime.getRuntime().exec("logcat -c");
+            Runtime.getRuntime().exec(new String[]{"logcat","-f",""+file,"*:W","CHOOSEN_DATE:D *:S" });
+
+        } catch (Exception e) {
+            Log.e("CUSTOMERROR", e.getMessage());
+        }
     }
 
     private void init() {
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(url != null && !"".equals(url)) {
+                if (url != null && !"".equals(url)) {
                     permission();
                     apodPresenter.chooseWallpaper(url);
                 }
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     private void config() {
         Gson gson = new Gson();
-        ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
+        config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
         this.key = config.getKey();
     }
 
@@ -201,11 +203,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     @Override
     public void onLoading(boolean content) {
-        if(content){
+        if (content) {
             scrollView.setVisibility(View.VISIBLE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             scrollView.setVisibility(View.GONE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
         }
@@ -220,66 +221,69 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     @Override
     public void loadImage(ApodModel model) {
-        scrollView.setVisibility(View.VISIBLE);
-        url = model.getUrl();
-        if(url != null) {
-            clear();
-            imageButtonWallpaper.setEnabled(true);
-            switch (apodPresenter.getMediaType()) {
-                case Media.IMAGE:
-                case Media.GIF:
-                    linearLayoutImageLoading.setVisibility(View.VISIBLE);
-                    Glide.with(this)
-                            .load(model.getHdurl())
-                            .listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    linearLayoutImageLoading.setVisibility(View.GONE);
-                                    return false;
-                                }
+        try {
+            scrollView.setVisibility(View.VISIBLE);
+            url = model.getUrl();
+            if (url != null) {
+                clear();
+                imageButtonWallpaper.setEnabled(true);
+                switch (apodPresenter.getMediaType()) {
+                    case Media.IMAGE:
+                    case Media.GIF:
+                        linearLayoutImageLoading.setVisibility(View.VISIBLE);
+                        Glide.with(this)
+                                .load(model.getHdurl())
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        linearLayoutImageLoading.setVisibility(View.GONE);
+                                        return false;
+                                    }
 
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    linearLayoutImageLoading.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
-                            .into(imageView);
-                    break;
-                case Media.VIDEO:
-                    Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (apodPresenter.getMediaType() == Media.VIDEO)
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                                } catch (Exception e) {
-                                    Log.e("Error", e.getMessage());
-                                }
-                        }
-                    });
-                    break;
-            }
-            if (model.getTitle() != null)
-                title.setText(model.getTitle());
-            if (model.getExplanation() != null)
-                explanation.setText(model.getExplanation());
-            if (model.getCopyright() != null)
-                copyright.setText(model.getCopyright() + "©");
-            if (model.getDate() != null) {
-                dataSelecionadaTitulo = model.getDate();
-                android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-                android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
-                try {
-                    date.setText(outFormat.format(inFormat.parse(model.getDate())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        linearLayoutImageLoading.setVisibility(View.GONE);
+                                        return false;
+                                    }
+                                })
+                                .into(imageView);
+                        break;
+                    case Media.VIDEO:
+                        Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (apodPresenter.getMediaType() == Media.VIDEO)
+                                    try {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                                    } catch (Exception e) {
+                                        Log.e("Error", e.getMessage());
+                                    }
+                            }
+                        });
+                        break;
                 }
+                if (model.getTitle() != null)
+                    title.setText(model.getTitle());
+                if (model.getExplanation() != null)
+                    explanation.setText(model.getExplanation());
+                if (model.getCopyright() != null)
+                    copyright.setText(model.getCopyright() + "©");
+                if (model.getDate() != null) {
+                    dataSelecionadaTitulo = model.getDate();
+                    SimpleDateFormat inFormat = new SimpleDateFormat("YYYY-MM-dd");
+                    SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM YYYY");
+                    try {
+                        date.setText(outFormat.format(inFormat.parse(model.getDate())));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Log.e("Data: ", dataSelecionada);
             }
-        }
-        else{
-            Log.e("Data: ",dataSelecionada);
+        }catch (Exception e){
+            Log.e("ERROR",e.getMessage());
         }
     }
 
@@ -321,6 +325,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             bitMapImg.compress(bcf, 100, out);
             out.flush();
             out.close();
+            FileObserver observer = new FileObserver(file.getPath()) { // set up a file observer to watch this directory on sd card
+                @Override
+                public void onEvent(int event, String file) {
+                    Toast.makeText(getBaseContext(), file + " was saved!", Toast.LENGTH_LONG);
+                }
+            };
             addImageToGallery(file.toString(), mActivity);
             Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
             startActivity(Intent.createChooser(intent, "Select Wallpaper"));
