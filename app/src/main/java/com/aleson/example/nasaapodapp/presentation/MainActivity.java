@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             out.flush();
             out.close();
             Runtime.getRuntime().exec("logcat -c");
-            Runtime.getRuntime().exec(new String[]{"logcat","-f",""+file,"*:W","CHOOSEN_DATE:D *:S" });
+            Runtime.getRuntime().exec(new String[]{"logcat", "-f", "" + file, "*:W", "CHOOSEN_DATE:D *:S"});
 
         } catch (Exception e) {
             Log.e("CUSTOMERROR", e.getMessage());
@@ -271,17 +271,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             if (model.getDate() != null) {
                 dataSelecionadaTitulo = model.getDate();
                 try {
-                    android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-                    android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
-                    date.setText(outFormat.format(inFormat.parse(model.getDate())));
-                }catch (Exception e){
                     SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
                     SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
-                    try {
-                        date.setText(outFormat.format(inFormat.parse(model.getDate())));
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
+                    date.setText(outFormat.format(inFormat.parse(model.getDate())));
+                } catch (Exception e) {
+                    Log.e("", "");
                 }
             }
         } else {
@@ -367,27 +361,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
-        Date dateFormat = null;
+        Date dateFormatInitial = null;
+        Date dateFormatFinal = null;
         try {
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy").parse(sumDate());
+            dateFormatInitial = new SimpleDateFormat("dd/MM/yyyy").parse(sumDate());
+            dateFormatFinal = new SimpleDateFormat("dd/MM/yyyy").parse("16-06-1995");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (dateFormat != null)
-            getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
+        if (dateFormatInitial != null)
+            getDatePickerDialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
 
-        String string_date = "1995-06-16";
-        long dateLong = 0;
+        if (dateFormatFinal != null)
+            getDatePickerDialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
 
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date d = f.parse(string_date);
-            dateLong = d.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        getDatePickerDialog.getDatePicker().setMinDate(dateLong);
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DAY_OF_MONTH, 1);
         getDatePickerDialog.setTitle("data");
