@@ -50,7 +50,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,7 +59,7 @@ import io.fabric.sdk.android.Fabric;
 
 import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView{
+public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     private ImageView imageView;
     private TextView title, copyright, date;
@@ -94,24 +93,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         apodPresenter.getTodayApod();
 
-        try {
-            permission();
-            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "LOG");
-            if (!mediaStorageDir.exists())
-                mediaStorageDir.mkdirs();
-            file = new File(mediaStorageDir + File.separator + "log.txt");
-            file.createNewFile();
-            byte[] data1 = {1, 1, 0, 0};
-            if (file.exists()) {
-                OutputStream fo = new FileOutputStream(file);
-                fo.write(data1);
-                fo.close();
-                System.out.println("file created: " + file);
-            }
-            process = Runtime.getRuntime().exec("logcat -f " + file);
-        }catch (Exception e){
-            Log.e("WOW","WOW");
-        };
+//        try {
+//            permission();
+//            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "LOG");
+//            if (!mediaStorageDir.exists())
+//                mediaStorageDir.mkdirs();
+//            file = new File(mediaStorageDir + "/" + "log.txt");
+//            file.createNewFile();
+//            process = Runtime.getRuntime().exec("logcat -f " + file);
+//        } catch (Exception e) {
+//            Log.e("WOW", "WOW");
+//        }
     }
 
     private void init() {
@@ -146,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         imageButtonWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(url != null && !"".equals(url)) {
+                if (url != null && !"".equals(url)) {
                     permission();
                     apodPresenter.chooseWallpaper(url);
                 }
@@ -201,11 +193,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
 
     @Override
     public void onLoading(boolean content) {
-        if(content){
+        if (content) {
             scrollView.setVisibility(View.VISIBLE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             scrollView.setVisibility(View.GONE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
         }
@@ -222,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     public void loadImage(ApodModel model) {
         scrollView.setVisibility(View.VISIBLE);
         url = model.getUrl();
-        if(url != null) {
+        if (url != null) {
             clear();
             imageButtonWallpaper.setEnabled(true);
             switch (apodPresenter.getMediaType()) {
@@ -277,9 +268,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                     e.printStackTrace();
                 }
             }
-        }
-        else{
-            Log.e("Data: ",dataSelecionada);
+        } else {
+            Log.e("Data: ", dataSelecionada);
         }
     }
 
