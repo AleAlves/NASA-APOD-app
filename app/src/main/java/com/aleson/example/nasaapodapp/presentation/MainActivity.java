@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.domain.ApodModel;
@@ -77,9 +79,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private String dataSelecionadaTitulo;
     private String key;
     private static String url = "";
+    private ConfigModel config;
     private ApodPresenter apodPresenter;
-    Process process;
-    File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,18 +93,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         config();
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         apodPresenter.getTodayApod();
-
-//        try {
-//            permission();
-//            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "LOG");
-//            if (!mediaStorageDir.exists())
-//                mediaStorageDir.mkdirs();
-//            file = new File(mediaStorageDir + "/" + "log.txt");
-//            file.createNewFile();
-//            process = Runtime.getRuntime().exec("logcat -f " + file);
-//        } catch (Exception e) {
-//            Log.e("WOW", "WOW");
-//        }
     }
 
     private void init() {
@@ -156,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void config() {
         Gson gson = new Gson();
-        ConfigModel config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
+        config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
         this.key = config.getKey();
     }
 
@@ -260,12 +249,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 copyright.setText(model.getCopyright() + "©");
             if (model.getDate() != null) {
                 dataSelecionadaTitulo = model.getDate();
-                android.icu.text.SimpleDateFormat inFormat = new android.icu.text.SimpleDateFormat("yyyy-MM-dd");
-                android.icu.text.SimpleDateFormat outFormat = new android.icu.text.SimpleDateFormat("EEEE , dd MMM yyyy");
                 try {
+                    SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
                     date.setText(outFormat.format(inFormat.parse(model.getDate())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e("", "");
                 }
             }
         } else {
@@ -311,6 +300,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             bitMapImg.compress(bcf, 100, out);
             out.flush();
             out.close();
+            FileObserver observer = new FileObserver(file.getPath()) { // set up a file observer to watch this directory on sd card
+                @Override
+                public void onEvent(int event, String file) {
+                    Toast.makeText(getBaseContext(), file + " was saved!", Toast.LENGTH_LONG);
+                }
+            };
             addImageToGallery(file.toString(), mActivity);
             Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
             startActivity(Intent.createChooser(intent, "Select Wallpaper"));
@@ -345,27 +340,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
-        Date dateFormat = null;
+        Date dateFormatInitial = null;
+        Date dateFormatFinal = null;
         try {
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy").parse(sumDate());
+            dateFormatInitial = new SimpleDateFormat("dd/MM/yyyy").parse(sumDate());
+            dateFormatFinal = new SimpleDateFormat("dd/MM/yyyy").parse("16-06-1995");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (dateFormat != null)
-            getDatePickerDialog.getDatePicker().setMaxDate(dateFormat.getTime());
+        if (dateFormatInitial != null)
+            getDatePickerDialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
 
-        String string_date = "1995-06-16";
-        long dateLong = 0;
+        if (dateFormatFinal != null)
+            getDatePickerDialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
 
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date d = f.parse(string_date);
-            dateLong = d.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        getDatePickerDialog.getDatePicker().setMinDate(dateLong);
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DAY_OF_MONTH, 1);
         getDatePickerDialog.setTitle("data");
