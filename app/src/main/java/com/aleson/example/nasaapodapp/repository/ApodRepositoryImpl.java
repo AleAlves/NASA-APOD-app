@@ -35,9 +35,8 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void requestData(String date) {
-        attempt++;
-        mainActivityView.onLoading(true);
         if(isOnline()) {
+            attempt++;
             Service service = new Service(mActivity, date, this);
             service.execute();
         }
@@ -49,7 +48,6 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void requestBitamp(String url) {
-        mainActivityView.onLoading(true);
         BitmapService bitmapService = new BitmapService(url, this);
         bitmapService.execute();
     }
@@ -75,7 +73,7 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void serviceError(String date) {
-        if(attempt <= 3) {
+        if(attempt < 3) {
             requestData(date);
         }
         else {

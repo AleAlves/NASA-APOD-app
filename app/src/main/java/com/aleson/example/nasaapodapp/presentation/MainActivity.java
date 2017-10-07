@@ -15,7 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileObserver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLoading(true);
+                onLoading(false);
                 RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
@@ -129,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             public void onClick(View v) {
                 if (url != null && !"".equals(url)) {
                     permission();
+                    onLoading(true);
                     apodPresenter.chooseWallpaper(url);
                 }
             }
@@ -306,12 +306,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             bitMapImg.compress(bcf, 100, out);
             out.flush();
             out.close();
-            FileObserver observer = new FileObserver(file.getPath()) { // set up a file observer to watch this directory on sd card
-                @Override
-                public void onEvent(int event, String file) {
-                    Toast.makeText(getBaseContext(), file + " was saved!", Toast.LENGTH_LONG);
-                }
-            };
             addImageToGallery(file.toString(), mActivity);
             Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
             startActivity(Intent.createChooser(intent, "Select Wallpaper"));
@@ -332,13 +326,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // Tratativa para nao executar duas vezes
                 if (view.isShown()) {
                     calendarAgendada = Calendar.getInstance();
                     calendarAgendada.set(year, monthOfYear, dayOfMonth);
                     dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
                     date.setText(dataSelecionada);
                     scrollView.setVisibility(View.GONE);
+                    onLoading(false);
                     apodPresenter.getChosenApod(dataSelecionada);
                 }
 
