@@ -11,6 +11,8 @@ public interface MainActivityView {
 
     void onServiceError();
 
+    void onConnectionError();
+
     void onLoading(boolean content);
 
     void onFinishLoad();

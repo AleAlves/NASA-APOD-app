@@ -176,8 +176,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void onServiceError() {
-        imageButtonWallpaper.setEnabled(false);
         clear();
+        Toast.makeText(mActivity, "Houston we have a problem...try again later.", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionError() {
+        clear();
+        Toast.makeText(mActivity, "Internet connection required", Toast.LENGTH_LONG).show();
     }
 
     @Override
