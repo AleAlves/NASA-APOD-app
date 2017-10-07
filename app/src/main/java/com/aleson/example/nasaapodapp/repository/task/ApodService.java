@@ -12,7 +12,7 @@ import java.net.URL;
 
 import livroandroid.lib.utils.HttpHelper;
 
-public class Service extends AsyncTask<URL, Integer, String> {
+public class ApodService extends AsyncTask<URL, Integer, String> {
 
     private Config config;
     private String url;
@@ -22,7 +22,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
     private ApodRepository apodRepository;
 
 
-    public Service(Activity mainActivityView, String date, ApodRepository apodRepository) {
+    public ApodService(Activity mainActivityView, String date, ApodRepository apodRepository) {
         config = new Config(mainActivityView);
         this.apodRepository = apodRepository;
         this.date = date;
@@ -48,7 +48,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
         if (s == null) {
             apodRepository.serviceError(date);
         } else {
-            if (s.contains("Internal Service Error") || s.contains("502 Bad Gateway") || s.contains("<html>")) {
+            if (s.contains("Internal ApodService Error") || s.contains("502 Bad Gateway") || s.contains("<html>")) {
                 apodRepository.onError(s);
             } else {
                 apodRepository.onSucess(s);

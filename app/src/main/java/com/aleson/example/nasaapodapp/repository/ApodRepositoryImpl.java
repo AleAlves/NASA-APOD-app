@@ -8,8 +8,8 @@ import android.net.NetworkInfo;
 import com.aleson.example.nasaapodapp.domain.ApodModel;
 import com.aleson.example.nasaapodapp.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
+import com.aleson.example.nasaapodapp.repository.task.ApodService;
 import com.aleson.example.nasaapodapp.repository.task.BitmapService;
-import com.aleson.example.nasaapodapp.repository.task.Service;
 import com.google.gson.Gson;
 
 public class ApodRepositoryImpl implements ApodRepository {
@@ -37,7 +37,7 @@ public class ApodRepositoryImpl implements ApodRepository {
     public void requestData(String date) {
         if (isOnline()) {
             attempt++;
-            Service service = new Service(mActivity, date, this);
+            ApodService service = new ApodService(mActivity, date, this);
             service.execute();
         } else {
             mainActivityView.onFinishLoad();
