@@ -1,6 +1,7 @@
 package com.aleson.example.nasaapodapp.domain;
 
 import android.support.annotation.IntDef;
+
 import static com.aleson.example.nasaapodapp.domain.Media.*;
 
 /**

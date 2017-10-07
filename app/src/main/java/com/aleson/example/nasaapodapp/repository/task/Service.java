@@ -28,7 +28,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
         this.date = date;
         this.key = config.getKey();
         this.url = config.getUrl();
-        Log.w("CHOOSEN_DATE",date);
+        Log.w("CHOOSEN_DATE", date);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Service extends AsyncTask<URL, Integer, String> {
         if (s == null) {
             apodRepository.serviceError(date);
         } else {
-            if (s.contains("Internal Service Error") || s.contains("502 Bad Gateway") ||  s.contains("<html>")) {
+            if (s.contains("Internal Service Error") || s.contains("502 Bad Gateway") || s.contains("<html>")) {
                 apodRepository.onError(s);
             } else {
                 apodRepository.onSucess(s);

@@ -35,12 +35,11 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void requestData(String date) {
-        if(isOnline()) {
+        if (isOnline()) {
             attempt++;
             Service service = new Service(mActivity, date, this);
             service.execute();
-        }
-        else {
+        } else {
             mainActivityView.onFinishLoad();
             mainActivityView.onConnectionError();
         }
@@ -73,10 +72,9 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void serviceError(String date) {
-        if(attempt < 3) {
+        if (attempt < 3) {
             requestData(date);
-        }
-        else {
+        } else {
             mainActivityView.onFinishLoad();
             mainActivityView.onServiceError();
         }

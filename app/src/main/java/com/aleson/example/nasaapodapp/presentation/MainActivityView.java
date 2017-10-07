@@ -1,6 +1,5 @@
 package com.aleson.example.nasaapodapp.presentation;
 
-
 import android.graphics.Bitmap;
 
 import com.aleson.example.nasaapodapp.domain.ApodModel;

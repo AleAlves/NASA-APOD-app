@@ -15,12 +15,12 @@ import java.net.URL;
  * Created by Santander on 28/09/17.
  */
 
-public class BitmapService  extends AsyncTask<URL, Integer, Bitmap> {
+public class BitmapService extends AsyncTask<URL, Integer, Bitmap> {
 
     private String src;
     private ApodRepository apodRepository;
 
-    public BitmapService(String url, ApodRepository apodRepository){
+    public BitmapService(String url, ApodRepository apodRepository) {
         this.src = url;
         this.apodRepository = apodRepository;
     }
