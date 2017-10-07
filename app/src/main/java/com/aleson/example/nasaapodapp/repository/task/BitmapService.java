@@ -11,10 +11,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Santander on 28/09/17.
- */
-
 public class BitmapService extends AsyncTask<URL, Integer, Bitmap> {
 
     private String src;

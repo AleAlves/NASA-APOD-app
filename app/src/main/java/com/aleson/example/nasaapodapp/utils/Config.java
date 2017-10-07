@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 public class Config {
 
     public String getKey() {
