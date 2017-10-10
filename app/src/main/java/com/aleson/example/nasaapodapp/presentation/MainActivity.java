@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         initListeners();
         config();
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
+        onLoading(false);
+        super.onResume();
         apodPresenter.getTodayApod();
     }
 
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void loadImage(ApodModel model) {
+    public void setContent(ApodModel model) {
         scrollView.setVisibility(View.VISIBLE);
         url = model.getUrl();
         if (url != null) {
@@ -215,22 +217,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 case Media.IMAGE:
                 case Media.GIF:
                     linearLayoutImageLoading.setVisibility(View.VISIBLE);
-                    Glide.with(this)
-                            .load(model.getHdurl())
-                            .listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    linearLayoutImageLoading.setVisibility(View.GONE);
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    linearLayoutImageLoading.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
-                            .into(imageView);
+                    loadImage(model);
                     break;
                 case Media.VIDEO:
                     Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
@@ -268,16 +255,50 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
+    private void loadImage(ApodModel model) {
+        final ApodModel loadModel = model;
+        Glide.with(this)
+                .load(model.getHdurl())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        loadImage(loadModel);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        linearLayoutImageLoading.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(imageView);
+    }
+
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
         scrollView.setVisibility(View.VISIBLE);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
-        int height = size.y;
+        int width = 0;
+        int height = 0;
+        Matrix.ScaleToFit matrix = null;
+        if (bitMapImg.getHeight() > bitMapImg.getWidth()) {
+            width = size.x + size.x / 2;
+            height = size.y + size.y / 2;
+            matrix = Matrix.ScaleToFit.START;
+        } else if (bitMapImg.getHeight() < bitMapImg.getWidth()) {
+            width = size.x + bitMapImg.getWidth();
+            height = size.y + bitMapImg.getHeight();
+            matrix = Matrix.ScaleToFit.START;
+        } else if (bitMapImg.getHeight() == bitMapImg.getWidth()) {
+            width = size.x;
+            height = size.y;
+            matrix = Matrix.ScaleToFit.FILL;
+        }
         Matrix m = new Matrix();
-        m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
+        m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), matrix);
         bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, true);
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
         if (!mediaStorageDir.exists())

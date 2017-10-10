@@ -16,7 +16,7 @@ public interface MainActivityView {
 
     void onFinishLoad();
 
-    void loadImage(ApodModel model);
+    void setContent(ApodModel model);
 
     void setWallpaper(Bitmap bitmap);
 }

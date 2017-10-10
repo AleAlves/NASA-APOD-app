@@ -49,7 +49,7 @@ public class ApodPresenterImpl implements ApodPresenter {
                 this.mediaType = Media.VIDEO;
             }
         }
-        mainActivityView.loadImage(model);
+        mainActivityView.setContent(model);
     }
 
     @Override
