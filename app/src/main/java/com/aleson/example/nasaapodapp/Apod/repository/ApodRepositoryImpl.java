@@ -1,15 +1,15 @@
-package com.aleson.example.nasaapodapp.repository;
+package com.aleson.example.nasaapodapp.Apod.repository;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.aleson.example.nasaapodapp.domain.ApodModel;
-import com.aleson.example.nasaapodapp.presentation.MainActivityView;
-import com.aleson.example.nasaapodapp.presenter.ApodPresenter;
-import com.aleson.example.nasaapodapp.repository.task.ApodService;
-import com.aleson.example.nasaapodapp.repository.task.BitmapService;
+import com.aleson.example.nasaapodapp.Apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.Apod.presentation.MainActivityView;
+import com.aleson.example.nasaapodapp.Apod.presenter.ApodPresenter;
+import com.aleson.example.nasaapodapp.Apod.repository.task.ApodService;
+import com.aleson.example.nasaapodapp.Apod.repository.task.BitmapService;
 import com.google.gson.Gson;
 
 public class ApodRepositoryImpl implements ApodRepository {

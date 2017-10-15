@@ -2,7 +2,7 @@ package com.aleson.example.nasaapodapp.utils;
 
 import android.app.Activity;
 
-import com.aleson.example.nasaapodapp.domain.ConfigModel;
+import com.aleson.example.nasaapodapp.Apod.domain.ConfigModel;
 import com.google.gson.Gson;
 
 import java.io.IOException;

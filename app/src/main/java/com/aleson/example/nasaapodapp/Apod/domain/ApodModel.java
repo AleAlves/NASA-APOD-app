@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.domain;
+package com.aleson.example.nasaapodapp.Apod.domain;
 
 import com.google.gson.annotations.SerializedName;
 
