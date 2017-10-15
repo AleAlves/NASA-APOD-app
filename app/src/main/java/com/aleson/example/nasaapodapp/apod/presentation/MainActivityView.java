@@ -1,8 +1,8 @@
-package com.aleson.example.nasaapodapp.Apod.presentation;
+package com.aleson.example.nasaapodapp.apod.presentation;
 
 import android.graphics.Bitmap;
 
-import com.aleson.example.nasaapodapp.Apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 
 public interface MainActivityView {
 

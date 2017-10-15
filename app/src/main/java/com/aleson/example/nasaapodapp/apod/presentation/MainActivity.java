@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.Apod.presentation;
+package com.aleson.example.nasaapodapp.apod.presentation;
 
 import android.Manifest;
 import android.app.Activity;
@@ -36,11 +36,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
-import com.aleson.example.nasaapodapp.Apod.domain.ApodModel;
-import com.aleson.example.nasaapodapp.Apod.domain.ConfigModel;
-import com.aleson.example.nasaapodapp.Apod.domain.Media;
-import com.aleson.example.nasaapodapp.Apod.presenter.ApodPresenter;
-import com.aleson.example.nasaapodapp.Apod.presenter.ApodPresenterImpl;
+import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.ConfigModel;
+import com.aleson.example.nasaapodapp.apod.domain.Media;
+import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
+import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;

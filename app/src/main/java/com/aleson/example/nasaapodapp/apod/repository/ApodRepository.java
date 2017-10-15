@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.Apod.repository;
+package com.aleson.example.nasaapodapp.apod.repository;
 
 import android.graphics.Bitmap;
 

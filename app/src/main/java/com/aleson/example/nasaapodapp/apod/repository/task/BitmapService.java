@@ -1,10 +1,10 @@
-package com.aleson.example.nasaapodapp.Apod.repository.task;
+package com.aleson.example.nasaapodapp.apod.repository.task;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
-import com.aleson.example.nasaapodapp.Apod.repository.ApodRepository;
+import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
 
 import java.io.IOException;
 import java.io.InputStream;

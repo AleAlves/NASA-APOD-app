@@ -1,6 +1,6 @@
-package com.aleson.example.nasaapodapp.Apod.presenter;
+package com.aleson.example.nasaapodapp.apod.presenter;
 
-import com.aleson.example.nasaapodapp.Apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 
 public interface ApodPresenter {
 

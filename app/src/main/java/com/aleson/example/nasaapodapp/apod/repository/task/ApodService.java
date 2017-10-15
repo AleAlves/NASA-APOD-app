@@ -1,10 +1,10 @@
-package com.aleson.example.nasaapodapp.Apod.repository.task;
+package com.aleson.example.nasaapodapp.apod.repository.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.aleson.example.nasaapodapp.Apod.repository.ApodRepository;
+import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
 import com.aleson.example.nasaapodapp.utils.Config;
 
 import java.io.IOException;

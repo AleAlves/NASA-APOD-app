@@ -1,8 +1,8 @@
-package com.aleson.example.nasaapodapp.Apod.domain;
+package com.aleson.example.nasaapodapp.apod.domain;
 
 import android.support.annotation.IntDef;
 
-import static com.aleson.example.nasaapodapp.Apod.domain.Media.*;
+import static com.aleson.example.nasaapodapp.apod.domain.Media.*;
 
 @IntDef({IMAGE, GIF, VIDEO})
 public @interface Media {

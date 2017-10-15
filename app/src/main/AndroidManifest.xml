@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aleson.example.nasaapodapp">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
-    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature"/>
+
+    <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        android:protectionLevel="signature" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,16 +19,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Apod.presentation.MainActivity">
+        <activity android:name=".apod.presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
+
+        <activity android:name=".favorite.presentation.Favorites" />
+        <activity android:name=".favorite.Favorites"></activity>
     </application>
 
 </manifest>

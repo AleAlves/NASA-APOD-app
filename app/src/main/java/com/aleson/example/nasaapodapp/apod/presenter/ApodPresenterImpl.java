@@ -1,12 +1,12 @@
-package com.aleson.example.nasaapodapp.Apod.presenter;
+package com.aleson.example.nasaapodapp.apod.presenter;
 
 import android.app.Activity;
 
-import com.aleson.example.nasaapodapp.Apod.domain.ApodModel;
-import com.aleson.example.nasaapodapp.Apod.domain.Media;
-import com.aleson.example.nasaapodapp.Apod.presentation.MainActivityView;
-import com.aleson.example.nasaapodapp.Apod.repository.ApodRepository;
-import com.aleson.example.nasaapodapp.Apod.repository.ApodRepositoryImpl;
+import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Media;
+import com.aleson.example.nasaapodapp.apod.presentation.MainActivityView;
+import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
+import com.aleson.example.nasaapodapp.apod.repository.ApodRepositoryImpl;
 
 public class ApodPresenterImpl implements ApodPresenter {
 
