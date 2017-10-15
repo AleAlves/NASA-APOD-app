@@ -40,14 +40,12 @@ public class ApodPresenterImpl implements ApodPresenter {
 
     @Override
     public void responseSucess(ApodModel model) {
-        if (model.getUrl().contains(".gif")) {
+        if (model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")) {
+            this.mediaType = Media.IMAGE;
+        } else if (model.getUrl().contains(".gif")) {
             this.mediaType = Media.GIF;
         } else {
-            if (model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")) {
-                this.mediaType = Media.IMAGE;
-            } else {
-                this.mediaType = Media.VIDEO;
-            }
+            this.mediaType = Media.VIDEO;
         }
         mainActivityView.setContent(model);
     }

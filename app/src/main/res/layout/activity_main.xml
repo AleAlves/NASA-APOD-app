@@ -7,6 +7,16 @@
     android:background="#9e9e9e"
     tools:context="com.aleson.example.nasaapodapp.presentation.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:titleTextColor="@color/colorTextTitle"
+        android:theme="@style/MenuBar"/>
+
+
     <ScrollView
         android:id="@+id/main"
         android:layout_width="match_parent"

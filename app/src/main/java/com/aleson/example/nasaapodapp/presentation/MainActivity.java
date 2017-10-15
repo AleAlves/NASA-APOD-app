@@ -3,6 +3,7 @@ package com.aleson.example.nasaapodapp.presentation;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +21,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -87,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         setContentView(R.layout.activity_main);
         Fabric.with(this, new Crashlytics());
         mActivity = this;
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         init();
         initListeners();
         config();
@@ -95,6 +101,40 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         super.onResume();
         apodPresenter.getTodayApod();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_about:
+                break;
+            case R.id.action_exit:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("EXIT", true);
+                startActivity(intent);
+                break;
+            case R.id.action_rate:
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent openPlayStore = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(openPlayStore);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(mActivity, " unable to find market app",   Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.action_lenguage:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void init() {
 
@@ -284,22 +324,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         int width = 0;
         int height = 0;
         Matrix.ScaleToFit matrix = null;
-        if (bitMapImg.getHeight() > bitMapImg.getWidth()) {
-            width = size.x + size.x / 2;
-            height = size.y + size.y / 2;
-            matrix = Matrix.ScaleToFit.START;
-        } else if (bitMapImg.getHeight() < bitMapImg.getWidth()) {
-            width = size.x + bitMapImg.getWidth();
-            height = size.y + bitMapImg.getHeight();
-            matrix = Matrix.ScaleToFit.START;
-        } else if (bitMapImg.getHeight() == bitMapImg.getWidth()) {
-            width = size.x;
-            height = size.y;
-            matrix = Matrix.ScaleToFit.FILL;
-        }
+        width = size.x + bitMapImg.getHeight() / 2;
+        height = size.y + bitMapImg.getWidth() / 2;
+        matrix = Matrix.ScaleToFit.START;
         Matrix m = new Matrix();
-        m.setRectToRect(new RectF(0, 0, bitMapImg.getWidth(), bitMapImg.getHeight()), new RectF(0, 0, width, height), matrix);
-        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, true);
+        m.setRectToRect(new RectF(0, 0, width, height), new RectF(0, 0, width, height), matrix);
+        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, false);
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
         if (!mediaStorageDir.exists())
             mediaStorageDir.mkdirs();
