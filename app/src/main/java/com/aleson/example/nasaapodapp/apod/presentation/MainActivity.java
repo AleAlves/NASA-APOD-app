@@ -41,6 +41,7 @@ import com.aleson.example.nasaapodapp.apod.domain.ConfigModel;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
+import com.aleson.example.nasaapodapp.favorites.Favorites;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
+            case R.id.action_favorites:
+                Intent intentFavorites = new Intent(this, Favorites.class);
+                startActivity(intentFavorites);
+                break;
             case R.id.action_about:
                 break;
             case R.id.action_exit:

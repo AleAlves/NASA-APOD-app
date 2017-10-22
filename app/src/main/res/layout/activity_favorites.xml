@@ -4,6 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aleson.example.nasaapodapp.favorite.Favorites">
+    tools:context="com.aleson.example.nasaapodapp.favorites.Favorites"
+    android:background="#9e9e9e">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:titleTextColor="@color/colorTextTitle"
+        android:theme="@style/MenuBar"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -31,8 +31,8 @@
             android:name="io.fabric.ApiKey"
             android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
 
-        <activity android:name=".favorite.presentation.Favorites" />
-        <activity android:name=".favorite.Favorites"></activity>
+        <activity android:name=".favorites.presentation.Favorites" />
+        <activity android:name=".favorites.Favorites"></activity>
     </application>
 
 </manifest>
