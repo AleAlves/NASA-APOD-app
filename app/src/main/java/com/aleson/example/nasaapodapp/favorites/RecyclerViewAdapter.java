@@ -68,7 +68,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.textViewDate.setText(apodList.get(position).getDate());
-        holder.textViewDate.setText(apodList.get(position).getTitle());
+        holder.textViewTitle.setText(apodList.get(position).getTitle());
     }
 
     @Override
