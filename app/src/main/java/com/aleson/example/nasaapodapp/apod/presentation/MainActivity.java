@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private static String url = "";
     private ConfigModel config;
     private ApodPresenter apodPresenter;
+    private ApodModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         switch (id){
             case R.id.action_favorites:
                 Intent intentFavorites = new Intent(this, Favorites.class);
+                Bundle bundle = new Bundle();
+                ApodModel apodModel = model;
+                bundle.putSerializable("apod", apodModel);
+                intentFavorites.putExtras(bundle);
                 startActivity(intentFavorites);
                 break;
             case R.id.action_about:
@@ -301,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     private void loadImage(ApodModel model) {
+        this.model = model;
         final ApodModel loadModel = model;
         Glide.with(this)
                 .load(model.getHdurl())

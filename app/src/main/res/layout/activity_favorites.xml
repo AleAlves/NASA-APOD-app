@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aleson.example.nasaapodapp.favorites.Favorites"
-    android:background="#9e9e9e">
+    android:background="#9e9e9e"
+    tools:context="com.aleson.example.nasaapodapp.favorites.Favorites">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -13,7 +13,16 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        app:titleTextColor="@color/colorTextTitle"
-        android:theme="@style/MenuBar"/>
+        android:theme="@style/MenuBar"
+        app:titleTextColor="@color/colorTextTitle" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/favorites_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>

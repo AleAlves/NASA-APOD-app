@@ -2,7 +2,9 @@ package com.aleson.example.nasaapodapp.apod.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ApodModel {
+import java.io.Serializable;
+
+public class ApodModel implements Serializable {
 
     @SerializedName("code")
     private String code;
