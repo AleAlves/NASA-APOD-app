@@ -42,6 +42,7 @@ import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.Favorites;
+import com.aleson.example.nasaapodapp.utils.ApodBD;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -60,6 +61,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -328,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
+        saveFavoriteApod(model);
         scrollView.setVisibility(View.VISIBLE);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -478,4 +481,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
+    private void saveFavoriteApod(ApodModel apodModel){
+        ApodBD apodBD = new ApodBD(mActivity);
+        apodBD.save(apodModel);
+        List<ApodModel> lost = apodBD.finAll();
+    }
 }
