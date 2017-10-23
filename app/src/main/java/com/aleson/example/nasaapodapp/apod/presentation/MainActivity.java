@@ -61,7 +61,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -484,6 +483,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private void saveFavoriteApod(ApodModel apodModel){
         ApodBD apodBD = new ApodBD(mActivity);
         apodBD.save(apodModel);
-        List<ApodModel> lost = apodBD.finAll();
     }
 }

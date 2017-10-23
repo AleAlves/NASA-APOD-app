@@ -60,6 +60,7 @@ public class ApodRepositoryImpl implements ApodRepository {
         if (model.getUrl() == null || model.getCode() == "400") {
             apodPresenter.responseError(model);
         } else {
+            model.setId(Long.parseLong(model.getDate().replace("-","")));
             apodPresenter.responseSucess(model);
         }
     }

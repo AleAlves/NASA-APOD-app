@@ -18,7 +18,9 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -31,7 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     View view1;
     ViewHolder viewHolder1;
 
-    public RecyclerViewAdapter(Context context, ArrayList<ApodModel> messages) {
+    public RecyclerViewAdapter(Context context, List<ApodModel> messages) {
         this.apodList.addAll(messages);
         this.context = context;
     }
@@ -67,15 +69,39 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.textViewDate.setText(apodList.get(position).getDate());
+        SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
+        try {
+            holder.textViewDate.setText(outFormat.format(inFormat.parse(apodList.get(position).getDate())));
+        }catch (Exception e){
+
+        }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
+        loadImage(apodList.get(position).getUrl(), holder);
     }
 
     @Override
     public int getItemCount() {
-
         return apodList.size();
     }
 
+
+    private void loadImage(final String url, final ViewHolder holder) {
+        Glide.with(context)
+                .load(url)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        loadImage(url, holder);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(holder.imageViewImage);
+    }
 
 }

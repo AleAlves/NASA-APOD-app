@@ -33,20 +33,22 @@
                 android:layout_marginLeft="5dp"
                 android:maxLines="1"
                 android:text="A Total Solar Eclipse over Wyoming"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/imageview_apod_image"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="right"
-            android:src="@drawable/wyoming" />
+            android:src="@drawable/wyoming"
+            android:scaleType="fitXY"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:background="@null" />
     </FrameLayout>
 </LinearLayout>

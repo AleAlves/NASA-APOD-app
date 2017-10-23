@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class ApodModel implements Serializable {
 
+    private long id;
+
     @SerializedName("code")
     private String code;
 
@@ -125,5 +127,14 @@ public class ApodModel implements Serializable {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
 
 }
