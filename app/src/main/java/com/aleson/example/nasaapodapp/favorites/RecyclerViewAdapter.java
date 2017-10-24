@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
@@ -44,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView textViewDate;
         public TextView textViewTitle;
         public ImageView imageViewImage;
+        public ProgressBar progressBarLoadingFavImage;
 
 
         public ViewHolder(View v) {
@@ -53,6 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textViewDate = (TextView) v.findViewById(R.id.textview_apod_date);
             textViewTitle = (TextView) v.findViewById(R.id.textview_apod_title);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_apod_image);
+            progressBarLoadingFavImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_fav_image);
         }
     }
 
@@ -77,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
-        loadImage(apodList.get(position).getUrl(), holder);
+        loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingFavImage);
     }
 
     @Override
@@ -86,18 +89,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    private void loadImage(final String url, final ViewHolder holder) {
+    private void loadImage(final String url, final ViewHolder holder, final ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xF9F9F9F9, android.graphics.PorterDuff.Mode.MULTIPLY);
         Glide.with(context)
                 .load(url)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        loadImage(url, holder);
+                        loadImage(url, holder, progressBar);
+                        progressBar.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })

@@ -45,6 +45,14 @@
             android:src="@drawable/wyoming"
             android:scaleType="fitXY"
             android:layout_marginRight="5dp"/>
+        
+        <ProgressBar
+            android:visibility="visible"
+            android:id="@+id/progressbar_loading_fav_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="35dp"
+            android:layout_gravity="right|center"/>
 
         <View
             android:layout_width="match_parent"
