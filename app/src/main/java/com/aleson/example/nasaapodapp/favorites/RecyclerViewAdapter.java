@@ -7,12 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.utils.ApodBD;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -33,10 +35,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     Context context;
     View view1;
     ViewHolder viewHolder1;
+    Button button;
+    FavoritesView mFavoritesView;
 
-    public RecyclerViewAdapter(Context context, List<ApodModel> messages) {
+    public RecyclerViewAdapter(Context context, List<ApodModel> messages, Favorites activity) {
         this.apodList.addAll(messages);
         this.context = context;
+        this.mFavoritesView = (FavoritesView) activity;
     }
 
 
@@ -46,7 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView textViewTitle;
         public ImageView imageViewImage;
         public ProgressBar progressBarLoadingFavImage;
-
+        public Button buttonDeleteApod;
 
         public ViewHolder(View v) {
 
@@ -56,6 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textViewTitle = (TextView) v.findViewById(R.id.textview_apod_title);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_apod_image);
             progressBarLoadingFavImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_fav_image);
+            buttonDeleteApod = (Button) v.findViewById(R.id.button_delete_apod);
         }
     }
 
@@ -70,7 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
@@ -81,6 +87,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingFavImage);
+
+        holder.buttonDeleteApod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ApodBD apodBD = new ApodBD(context);
+                apodBD.delete(apodList.get(position));
+                mFavoritesView.reloadFavoritesList();
+            }
+        });
     }
 
     @Override

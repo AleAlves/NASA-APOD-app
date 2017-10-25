@@ -59,6 +59,7 @@ public class ApodBD extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
+            contentValues.put("_id", apodModel.getId());
             contentValues.put("copyright", apodModel.getCopyright());
             contentValues.put("date", apodModel.getDate());
             contentValues.put("explanation", apodModel.getExplanation());
@@ -67,7 +68,7 @@ public class ApodBD extends SQLiteOpenHelper {
             contentValues.put("media_type", apodModel.getMedia_type());
             contentValues.put("service_version", apodModel.getService_version());
             contentValues.put("title", apodModel.getTitle());
-            if (exists(apodModel.getDate(), db)) {
+            if (exists(apodModel.getId(), db)) {
                 String[] whereArgs = new String[]{String.valueOf(_id)};
                 return db.update("fav_apod", contentValues, "_id=?", whereArgs);
             } else {
@@ -81,7 +82,7 @@ public class ApodBD extends SQLiteOpenHelper {
     public int delete(ApodModel apodModel) {
         SQLiteDatabase db = getWritableDatabase();
         try {
-            return db.delete("fav_apod", "date=?", new String[]{apodModel.getDate()});
+            return db.delete("fav_apod", "_id=?", new String[]{String.valueOf(apodModel.getId())});
         } finally {
             db.close();
         }
@@ -104,6 +105,7 @@ public class ApodBD extends SQLiteOpenHelper {
             do {
                 ApodModel apodModel = new ApodModel();
                 apodModels.add(apodModel);
+                apodModel.setId(cursor.getLong(cursor.getColumnIndex("_id")));
                 apodModel.setDate(cursor.getString(cursor.getColumnIndex("date")));
                 apodModel.setCopyright(cursor.getString(cursor.getColumnIndex("copyright")));
                 apodModel.setExplanation(cursor.getString(cursor.getColumnIndex("explanation")));
@@ -117,8 +119,8 @@ public class ApodBD extends SQLiteOpenHelper {
         return apodModels;
     }
 
-    private boolean exists(String date, SQLiteDatabase db) {
-        Cursor cursor = db.query("fav_apod", null, "date=?", new String[]{date}, null, null, null);
+    private boolean exists(long id, SQLiteDatabase db) {
+        Cursor cursor = db.query("fav_apod", null, "_id=?", new String[]{String.valueOf(id)}, null, null, null);
         boolean exists = cursor.getCount() > 0;
         return exists;
     }

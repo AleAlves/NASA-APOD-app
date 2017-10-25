@@ -21,9 +21,8 @@ import com.aleson.example.nasaapodapp.utils.ApodBD;
 
 import java.util.ArrayList;
 
-public class Favorites extends AppCompatActivity {
+public class Favorites extends AppCompatActivity implements FavoritesView{
 
-    private ArrayList<ApodModel> apodList = new ArrayList<>();
     private Activity mActivity;
     private Context context;
     RecyclerView recyclerView;
@@ -38,7 +37,6 @@ public class Favorites extends AppCompatActivity {
         setContentView(R.layout.activity_favorites);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        ApodModel apod = (ApodModel) getIntent().getExtras().getSerializable("apod");
         ArrayList<ApodModel> apodModelList;
         ApodBD apodBD = new ApodBD(this);
         apodModelList = apodBD.finAll();
@@ -82,7 +80,17 @@ public class Favorites extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.favorites_list);
         recylerViewLayoutManager = new LinearLayoutManager(mActivity);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(context, model);
+        recyclerViewAdapter = new RecyclerViewAdapter(context, model, this);
+        recyclerView.setAdapter(recyclerViewAdapter);
+    }
+
+    @Override
+    public void reloadFavoritesList() {
+        ArrayList<ApodModel> apodModelList;
+        ApodBD apodBD = new ApodBD(this);
+        apodModelList = apodBD.finAll();
+        adapter(apodModelList);
+        recyclerViewAdapter = new RecyclerViewAdapter(context, apodModelList, this);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 }
