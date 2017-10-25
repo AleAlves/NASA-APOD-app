@@ -50,7 +50,8 @@
                 android:text="2017 August 22 "
                 android:textSize="14dp"
                 android:gravity="center"
-                android:layout_gravity="center"/>
+                android:layout_gravity="top|center"
+                android:paddingTop="10dp"/>
 
             <TextView
                 android:id="@+id/textview_apod_title"
