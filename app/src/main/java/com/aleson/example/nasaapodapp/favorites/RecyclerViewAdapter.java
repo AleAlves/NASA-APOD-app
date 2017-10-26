@@ -1,5 +1,6 @@
 package com.aleson.example.nasaapodapp.favorites;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -7,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,13 +35,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ArrayList<ApodModel> apodList = new ArrayList<>();
     Context context;
     View view1;
+    static Activity activity;
     ViewHolder viewHolder1;
-    Button button;
-    FavoritesView mFavoritesView;
+    static FavoritesView mFavoritesView;
 
     public RecyclerViewAdapter(Context context, List<ApodModel> messages, Favorites activity) {
         this.apodList.addAll(messages);
         this.context = context;
+        this.activity = activity;
         this.mFavoritesView = (FavoritesView) activity;
     }
 
@@ -51,7 +53,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView textViewTitle;
         public ImageView imageViewImage;
         public ProgressBar progressBarLoadingFavImage;
-        public Button buttonDeleteApod;
+        public ImageButton buttonDeleteApod;
+        public ImageButton buttonWallpaperApod;
 
         public ViewHolder(View v) {
 
@@ -61,7 +64,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textViewTitle = (TextView) v.findViewById(R.id.textview_apod_title);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_apod_image);
             progressBarLoadingFavImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_fav_image);
-            buttonDeleteApod = (Button) v.findViewById(R.id.button_delete_apod);
+            buttonDeleteApod = (ImageButton) v.findViewById(R.id.button_delete_apod);
+            buttonWallpaperApod = (ImageButton) v.findViewById(R.id.button_wallpaper_apod);
+            buttonWallpaperApod.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mFavoritesView.openWallpaperManager();
+                }
+            });
         }
     }
 

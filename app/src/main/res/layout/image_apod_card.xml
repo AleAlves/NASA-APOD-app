@@ -40,6 +40,35 @@
                     android:layout_marginRight="5dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/wyoming"/>
+
+                <ImageButton
+                    android:id="@+id/button_delete_apod"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/progressbar_loading_fav_image"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:background="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_delete_forever_black_24dp"
+                    android:textColor="#000" />
+
+                <ImageButton
+                    android:id="@+id/button_wallpaper_apod"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="48dp"
+                    android:background="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_image_black_24dp"
+                    android:textColor="#000"
+                    android:layout_alignTop="@+id/button_delete_apod"
+                    android:layout_toStartOf="@+id/button_delete_apod"
+                    android:layout_marginEnd="11dp" />
             </RelativeLayout>
 
             <TextView
@@ -69,14 +98,6 @@
                 android:layout_gravity="bottom"
                 android:background="@null" />
 
-            <Button
-                android:id="@+id/button_delete_apod"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="5dp"
-                android:text="X"
-                android:textColor="#000" />
         </FrameLayout>
     </FrameLayout>
 </LinearLayout>

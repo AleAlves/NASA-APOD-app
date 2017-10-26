@@ -7,4 +7,5 @@ package com.aleson.example.nasaapodapp.favorites;
 public interface FavoritesView {
 
     void reloadFavoritesList();
+    void openWallpaperManager();
 }

@@ -93,4 +93,10 @@ public class Favorites extends AppCompatActivity implements FavoritesView{
         recyclerViewAdapter = new RecyclerViewAdapter(context, apodModelList, this);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
+
+    @Override
+    public void openWallpaperManager() {
+        Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+        startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+    }
 }

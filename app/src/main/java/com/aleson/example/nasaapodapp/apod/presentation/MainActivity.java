@@ -4,19 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.Point;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -42,8 +35,8 @@ import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.Favorites;
-import com.aleson.example.nasaapodapp.utils.ApodBD;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
+import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -53,8 +46,6 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -107,14 +98,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_favorites:
                 Intent intentFavorites = new Intent(this, Favorites.class);
                 Bundle bundle = new Bundle();
@@ -137,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 try {
                     startActivity(openPlayStore);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(mActivity, " unable to find market app",   Toast.LENGTH_LONG).show();
+                    Toast.makeText(mActivity, " unable to find market app", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.action_lenguage:
@@ -329,52 +320,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
-        saveFavoriteApod(model);
         scrollView.setVisibility(View.VISIBLE);
+        Wallpaper wallpaper = new Wallpaper(mActivity);
         Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = 0;
-        int height = 0;
-        Matrix.ScaleToFit matrix = null;
-        width = size.x + bitMapImg.getHeight() / 2;
-        height = size.y + bitMapImg.getWidth() / 2;
-        matrix = Matrix.ScaleToFit.START;
-        Matrix m = new Matrix();
-        m.setRectToRect(new RectF(0, 0, width, height), new RectF(0, 0, width, height), matrix);
-        bitMapImg = Bitmap.createBitmap(bitMapImg, 0, 0, bitMapImg.getWidth(), bitMapImg.getHeight(), m, false);
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "APOD");
-        if (!mediaStorageDir.exists())
-            mediaStorageDir.mkdirs();
-        try {
-            String format = url.substring(url.length() - 3, url.length());
-            Bitmap.CompressFormat bcf = null;
-            switch (format) {
-                case "jpg":
-                case "jpeg":
-                    bcf = Bitmap.CompressFormat.JPEG;
-                    break;
-                case "png":
-                    bcf = Bitmap.CompressFormat.PNG;
-                    break;
-            }
-            String fname = dataSelecionadaTitulo + "." + format;
-            File file = new File(mediaStorageDir, fname);
-            if (file.exists()) {
-                file.delete();
-            }
-            file.createNewFile();
-            Date currentTime = Calendar.getInstance().getTime();
-            file.setLastModified(currentTime.getTime());
-            FileOutputStream out = new FileOutputStream(file);
-            bitMapImg.compress(bcf, 100, out);
-            out.flush();
-            out.close();
-            addImageToGallery(file.toString(), mActivity);
-            Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
-            startActivity(Intent.createChooser(intent, "Select Wallpaper"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (wallpaper.setWallpaper(model, bitMapImg, url, dataSelecionadaTitulo, display)) {
+            openSystemWallpaperManager();
+        } else {
+            Toast.makeText(mActivity, "Error", Toast.LENGTH_LONG);
         }
     }
 
@@ -432,47 +384,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         return df.format(dataInicial);
     }
 
-    public static void addImageToGallery(final String filePath, final Context context) {
-
-        ContentValues values = new ContentValues();
-
-        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-        values.put(MediaStore.MediaColumns.DATA, filePath);
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-    }
-
     private void permission() {
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
-
-                // No explanation needed, we can request the permission.
-
                 ActivityCompat.requestPermissions(mActivity,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
         if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
                     Manifest.permission.INTERNET)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
-
-                // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(mActivity,
                         new String[]{Manifest.permission.INTERNET}, 1);
@@ -480,8 +407,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
-    private void saveFavoriteApod(ApodModel apodModel){
-        ApodBD apodBD = new ApodBD(mActivity);
-        apodBD.save(apodModel);
+    public void openSystemWallpaperManager() {
+        Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+        startActivity(Intent.createChooser(intent, "Select Wallpaper"));
     }
 }
