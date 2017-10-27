@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:paddingBottom="1dp"
-    android:paddingTop="1dp">
+    android:paddingTop="1dp"
+    android:orientation="vertical">
 
-    <FrameLayout
+    <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorAccent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -27,11 +26,11 @@
                     android:id="@+id/progressbar_loading_fav_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:foregroundGravity="center_vertical"
-                    android:visibility="visible"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="34dp" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="34dp"
+                    android:foregroundGravity="center_vertical"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/imageview_apod_image"
@@ -39,48 +38,25 @@
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/wyoming"/>
-
-                <ImageButton
-                    android:id="@+id/button_delete_apod"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignTop="@+id/progressbar_loading_fav_image"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="8dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_delete_forever_black_24dp"
-                    android:textColor="#000" />
-
-                <ImageButton
-                    android:id="@+id/button_wallpaper_apod"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="48dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_image_black_24dp"
-                    android:textColor="#000"
-                    android:layout_alignTop="@+id/button_delete_apod"
-                    android:layout_toStartOf="@+id/button_delete_apod"
-                    android:layout_marginEnd="11dp" />
+                    android:src="@drawable/wyoming"
+                    android:padding="5dp"/>
             </RelativeLayout>
-
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
             <TextView
                 android:id="@+id/textview_apod_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="2017 August 22 "
-                android:textSize="14dp"
-                android:gravity="center"
                 android:layout_gravity="top|center"
-                android:paddingTop="10dp"/>
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingTop="10dp"
+                android:text="2017 August 22 "
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/textview_apod_title"
@@ -92,12 +68,45 @@
                 android:textSize="12dp"
                 android:visibility="gone" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_gravity="bottom"
-                android:background="@null" />
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp">
 
-        </FrameLayout>
-    </FrameLayout>
-</LinearLayout>
+            <ImageButton
+                android:id="@+id/button_wallpaper_apod"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_image_black_24dp"
+                android:textColor="#000" />
+
+            <ImageButton
+                android:id="@+id/button_delete_apod"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_delete_forever_black_24dp"
+                android:textColor="#000" />
+        </LinearLayout>
+    </GridLayout>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="bottom"
+            android:background="@null" />
+    </GridLayout>
+</FrameLayout>
