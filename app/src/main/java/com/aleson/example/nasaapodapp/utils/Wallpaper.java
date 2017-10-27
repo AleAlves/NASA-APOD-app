@@ -32,7 +32,6 @@ public class Wallpaper extends AppCompatActivity{
     }
 
     public boolean setWallpaper(ApodModel model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display){
-        saveFavoriteApod(model);
         Point size = new Point();
         display.getSize(size);
         int width = 0;
@@ -71,6 +70,8 @@ public class Wallpaper extends AppCompatActivity{
             bitMapImg.compress(bcf, 100, out);
             out.flush();
             out.close();
+            model.setFileLocation(file.getAbsolutePath());
+            saveFavoriteApod(model);
             addImageToGallery(file.toString(), activity);
             return true;
         } catch (Exception e) {
@@ -91,5 +92,13 @@ public class Wallpaper extends AppCompatActivity{
     private void saveFavoriteApod(ApodModel apodModel){
         ApodBD apodBD = new ApodBD(activity);
         apodBD.save(apodModel);
+    }
+
+    public void deleteFile(ApodModel apodModel){
+        String fname = apodModel.getFileLocation();
+        File file = new File(fname);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 }

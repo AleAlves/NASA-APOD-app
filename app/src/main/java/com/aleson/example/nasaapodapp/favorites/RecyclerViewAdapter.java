@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 import com.aleson.example.nasaapodapp.utils.ApodBD;
+import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -145,6 +146,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 ApodBD apodBD = new ApodBD(context);
                 apodBD.delete(apodList.get(position));
+                Wallpaper wallpaper = new Wallpaper(activity);
+                wallpaper.deleteFile(apodList.get(position).getFileLocation());
                 mFavoritesView.reloadFavoritesList();
             }
         });

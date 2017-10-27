@@ -10,6 +10,8 @@ public class ApodModel implements Serializable {
 
     private int rate;
 
+    private String fileLocation;
+
     @SerializedName("code")
     private String code;
 
@@ -145,4 +147,13 @@ public class ApodModel implements Serializable {
     public void setRate(int rate) {
         this.rate = rate;
     }
+
+    public String getFileLocation() {
+        return fileLocation;
+    }
+
+    public void setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
+    }
+
 }

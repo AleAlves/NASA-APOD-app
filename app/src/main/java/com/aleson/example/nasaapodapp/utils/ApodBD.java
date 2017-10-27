@@ -47,6 +47,7 @@ public class ApodBD extends SQLiteOpenHelper {
                 "    title text," +
                 "    url text," +
                 "    rate integer" +
+                "    file_location text" +
                 ");");
     }
 
@@ -70,6 +71,7 @@ public class ApodBD extends SQLiteOpenHelper {
             contentValues.put("service_version", apodModel.getService_version());
             contentValues.put("title", apodModel.getTitle());
             contentValues.put("rate",apodModel.getRate());
+            contentValues.put("file_location",apodModel.getRate());
             if (exists(apodModel.getId(), db)) {
                 String[] whereArgs = new String[]{String.valueOf(_id)};
                 return db.update("fav_apod", contentValues, "_id=?", whereArgs);
