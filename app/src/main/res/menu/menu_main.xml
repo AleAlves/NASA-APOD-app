@@ -5,7 +5,7 @@
         android:title="my favorites"/>
     <item
         android:id="@+id/action_lenguage"
-        android:title="lenguage"/>
+        android:title="language"/>
     <item
         android:id="@+id/action_about"
         android:title="about"/>
