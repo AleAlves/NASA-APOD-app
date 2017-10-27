@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.favorites;
+package com.aleson.example.nasaapodapp.favorites.presentation.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
+import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesView;
 import com.aleson.example.nasaapodapp.utils.ApodBD;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
@@ -41,7 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ViewHolder viewHolder1;
     static FavoritesView mFavoritesView;
 
-    public RecyclerViewAdapter(Context context, List<ApodModel> messages, Favorites activity) {
+    public RecyclerViewAdapter(Context context, List<ApodModel> messages, FavoritesActivity activity) {
         this.apodList.addAll(messages);
         this.context = context;
         this.activity = activity;

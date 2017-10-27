@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.favorites;
+package com.aleson.example.nasaapodapp.favorites.presentation;
 
 /**
  * Created by Santander on 25/10/17.

@@ -34,7 +34,7 @@ import com.aleson.example.nasaapodapp.apod.domain.ConfigModel;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
-import com.aleson.example.nasaapodapp.favorites.Favorites;
+import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         int id = item.getItemId();
         switch (id) {
             case R.id.action_favorites:
-                Intent intentFavorites = new Intent(this, Favorites.class);
+                Intent intentFavorites = new Intent(this, FavoritesActivity.class);
                 Bundle bundle = new Bundle();
                 ApodModel apodModel = model;
                 bundle.putSerializable("apod", apodModel);

@@ -32,7 +32,7 @@
             android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
 
         <activity android:name=".favorites.presentation.Favorites" />
-        <activity android:name=".favorites.Favorites"></activity>
+        <activity android:name=".favorites.presentation.FavoritesActivity"></activity>
     </application>
 
 </manifest>

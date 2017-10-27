@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.favorites;
+package com.aleson.example.nasaapodapp.favorites.presentation;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -17,11 +17,12 @@ import android.widget.Toast;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 import com.aleson.example.nasaapodapp.apod.presentation.MainActivity;
+import com.aleson.example.nasaapodapp.favorites.presentation.adapter.RecyclerViewAdapter;
 import com.aleson.example.nasaapodapp.utils.ApodBD;
 
 import java.util.ArrayList;
 
-public class Favorites extends AppCompatActivity implements FavoritesView{
+public class FavoritesActivity extends AppCompatActivity implements FavoritesView {
 
     private Activity mActivity;
     private Context context;
