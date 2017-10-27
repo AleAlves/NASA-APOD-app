@@ -94,11 +94,12 @@ public class Wallpaper extends AppCompatActivity{
         apodBD.save(apodModel);
     }
 
-    public void deleteFile(ApodModel apodModel){
-        String fname = apodModel.getFileLocation();
-        File file = new File(fname);
+    public boolean deleteFile(String fileLocation){
+        File file = new File(fileLocation);
         if (file.exists()) {
             file.delete();
+            return true;
         }
+        return false;
     }
 }

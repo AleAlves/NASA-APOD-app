@@ -46,7 +46,7 @@ public class ApodBD extends SQLiteOpenHelper {
                 "    service_version text," +
                 "    title text," +
                 "    url text," +
-                "    rate integer" +
+                "    rate integer," +
                 "    file_location text" +
                 ");");
     }
@@ -70,8 +70,8 @@ public class ApodBD extends SQLiteOpenHelper {
             contentValues.put("media_type", apodModel.getMedia_type());
             contentValues.put("service_version", apodModel.getService_version());
             contentValues.put("title", apodModel.getTitle());
-            contentValues.put("rate",apodModel.getRate());
-            contentValues.put("file_location",apodModel.getRate());
+            contentValues.put("rate", apodModel.getRate());
+            contentValues.put("file_location", apodModel.getFileLocation());
             if (exists(apodModel.getId(), db)) {
                 String[] whereArgs = new String[]{String.valueOf(_id)};
                 return db.update("fav_apod", contentValues, "_id=?", whereArgs);
@@ -119,6 +119,7 @@ public class ApodBD extends SQLiteOpenHelper {
                 apodModel.setTitle(cursor.getString(cursor.getColumnIndex("title")));
                 apodModel.setService_version(cursor.getString(cursor.getColumnIndex("service_version")));
                 apodModel.setRate(cursor.getInt(cursor.getColumnIndex("rate")));
+                apodModel.setFileLocation(cursor.getString(cursor.getColumnIndex("file_location")));
             } while (cursor.moveToNext());
         }
         return apodModels;
