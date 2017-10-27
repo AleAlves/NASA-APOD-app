@@ -55,10 +55,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ProgressBar progressBarLoadingFavImage;
         public ImageButton buttonDeleteApod;
         public ImageButton buttonWallpaperApod;
+        public ImageButton buttonStar1;
+        public ImageButton buttonStar2;
+        public ImageButton buttonStar3;
+        public ImageButton buttonStar4;
+        public ImageButton buttonStar5;
 
         public ViewHolder(View v) {
 
             super(v);
+
+            buttonStar1 = (ImageButton) v.findViewById(R.id.image_button_start_1);
+            buttonStar2 = (ImageButton) v.findViewById(R.id.image_button_start_2);
+            buttonStar3 = (ImageButton) v.findViewById(R.id.image_button_start_3);
+            buttonStar4 = (ImageButton) v.findViewById(R.id.image_button_start_4);
+            buttonStar5 = (ImageButton) v.findViewById(R.id.image_button_start_5);
+
 
             textViewDate = (TextView) v.findViewById(R.id.textview_apod_date);
             textViewTitle = (TextView) v.findViewById(R.id.textview_apod_title);
@@ -98,6 +110,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingFavImage);
 
+        switch (apodList.get(position).getRate()){
+            case 0:
+                break;
+            case 1:
+                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+            case 2:
+                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+            case 3:
+                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar3.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+            case 4:
+                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar3.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar4.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+            case 5:
+                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar3.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar4.setImageResource(R.drawable.ic_star_black_24dp);
+                holder.buttonStar5.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+        }
+
         holder.buttonDeleteApod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +148,49 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 mFavoritesView.reloadFavoritesList();
             }
         });
+
+        holder.buttonStar1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRate(apodList.get(position));
+            }
+        });
+
+        holder.buttonStar2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRate(apodList.get(position));
+            }
+        });
+
+        holder.buttonStar3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRate(apodList.get(position));
+            }
+        });
+
+        holder.buttonStar4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRate(apodList.get(position));
+            }
+        });
+
+        holder.buttonStar5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRate(apodList.get(position));
+            }
+        });
+
+
+    }
+
+    private void setRate(ApodModel model){
+        ApodBD apodBD = new ApodBD(context);
+        apodBD.save(model);
+        mFavoritesView.reloadFavoritesList();
     }
 
     @Override

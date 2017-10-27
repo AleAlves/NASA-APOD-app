@@ -8,6 +8,8 @@ public class ApodModel implements Serializable {
 
     private long id;
 
+    private int rate;
+
     @SerializedName("code")
     private String code;
 
@@ -136,5 +138,11 @@ public class ApodModel implements Serializable {
         this.id = id;
     }
 
+    public int getRate() {
+        return rate;
+    }
 
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
 }
