@@ -53,7 +53,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             deviceModel.setImei("321421e23d23d223e");
             deviceModel.setManufactuer(android.os.Build.MANUFACTURER);
             deviceModel.setModelName(android.os.Build.MODEL);
-            deviceModel.setRate_value(0);
+            deviceModel.setRateValue(0);
             deviceModel.setScreenSize("100x100");
             apodBD.saveDeviceInfo(deviceModel);
         }

@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RateRestRequest {
 
-    private String API_BASE_URL = "http://192.168.0.11:3000/";
+    private String API_BASE_URL = "http://192.168.0.11:3000/api/";
 
     public RateRestRequest(ApodModel model) {
 
@@ -30,15 +30,15 @@ public class RateRestRequest {
 
         NasaApodClient client = retrofit.create(NasaApodClient.class);
 
-        Call<ApodModel> call = client.test(model);
-        call.enqueue(new Callback<ApodModel>() {
+        Call<String> call = client.rate(model);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<ApodModel> call, Response<ApodModel> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("E",call.request().url().toString());
             }
 
             @Override
-            public void onFailure(Call<ApodModel> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Log.i("E","error");
             }
         });

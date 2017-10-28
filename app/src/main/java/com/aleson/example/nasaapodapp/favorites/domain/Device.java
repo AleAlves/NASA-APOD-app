@@ -12,8 +12,8 @@ public class Device implements Serializable{
     private String imei;
     private String modelName;
     private String screenSize;
-    private String manufactuer;
-    private int rate_value;
+    private String manufacturer;
+    private int rateValue;
 
     public int getId() {
         return id;
@@ -48,18 +48,18 @@ public class Device implements Serializable{
     }
 
     public String getManufactuer() {
-        return manufactuer;
+        return manufacturer;
     }
 
     public void setManufactuer(String manufactuer) {
-        this.manufactuer = manufactuer;
+        this.manufacturer = manufactuer;
     }
 
-    public int getRate_value() {
-        return rate_value;
+    public int getRateValue() {
+        return rateValue;
     }
 
-    public void setRate_value(int rate_value) {
-        this.rate_value = rate_value;
+    public void setRateValue(int rate_value) {
+        this.rateValue = rate_value;
     }
 }

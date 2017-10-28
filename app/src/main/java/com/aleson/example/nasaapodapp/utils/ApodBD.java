@@ -38,9 +38,8 @@ public class ApodBD extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS fav_apod (" +
                 "    _id integer primary key," +
-                "    day text ," +
+                "    date text ," +
                 "    copyright text," +
-                "    date text," +
                 "    explanation text," +
                 "    hdurl text," +
                 "    media_type text," +
@@ -64,7 +63,7 @@ public class ApodBD extends SQLiteOpenHelper {
             ContentValues contentValues = new ContentValues();
             contentValues.put("_id", apodModel.getId());
             contentValues.put("copyright", apodModel.getCopyright());
-            contentValues.put("day", apodModel.getDay());
+            contentValues.put("date", apodModel.getDate());
             contentValues.put("explanation", apodModel.getExplanation());
             contentValues.put("hdurl", apodModel.getHdurl());
             contentValues.put("url", apodModel.getUrl());
@@ -94,7 +93,7 @@ public class ApodBD extends SQLiteOpenHelper {
             contentValues.put("manufacturer", model.getManufactuer());
             contentValues.put("model_name", model.getModelName());
             contentValues.put("screen_size", model.getScreenSize());
-            contentValues.put("rate_value", model.getRate_value());
+            contentValues.put("rate_value", model.getRateValue());
             if (existsDevice(model.getId(), db)) {
                 String[] whereArgs = new String[]{String.valueOf(_id)};
                 db.update("device", contentValues, "_id=?", whereArgs);
@@ -154,7 +153,7 @@ public class ApodBD extends SQLiteOpenHelper {
                 Apod apodModel = new Apod();
                 apodModels.add(apodModel);
                 apodModel.setId(cursor.getLong(cursor.getColumnIndex("_id")));
-                apodModel.setDay(cursor.getString(cursor.getColumnIndex("day")));
+                apodModel.setDate(cursor.getString(cursor.getColumnIndex("date")));
                 apodModel.setCopyright(cursor.getString(cursor.getColumnIndex("copyright")));
                 apodModel.setExplanation(cursor.getString(cursor.getColumnIndex("explanation")));
                 apodModel.setHdurl(cursor.getString(cursor.getColumnIndex("hdurl")));
@@ -173,7 +172,7 @@ public class ApodBD extends SQLiteOpenHelper {
         Device deviceModel = new Device();
         if (cursor.moveToFirst()) {
             deviceModel.setId(cursor.getInt(cursor.getColumnIndex("_id")));
-            deviceModel.setRate_value(cursor.getInt(cursor.getColumnIndex("rate_value")));
+            deviceModel.setRateValue(cursor.getInt(cursor.getColumnIndex("rate_value")));
             deviceModel.setImei(cursor.getString(cursor.getColumnIndex("imei")));
             deviceModel.setScreenSize(cursor.getString(cursor.getColumnIndex("screen_size")));
             deviceModel.setModelName(cursor.getString(cursor.getColumnIndex("model_name")));

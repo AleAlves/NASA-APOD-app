@@ -282,12 +282,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 explanation.setText(model.getExplanation());
             if (model.getCopyright() != null)
                 copyright.setText(model.getCopyright() + "©");
-            if (model.getDay() != null) {
-                dataSelecionadaTitulo = model.getDay();
+            if (model.getDate() != null) {
+                dataSelecionadaTitulo = model.getDate();
                 try {
                     SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
                     SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
-                    date.setText(outFormat.format(inFormat.parse(model.getDay())));
+                    date.setText(outFormat.format(inFormat.parse(model.getDate())));
                 } catch (Exception e) {
                     Log.e("", "");
                 }

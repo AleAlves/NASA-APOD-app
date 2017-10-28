@@ -57,10 +57,10 @@ public class ApodRepositoryImpl implements ApodRepository {
         Apod model = gson.fromJson(response, Apod.class);
         mainActivityView.onFinishLoad();
 
-        if (model.getUrl() == null || model.getCode() == "400" || model.getDay() == null) {
+        if (model.getUrl() == null || model.getCode() == "400" || model.getDate() == null) {
             apodPresenter.responseError(model);
         } else {
-            model.setId(Long.parseLong(model.getDay().replace("-","")));
+            model.setId(Long.parseLong(model.getDate().replace("-","")));
             apodPresenter.responseSucess(model);
         }
     }

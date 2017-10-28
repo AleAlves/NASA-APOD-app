@@ -112,7 +112,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
         try {
-            holder.textViewDate.setText(outFormat.format(inFormat.parse(apodList.get(position).getDay())));
+            holder.textViewDate.setText(outFormat.format(inFormat.parse(apodList.get(position).getDate())));
         } catch (Exception e) {
 
         }
@@ -132,12 +132,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        setRate(apodList.get(position), apodList.get(position).getRate(), holder);
+        loadRate(apodList.get(position).getRate(), holder);
 
         holder.buttonStar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRate(apodList.get(position), 1, holder);
+                saveRate(apodList.get(position), 1);
+                loadRate(apodList.get(position).getRate(), holder);
                 mFavoritesView.reloadFavoritesList();
             }
         });
@@ -145,7 +146,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonStar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRate(apodList.get(position), 2, holder);
+                saveRate(apodList.get(position), 2);
+                loadRate(apodList.get(position).getRate(), holder);
                 mFavoritesView.reloadFavoritesList();
             }
         });
@@ -153,7 +155,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonStar3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRate(apodList.get(position), 3, holder);
+                saveRate(apodList.get(position), 3);
+                loadRate(apodList.get(position).getRate(), holder);
                 mFavoritesView.reloadFavoritesList();
             }
         });
@@ -161,7 +164,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonStar4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRate(apodList.get(position), 4, holder);
+                saveRate(apodList.get(position), 4);
+                loadRate(apodList.get(position).getRate(), holder);
                 mFavoritesView.reloadFavoritesList();
             }
         });
@@ -169,7 +173,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonStar5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRate(apodList.get(position), 5, holder);
+                saveRate(apodList.get(position), 5);
+                loadRate(apodList.get(position).getRate(), holder);
                 mFavoritesView.reloadFavoritesList();
             }
         });
@@ -178,8 +183,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-    private void setRate(Apod model, int rate, ViewHolder holder) {
-
+    private void loadRate( int rate, ViewHolder holder){
         switch (rate) {
             case 0:
                 break;
@@ -209,15 +213,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.buttonStar5.setImageResource(R.drawable.ic_star_black_24dp);
                 break;
         }
+    }
+
+    private void saveRate(Apod model, int rate) {
         ApodBD apodBD = new ApodBD(context);
         model.setRate(rate);
         Device deviceModel = apodBD.getDeviceInfo();
-        deviceModel.setRate_value(rate);
+        deviceModel.setRateValue(rate);
         apodBD.saveDeviceInfo(deviceModel);
         apodBD.saveApod(model);
         favoritesPresenter.sendRate(model, deviceModel);
     }
-
 
     @Override
     public int getItemCount() {

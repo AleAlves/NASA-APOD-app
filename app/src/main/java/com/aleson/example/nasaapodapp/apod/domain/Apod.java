@@ -22,7 +22,7 @@ public class Apod implements Serializable {
     private String copyright;
 
     @SerializedName("date")
-    private String day;
+    private String date;
 
     @SerializedName("explanation")
     private String explanation;
@@ -60,12 +60,12 @@ public class Apod implements Serializable {
         this.copyright = copyright;
     }
 
-    public String getDay() {
-        return day;
+    public String getDate() {
+        return date;
     }
 
-    public void setDay(String date) {
-        this.day = date;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getExplanation() {
