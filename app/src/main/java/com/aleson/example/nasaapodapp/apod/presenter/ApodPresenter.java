@@ -1,6 +1,6 @@
 package com.aleson.example.nasaapodapp.apod.presenter;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 
 public interface ApodPresenter {
 
@@ -10,9 +10,9 @@ public interface ApodPresenter {
 
     void getChosenApod(String date);
 
-    void responseSucess(ApodModel model);
+    void responseSucess(Apod model);
 
-    void responseError(ApodModel model);
+    void responseError(Apod model);
 
     void chooseWallpaper(String url);
 

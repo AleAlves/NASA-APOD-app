@@ -2,7 +2,7 @@ package com.aleson.example.nasaapodapp.apod.presenter;
 
 import android.app.Activity;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
@@ -39,7 +39,7 @@ public class ApodPresenterImpl implements ApodPresenter {
     }
 
     @Override
-    public void responseSucess(ApodModel model) {
+    public void responseSucess(Apod model) {
         if (model.getUrl().contains(".jpg") || model.getUrl().contains(".jpeg") || model.getUrl().contains(".png")) {
             this.mediaType = Media.IMAGE;
         } else if (model.getUrl().contains(".gif")) {
@@ -51,7 +51,7 @@ public class ApodPresenterImpl implements ApodPresenter {
     }
 
     @Override
-    public void responseError(ApodModel model) {
+    public void responseError(Apod model) {
         mainActivityView.onError("");
     }
 

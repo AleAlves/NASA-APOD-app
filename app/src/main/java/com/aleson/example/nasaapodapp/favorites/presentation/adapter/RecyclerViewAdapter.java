@@ -15,9 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesView;
+import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.utils.ApodBD;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
@@ -36,18 +38,21 @@ import java.util.List;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    ArrayList<ApodModel> apodList = new ArrayList<>();
+    ArrayList<Apod> apodList = new ArrayList<>();
     Context context;
     View view1;
     static Activity activity;
     ViewHolder viewHolder1;
     static FavoritesView mFavoritesView;
+    FavoritesPresenter favoritesPresenter;
 
-    public RecyclerViewAdapter(Context context, List<ApodModel> messages, FavoritesActivity activity) {
+
+    public RecyclerViewAdapter(Context context, List<Apod> messages, FavoritesActivity activity, FavoritesPresenter favoritesPresenter) {
         this.apodList.addAll(messages);
         this.context = context;
         this.activity = activity;
         this.mFavoritesView = (FavoritesView) activity;
+        this.favoritesPresenter = favoritesPresenter;
     }
 
 
@@ -107,7 +112,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
         try {
-            holder.textViewDate.setText(outFormat.format(inFormat.parse(apodList.get(position).getDate())));
+            holder.textViewDate.setText(outFormat.format(inFormat.parse(apodList.get(position).getDay())));
         } catch (Exception e) {
 
         }
@@ -173,7 +178,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-    private void setRate(ApodModel model, int rate, ViewHolder holder) {
+    private void setRate(Apod model, int rate, ViewHolder holder) {
 
         switch (rate) {
             case 0:
@@ -204,11 +209,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.buttonStar5.setImageResource(R.drawable.ic_star_black_24dp);
                 break;
         }
-
         ApodBD apodBD = new ApodBD(context);
         model.setRate(rate);
-        apodBD.save(model);
+        Device deviceModel = apodBD.getDeviceInfo();
+        deviceModel.setRate_value(rate);
+        apodBD.saveDeviceInfo(deviceModel);
+        apodBD.saveApod(model);
+        favoritesPresenter.sendRate(model, deviceModel);
     }
+
 
     @Override
     public int getItemCount() {

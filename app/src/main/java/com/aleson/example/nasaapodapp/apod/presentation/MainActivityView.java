@@ -2,7 +2,7 @@ package com.aleson.example.nasaapodapp.apod.presentation;
 
 import android.graphics.Bitmap;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 
 public interface MainActivityView {
 
@@ -16,7 +16,7 @@ public interface MainActivityView {
 
     void onFinishLoad();
 
-    void setContent(ApodModel model);
+    void setContent(Apod model);
 
     void setWallpaper(Bitmap bitmap);
 }

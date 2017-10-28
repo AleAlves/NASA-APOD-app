@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.domain.ConfigModel;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private static String url = "";
     private ConfigModel config;
     private ApodPresenter apodPresenter;
-    private ApodModel model;
+    private Apod model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             case R.id.action_favorites:
                 Intent intentFavorites = new Intent(this, FavoritesActivity.class);
                 Bundle bundle = new Bundle();
-                ApodModel apodModel = model;
+                Apod apodModel = model;
                 bundle.putSerializable("apod", apodModel);
                 intentFavorites.putExtras(bundle);
                 startActivity(intentFavorites);
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void setContent(ApodModel model) {
+    public void setContent(Apod model) {
         scrollView.setVisibility(View.VISIBLE);
         url = model.getUrl();
         if (url != null) {
@@ -282,12 +282,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 explanation.setText(model.getExplanation());
             if (model.getCopyright() != null)
                 copyright.setText(model.getCopyright() + "©");
-            if (model.getDate() != null) {
-                dataSelecionadaTitulo = model.getDate();
+            if (model.getDay() != null) {
+                dataSelecionadaTitulo = model.getDay();
                 try {
                     SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
                     SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
-                    date.setText(outFormat.format(inFormat.parse(model.getDate())));
+                    date.setText(outFormat.format(inFormat.parse(model.getDay())));
                 } catch (Exception e) {
                     Log.e("", "");
                 }
@@ -297,9 +297,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
-    private void loadImage(ApodModel model) {
+    private void loadImage(Apod model) {
         this.model = model;
-        final ApodModel loadModel = model;
+        final Apod loadModel = model;
         Glide.with(this)
                 .load(model.getHdurl())
                 .listener(new RequestListener<Drawable>() {
@@ -403,6 +403,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
                 ActivityCompat.requestPermissions(mActivity,
                         new String[]{Manifest.permission.INTERNET}, 1);
+            }
+        }
+        if(ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
+                    Manifest.permission.READ_PHONE_STATE)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(mActivity,
+                        new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
             }
         }
     }

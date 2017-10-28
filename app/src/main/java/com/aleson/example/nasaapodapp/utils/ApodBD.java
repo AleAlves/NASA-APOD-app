@@ -6,7 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.favorites.domain.Device;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class ApodBD extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS device (" +
-                "    _id integer primary key, " +
+                "    _id integer primary key autoincrement, " +
                 "    imei text," +
                 "    model_name text," +
                 "    screen_size text," +
@@ -37,9 +38,9 @@ public class ApodBD extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS fav_apod (" +
                 "    _id integer primary key," +
-                "    date text ," +
+                "    day text ," +
                 "    copyright text," +
-                "    date_ text," +
+                "    date text," +
                 "    explanation text," +
                 "    hdurl text," +
                 "    media_type text," +
@@ -56,14 +57,14 @@ public class ApodBD extends SQLiteOpenHelper {
 
     }
 
-    public long save(ApodModel apodModel) {
+    public long saveApod(Apod apodModel) {
         long _id = apodModel.getId();
         SQLiteDatabase db = getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put("_id", apodModel.getId());
             contentValues.put("copyright", apodModel.getCopyright());
-            contentValues.put("date", apodModel.getDate());
+            contentValues.put("day", apodModel.getDay());
             contentValues.put("explanation", apodModel.getExplanation());
             contentValues.put("hdurl", apodModel.getHdurl());
             contentValues.put("url", apodModel.getUrl());
@@ -83,7 +84,50 @@ public class ApodBD extends SQLiteOpenHelper {
         }
     }
 
-    public int delete(ApodModel apodModel) {
+    public void saveDeviceInfo(Device model){
+        long _id = model.getId();
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("_id", model.getId());
+            contentValues.put("imei", model.getImei());
+            contentValues.put("manufacturer", model.getManufactuer());
+            contentValues.put("model_name", model.getModelName());
+            contentValues.put("screen_size", model.getScreenSize());
+            contentValues.put("rate_value", model.getRate_value());
+            if (existsDevice(model.getId(), db)) {
+                String[] whereArgs = new String[]{String.valueOf(_id)};
+                db.update("device", contentValues, "_id=?", whereArgs);
+            } else {
+                db.insert("device", "", contentValues);
+            }
+        } finally {
+            db.close();
+        }
+    }
+
+    public Device getDeviceInfo() {
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            Cursor cursor = db.query("device", null, null, null, null, null, null);
+            return (Device) deviceItem(cursor);
+        } finally {
+            db.close();
+        }
+    }
+
+    public boolean hasDeviceInformation(){
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+            Cursor cursor = db.query("device", null, null, null, null, null, null);
+            boolean exists = cursor.getCount() > 0;
+            return exists;
+        }finally{
+            return false;
+        }
+    }
+
+    public int delete(Apod apodModel) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             return db.delete("fav_apod", "_id=?", new String[]{String.valueOf(apodModel.getId())});
@@ -93,24 +137,24 @@ public class ApodBD extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<ApodModel> finAll() {
+    public ArrayList<Apod> finAll() {
         SQLiteDatabase db = getReadableDatabase();
         try {
             Cursor cursor = db.query("fav_apod", null, null, null, null, null, null);
-            return (ArrayList<ApodModel>) toList(cursor);
+            return (ArrayList<Apod>) toList(cursor);
         } finally {
             db.close();
         }
     }
 
-    private List<ApodModel> toList(Cursor cursor) {
-        List<ApodModel> apodModels = new ArrayList<>();
+    private List<Apod> toList(Cursor cursor) {
+        List<Apod> apodModels = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                ApodModel apodModel = new ApodModel();
+                Apod apodModel = new Apod();
                 apodModels.add(apodModel);
                 apodModel.setId(cursor.getLong(cursor.getColumnIndex("_id")));
-                apodModel.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                apodModel.setDay(cursor.getString(cursor.getColumnIndex("day")));
                 apodModel.setCopyright(cursor.getString(cursor.getColumnIndex("copyright")));
                 apodModel.setExplanation(cursor.getString(cursor.getColumnIndex("explanation")));
                 apodModel.setHdurl(cursor.getString(cursor.getColumnIndex("hdurl")));
@@ -125,8 +169,27 @@ public class ApodBD extends SQLiteOpenHelper {
         return apodModels;
     }
 
+    public Device deviceItem(Cursor cursor){
+        Device deviceModel = new Device();
+        if (cursor.moveToFirst()) {
+            deviceModel.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+            deviceModel.setRate_value(cursor.getInt(cursor.getColumnIndex("rate_value")));
+            deviceModel.setImei(cursor.getString(cursor.getColumnIndex("imei")));
+            deviceModel.setScreenSize(cursor.getString(cursor.getColumnIndex("screen_size")));
+            deviceModel.setModelName(cursor.getString(cursor.getColumnIndex("model_name")));
+            deviceModel.setManufactuer(cursor.getString(cursor.getColumnIndex("manufacturer")));
+        }
+        return deviceModel;
+    }
+
     private boolean exists(long id, SQLiteDatabase db) {
         Cursor cursor = db.query("fav_apod", null, "_id=?", new String[]{String.valueOf(id)}, null, null, null);
+        boolean exists = cursor.getCount() > 0;
+        return exists;
+    }
+
+    private boolean existsDevice(int id, SQLiteDatabase db) {
+        Cursor cursor = db.query("device", null, "_id=?", new String[]{String.valueOf(id)}, null, null, null);
         boolean exists = cursor.getCount() > 0;
         return exists;
     }

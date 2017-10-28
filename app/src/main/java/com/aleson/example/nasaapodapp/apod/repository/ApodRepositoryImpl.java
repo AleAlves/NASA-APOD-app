@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.repository.task.ApodService;
@@ -54,13 +54,13 @@ public class ApodRepositoryImpl implements ApodRepository {
     @Override
     public void onSucess(String response) {
         Gson gson = new Gson();
-        ApodModel model = gson.fromJson(response, ApodModel.class);
+        Apod model = gson.fromJson(response, Apod.class);
         mainActivityView.onFinishLoad();
 
-        if (model.getUrl() == null || model.getCode() == "400") {
+        if (model.getUrl() == null || model.getCode() == "400" || model.getDay() == null) {
             apodPresenter.responseError(model);
         } else {
-            model.setId(Long.parseLong(model.getDate().replace("-","")));
+            model.setId(Long.parseLong(model.getDay().replace("-","")));
             apodPresenter.responseSucess(model);
         }
     }

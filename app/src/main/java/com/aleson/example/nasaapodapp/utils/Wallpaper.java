@@ -12,7 +12,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,7 +31,7 @@ public class Wallpaper extends AppCompatActivity{
         this.activity = activity;
     }
 
-    public boolean setWallpaper(ApodModel model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display){
+    public boolean setWallpaper(Apod model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display){
         Point size = new Point();
         display.getSize(size);
         int width = 0;
@@ -89,9 +89,9 @@ public class Wallpaper extends AppCompatActivity{
         context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-    private void saveFavoriteApod(ApodModel apodModel){
+    private void saveFavoriteApod(Apod apodModel){
         ApodBD apodBD = new ApodBD(activity);
-        apodBD.save(apodModel);
+        apodBD.saveApod(apodModel);
     }
 
     public boolean deleteFile(String fileLocation){
