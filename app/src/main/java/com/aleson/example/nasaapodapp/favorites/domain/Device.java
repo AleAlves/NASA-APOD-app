@@ -10,7 +10,7 @@ public class Device implements Serializable{
 
     private int id;
     private String imei;
-    private String modelName;
+    private String deviceName;
     private String screenSize;
     private String manufacturer;
     private int rateValue;
@@ -31,12 +31,12 @@ public class Device implements Serializable{
         this.imei = imei;
     }
 
-    public String getModelName() {
-        return modelName;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
+    public void setDeviceName(String modelName) {
+        this.deviceName = modelName;
     }
 
     public String getScreenSize() {

@@ -1,9 +1,12 @@
 package com.aleson.example.nasaapodapp.favorites.presentation;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,23 +51,32 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         ApodBD apodBD = new ApodBD(this);
         apodModelList = apodBD.finAll();
         if (!apodBD.hasDeviceInformation()) {
+            String imei = null;
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            } else {
+                imei = getDeviceImei();
+            }
             Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
             Device deviceModel = new Device();
-            deviceModel.setImei("321421e23d23d223e");
+            deviceModel.setImei(imei);
             deviceModel.setManufactuer(android.os.Build.MANUFACTURER);
-            deviceModel.setModelName(android.os.Build.MODEL);
+            deviceModel.setDeviceName(android.os.Build.MODEL);
             deviceModel.setRateValue(0);
-            deviceModel.setScreenSize("100x100");
+            deviceModel.setScreenSize(size.x + "x" + size.y);
             apodBD.saveDeviceInfo(deviceModel);
         }
         favoritesPresenter = new FavoritesPresenterImpl(mActivity);
         adapter(apodModelList);
     }
 
-    public String getIMEI(Activity activity) {
-        TelephonyManager telephonyManager = (TelephonyManager) activity
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
+    private String getDeviceImei() {
+        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceid = mTelephonyManager.getDeviceId();
+        return deviceid;
     }
 
     @Override

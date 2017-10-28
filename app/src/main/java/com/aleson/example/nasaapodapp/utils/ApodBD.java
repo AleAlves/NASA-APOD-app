@@ -91,7 +91,7 @@ public class ApodBD extends SQLiteOpenHelper {
             contentValues.put("_id", model.getId());
             contentValues.put("imei", model.getImei());
             contentValues.put("manufacturer", model.getManufactuer());
-            contentValues.put("model_name", model.getModelName());
+            contentValues.put("model_name", model.getDeviceName());
             contentValues.put("screen_size", model.getScreenSize());
             contentValues.put("rate_value", model.getRateValue());
             if (existsDevice(model.getId(), db)) {
@@ -116,13 +116,13 @@ public class ApodBD extends SQLiteOpenHelper {
     }
 
     public boolean hasDeviceInformation(){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         try{
             Cursor cursor = db.query("device", null, null, null, null, null, null);
             boolean exists = cursor.getCount() > 0;
             return exists;
         }finally{
-            return false;
+            db.close();
         }
     }
 
@@ -175,7 +175,7 @@ public class ApodBD extends SQLiteOpenHelper {
             deviceModel.setRateValue(cursor.getInt(cursor.getColumnIndex("rate_value")));
             deviceModel.setImei(cursor.getString(cursor.getColumnIndex("imei")));
             deviceModel.setScreenSize(cursor.getString(cursor.getColumnIndex("screen_size")));
-            deviceModel.setModelName(cursor.getString(cursor.getColumnIndex("model_name")));
+            deviceModel.setDeviceName(cursor.getString(cursor.getColumnIndex("model_name")));
             deviceModel.setManufactuer(cursor.getString(cursor.getColumnIndex("manufacturer")));
         }
         return deviceModel;
