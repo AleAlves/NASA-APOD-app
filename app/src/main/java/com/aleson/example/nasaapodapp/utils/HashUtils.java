@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by GAMER on 28/10/2017.
  */
 
-public class Sha1Hex {
+public class HashUtils {
 
     public static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {

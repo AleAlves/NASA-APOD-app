@@ -20,7 +20,7 @@ import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesView;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
-import com.aleson.example.nasaapodapp.utils.ApodBD;
+import com.aleson.example.nasaapodapp.utils.LocalDataBase;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -122,7 +122,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonDeleteApod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApodBD apodBD = new ApodBD(context);
+                LocalDataBase apodBD = new LocalDataBase(context);
                 apodBD.delete(apodList.get(position));
                 Wallpaper wallpaper = new Wallpaper(activity);
                 if (wallpaper.deleteFile(apodList.get(position).getFileLocation())) {
@@ -216,7 +216,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void saveRate(Apod model, int rate) {
-        ApodBD apodBD = new ApodBD(context);
+        LocalDataBase apodBD = new LocalDataBase(context);
         model.setRate(rate);
         Device deviceModel = apodBD.getDeviceInfo();
         deviceModel.setRateValue(rate);

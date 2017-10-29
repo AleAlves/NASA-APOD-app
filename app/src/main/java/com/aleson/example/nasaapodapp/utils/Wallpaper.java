@@ -90,7 +90,7 @@ public class Wallpaper extends AppCompatActivity{
     }
 
     private void saveFavoriteApod(Apod apodModel){
-        ApodBD apodBD = new ApodBD(activity);
+        LocalDataBase apodBD = new LocalDataBase(activity);
         apodBD.saveApod(apodModel);
     }
 

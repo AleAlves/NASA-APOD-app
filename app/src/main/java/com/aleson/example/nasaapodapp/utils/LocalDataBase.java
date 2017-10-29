@@ -16,12 +16,12 @@ import java.util.List;
  * Created by GAMER on 22/10/2017.
  */
 
-public class ApodBD extends SQLiteOpenHelper {
+public class LocalDataBase extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "nasa.apod.app.android.sqlite";
     public static final int DATABASE_VERSION = 1;
 
-    public ApodBD(Context context) {
+    public LocalDataBase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

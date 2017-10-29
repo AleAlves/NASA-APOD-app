@@ -26,8 +26,8 @@ import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.aleson.example.nasaapodapp.favorites.presentation.adapter.RecyclerViewAdapter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenterImpl;
-import com.aleson.example.nasaapodapp.utils.ApodBD;
-import com.aleson.example.nasaapodapp.utils.Sha1Hex;
+import com.aleson.example.nasaapodapp.utils.LocalDataBase;
+import com.aleson.example.nasaapodapp.utils.HashUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -51,7 +51,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         ArrayList<Apod> apodModelList;
-        ApodBD apodBD = new ApodBD(this);
+        LocalDataBase apodBD = new LocalDataBase(this);
         if (!apodBD.hasDeviceInformation()) {
             String imei = null;
             if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
@@ -65,7 +65,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             display.getSize(size);
             Device deviceModel = new Device();
             try {
-                deviceModel.setImei(Sha1Hex.makeSHA1Hash(imei));
+                deviceModel.setImei(HashUtils.makeSHA1Hash(imei));
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (UnsupportedEncodingException e) {
@@ -132,7 +132,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     @Override
     public void reloadFavoritesList() {
         ArrayList<Apod> apodModelList;
-        ApodBD apodBD = new ApodBD(this);
+        LocalDataBase apodBD = new LocalDataBase(this);
         apodModelList = apodBD.finAll();
         adapter(apodModelList);
         recyclerViewAdapter = new RecyclerViewAdapter(context, apodModelList, this, favoritesPresenter);
