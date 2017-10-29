@@ -27,7 +27,10 @@ import com.aleson.example.nasaapodapp.favorites.presentation.adapter.RecyclerVie
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.ApodBD;
+import com.aleson.example.nasaapodapp.utils.Sha1Hex;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class FavoritesActivity extends AppCompatActivity implements FavoritesView {
@@ -62,7 +65,13 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             Point size = new Point();
             display.getSize(size);
             Device deviceModel = new Device();
-            deviceModel.setImei(imei);
+            try {
+                deviceModel.setImei(Sha1Hex.makeSHA1Hash(imei));
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             deviceModel.setManufactuer(android.os.Build.MANUFACTURER);
             deviceModel.setDeviceName(android.os.Build.MODEL);
             deviceModel.setRateValue(0);

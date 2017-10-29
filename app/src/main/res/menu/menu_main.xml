@@ -4,6 +4,9 @@
         android:id="@+id/action_favorites"
         android:title="my favorites"/>
     <item
+        android:id="@+id/action_top_rated"
+        android:title="Top rated"/>
+    <item
         android:id="@+id/action_lenguage"
         android:title="language"/>
     <item

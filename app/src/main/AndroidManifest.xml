@@ -3,14 +3,30 @@
     package="com.aleson.example.nasaapodapp">
 
     <dependency>
-        <groupId>com.squareup.retrofit2</groupId>
-        <artifactId>retrofit</artifactId>
-        <version>2.3.0</version>
+        <groupId>
+            com.squareup.retrofit2
+        </groupId>
+
+        <artifactId>
+            retrofit
+        </artifactId>
+
+        <version>
+            2.3.0
+        </version>
     </dependency>
     <dependency>
-        <groupId>com.squareup.retrofit2</groupId>
-        <artifactId>converter-gson</artifactId>
-        <version>2.3.0</version>
+        <groupId>
+            com.squareup.retrofit2
+        </groupId>
+
+        <artifactId>
+            converter-gson
+        </artifactId>
+
+        <version>
+            2.3.0
+        </version>
     </dependency>
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -44,7 +60,8 @@
             android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
 
         <activity android:name=".favorites.presentation.Favorites" />
-        <activity android:name=".favorites.presentation.FavoritesActivity"></activity>
+        <activity android:name=".favorites.presentation.FavoritesActivity" />
+        <activity android:name=".topRated.presentation.TopRatedActivity"></activity>
     </application>
 
 </manifest>

@@ -35,6 +35,7 @@ import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
+import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
@@ -132,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 }
                 break;
             case R.id.action_lenguage:
+                break;
+            case R.id.action_top_rated:
+                Intent intentTopRated = new Intent(this, TopRatedActivity.class);
+                startActivity(intentTopRated);
                 break;
         }
         return super.onOptionsItemSelected(item);

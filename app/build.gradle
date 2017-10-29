@@ -42,7 +42,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
-    compile 'com.android.support:recyclerview-v7:25+'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -54,7 +55,6 @@ dependencies {
     compile 'com.github.bluejamesbond:textjustify-android:2.1.6'
     compile 'me.biubiubiu.justifytext:library:1.1'
     compile 'com.uncopt:android.justified:1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
