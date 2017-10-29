@@ -38,7 +38,7 @@ public class ApodBD extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS fav_apod (" +
                 "    _id integer primary key," +
-                "    date text ," +
+                "    apod_date text ," +
                 "    copyright text," +
                 "    explanation text," +
                 "    hdurl text," +
@@ -63,7 +63,7 @@ public class ApodBD extends SQLiteOpenHelper {
             ContentValues contentValues = new ContentValues();
             contentValues.put("_id", apodModel.getId());
             contentValues.put("copyright", apodModel.getCopyright());
-            contentValues.put("date", apodModel.getDate());
+            contentValues.put("apod_date", apodModel.getDate());
             contentValues.put("explanation", apodModel.getExplanation());
             contentValues.put("hdurl", apodModel.getHdurl());
             contentValues.put("url", apodModel.getUrl());
@@ -153,7 +153,7 @@ public class ApodBD extends SQLiteOpenHelper {
                 Apod apodModel = new Apod();
                 apodModels.add(apodModel);
                 apodModel.setId(cursor.getLong(cursor.getColumnIndex("_id")));
-                apodModel.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                apodModel.setDate(cursor.getString(cursor.getColumnIndex("apod_date")));
                 apodModel.setCopyright(cursor.getString(cursor.getColumnIndex("copyright")));
                 apodModel.setExplanation(cursor.getString(cursor.getColumnIndex("explanation")));
                 apodModel.setHdurl(cursor.getString(cursor.getColumnIndex("hdurl")));

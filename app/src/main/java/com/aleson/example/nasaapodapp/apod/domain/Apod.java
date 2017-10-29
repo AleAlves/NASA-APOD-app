@@ -10,6 +10,9 @@ public class Apod implements Serializable {
 
     private int rate;
 
+    @SerializedName("averageRate")
+    private int averageRate;
+
     private String fileLocation;
 
     @SerializedName("code")
@@ -156,4 +159,11 @@ public class Apod implements Serializable {
         this.fileLocation = fileLocation;
     }
 
+    public int getAverageRate() {
+        return averageRate;
+    }
+
+    public void setAverageRate(int avarageRate) {
+        this.averageRate = avarageRate;
+    }
 }

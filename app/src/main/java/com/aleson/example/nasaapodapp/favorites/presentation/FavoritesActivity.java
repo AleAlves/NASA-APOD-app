@@ -52,7 +52,6 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         setSupportActionBar(myToolbar);
         ArrayList<Apod> apodModelList;
         ApodBD apodBD = new ApodBD(this);
-        apodModelList = apodBD.finAll();
         if (!apodBD.hasDeviceInformation()) {
             String imei = null;
             if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
@@ -78,6 +77,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             deviceModel.setScreenSize(size.x + "x" + size.y);
             apodBD.saveDeviceInfo(deviceModel);
         }
+        apodModelList = apodBD.finAll();
         favoritesPresenter = new FavoritesPresenterImpl(mActivity);
         adapter(apodModelList);
     }

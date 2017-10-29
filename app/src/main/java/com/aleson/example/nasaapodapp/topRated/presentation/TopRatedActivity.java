@@ -14,7 +14,7 @@ import com.aleson.example.nasaapodapp.topRated.presentation.adapter.RecyclerView
 import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenter;
 import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenterImpl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TopRatedActivity extends AppCompatActivity  implements TopRatedView {
 
@@ -33,10 +33,10 @@ public class TopRatedActivity extends AppCompatActivity  implements TopRatedView
         context = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        topRatedPresenter = new TopRatedPresenterImpl();
+        topRatedPresenter = new TopRatedPresenterImpl(this);
     }
 
-    private void adapter(ArrayList<Apod> model) {
+    private void adapter(List<Apod> model) {
         recyclerView = (RecyclerView) findViewById(R.id.top_rated_list);
         recylerViewLayoutManager = new LinearLayoutManager(mActivity);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
@@ -45,7 +45,7 @@ public class TopRatedActivity extends AppCompatActivity  implements TopRatedView
     }
 
     @Override
-    public void loadTopRatedApods() {
-
+    public void loadTopRatedApods(List<Apod> apods) {
+        adapter(apods);
     }
 }

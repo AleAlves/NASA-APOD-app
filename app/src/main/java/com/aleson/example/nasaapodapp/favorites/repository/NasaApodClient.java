@@ -4,7 +4,6 @@ import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.PUT;
 
 /**
@@ -12,12 +11,6 @@ import retrofit2.http.PUT;
  */
 
 public interface NasaApodClient {
-    @PUT("test")
-    Call<String> test(@Body ApodModel model);
-
     @PUT("rate")
     Call<String> rate(@Body ApodModel model);
-
-    @GET("top")
-    Call<ApodModel> top();
 }

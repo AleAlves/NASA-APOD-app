@@ -61,11 +61,11 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
 
             super(v);
 
-            buttonStar1 = (ImageButton) v.findViewById(R.id.image_button_start_1);
-            buttonStar2 = (ImageButton) v.findViewById(R.id.image_button_start_2);
-            buttonStar3 = (ImageButton) v.findViewById(R.id.image_button_start_3);
-            buttonStar4 = (ImageButton) v.findViewById(R.id.image_button_start_4);
-            buttonStar5 = (ImageButton) v.findViewById(R.id.image_button_start_5);
+            buttonStar1 = (ImageButton) v.findViewById(R.id.image_button_top_rated_start_1);
+            buttonStar2 = (ImageButton) v.findViewById(R.id.image_button_top_rated_start_2);
+            buttonStar3 = (ImageButton) v.findViewById(R.id.image_button_top_rated_start_3);
+            buttonStar4 = (ImageButton) v.findViewById(R.id.image_button_top_rated_start_4);
+            buttonStar5 = (ImageButton) v.findViewById(R.id.image_button_top_rated_start_5);
 
 
             textViewDate = (TextView) v.findViewById(R.id.textview_top_rated_apod_date);
@@ -97,11 +97,11 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
         }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingTopRatedImage);
-        loadRate(apodList.get(position).getRate(), holder);
+        loadRate(apodList.get(position).getAverageRate(), holder);
     }
 
     private void loadRate( int rate, ViewHolder holder){
-        switch (rate) {
+        switch ((int) Math.round(rate)) {
             case 0:
                 break;
             case 1:
