@@ -51,7 +51,7 @@ public class ApodService extends AsyncTask<URL, Integer, String> {
             if (s.contains("Internal ApodService Error") || s.contains("502 Bad Gateway") || s.contains("<html>")) {
                 apodRepository.onError(s);
             } else {
-                apodRepository.onSucess(s);
+//                apodRepository.onSucess(s);
             }
         }
     }

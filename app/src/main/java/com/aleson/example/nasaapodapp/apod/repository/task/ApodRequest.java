@@ -6,8 +6,8 @@ package com.aleson.example.nasaapodapp.apod.repository.task;
 
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
-import com.aleson.example.nasaapodapp.apod.repository.NasaApodApi;
 import com.aleson.example.nasaapodapp.utils.EndPoint;
+import com.aleson.example.nasaapodapp.utils.Keys;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -24,7 +24,7 @@ public class ApodRequest {
 
     private ApodRepository apodRepository;
 
-    public ApodRequest(final ApodRepository topRatedRepository) {
+    public ApodRequest(final ApodRepository topRatedRepository, String date) {
 
         this.apodRepository = topRatedRepository;
 
@@ -36,7 +36,7 @@ public class ApodRequest {
 
         NasaApodApi client = retrofit.create(NasaApodApi.class);
 
-        Call<ApodModel> call = client.getApod();
+        Call<ApodModel> call = client.getApod(Keys.API_KEY, date);
 
         call.enqueue(new Callback<ApodModel>() {
             @Override

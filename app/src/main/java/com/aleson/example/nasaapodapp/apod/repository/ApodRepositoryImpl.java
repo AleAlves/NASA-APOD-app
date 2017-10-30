@@ -37,7 +37,7 @@ public class ApodRepositoryImpl implements ApodRepository {
     public void requestData(String date) {
         if (isOnline()) {
             attempt++;
-            new ApodRequest(this);
+            new ApodRequest(this, date);
         } else {
             mainActivityView.onFinishLoad();
             mainActivityView.onConnectionError();
