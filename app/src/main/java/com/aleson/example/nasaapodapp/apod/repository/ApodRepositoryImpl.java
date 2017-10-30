@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 import com.aleson.example.nasaapodapp.apod.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.repository.task.ApodRequest;
@@ -51,9 +50,8 @@ public class ApodRepositoryImpl implements ApodRepository {
     }
 
     @Override
-    public void onSucess(ApodModel response) {
+    public void onSucess(Apod model) {
         mainActivityView.onFinishLoad();
-        Apod model = response.getApod();
         if (model.getUrl() == null || model.getCode() == "400" || model.getDate() == null) {
             apodPresenter.responseError(model);
         } else {

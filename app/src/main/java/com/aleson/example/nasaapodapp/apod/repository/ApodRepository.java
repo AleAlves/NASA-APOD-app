@@ -2,7 +2,7 @@ package com.aleson.example.nasaapodapp.apod.repository;
 
 import android.graphics.Bitmap;
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 
 public interface ApodRepository {
 
@@ -10,7 +10,7 @@ public interface ApodRepository {
 
     void requestBitamp(String url);
 
-    void onSucess(ApodModel response);
+    void onSucess(Apod response);
 
     void onError(String response);
 

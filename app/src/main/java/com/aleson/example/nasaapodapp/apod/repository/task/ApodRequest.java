@@ -4,7 +4,7 @@ package com.aleson.example.nasaapodapp.apod.repository.task;
  * Created by GAMER on 28/10/2017.
  */
 
-import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
 import com.aleson.example.nasaapodapp.utils.EndPoint;
 import com.aleson.example.nasaapodapp.utils.Keys;
@@ -30,22 +30,27 @@ public class ApodRequest {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(EndPoint.SERVER_API).addConverterFactory(GsonConverterFactory.create());
+        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(EndPoint.APOD_API).addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         NasaApodApi client = retrofit.create(NasaApodApi.class);
 
-        Call<ApodModel> call = client.getApod(Keys.API_KEY, date);
+        Call<Apod> call = client.getApod(Keys.API_KEY, date);
 
-        call.enqueue(new Callback<ApodModel>() {
+        call.enqueue(new Callback<Apod>() {
             @Override
-            public void onResponse(Call<ApodModel> call, Response<ApodModel> response) {
+            public void onResponse(Call<Apod> call, Response<Apod> response) {
                 apodRepository.onSucess(response.body());
+                if (response == null) {
+                    apodRepository.onError(response.message());
+                } else {
+                    apodRepository.onSucess(response.body());
+                }
             }
 
             @Override
-            public void onFailure(Call<ApodModel> call, Throwable t) {
+            public void onFailure(Call<Apod> call, Throwable t) {
                 apodRepository.onError(t.getMessage());
             }
         });

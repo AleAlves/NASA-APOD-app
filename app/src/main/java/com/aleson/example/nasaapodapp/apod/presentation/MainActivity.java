@@ -30,7 +30,6 @@ import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.apod.domain.ConfigModel;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
@@ -44,11 +43,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -74,9 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private Calendar calendarAgendada;
     private String dataSelecionada;
     private String dataSelecionadaTitulo;
-    private String key;
     private static String url = "";
-    private ConfigModel config;
     private ApodPresenter apodPresenter;
     private Apod model;
 
@@ -90,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         setSupportActionBar(myToolbar);
         init();
         initListeners();
-        config();
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         onLoading(false);
         super.onResume();
@@ -190,28 +183,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });
 
-    }
-
-    private void config() {
-        Gson gson = new Gson();
-        config = gson.fromJson(loadJSONFromAsset("config"), ConfigModel.class);
-        this.key = config.getKey();
-    }
-
-    public String loadJSONFromAsset(String file) {
-        String json = null;
-        try {
-            InputStream is = mActivity.getAssets().open("jsons/" + file + ".json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 
     @Override
