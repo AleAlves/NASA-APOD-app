@@ -20,6 +20,6 @@ public class FavoritesRepositoryImpl implements FavoritesRepository {
         ApodModel apodModel = new ApodModel();
         apodModel.setApod(apod);
         apodModel.setDevice(device);
-        RateRestRequest restApi = new RateRestRequest(apodModel);
+        new RateRestRequest(apodModel);
     }
 }

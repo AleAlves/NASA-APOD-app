@@ -1,6 +1,5 @@
 package com.aleson.example.nasaapodapp.apod.presentation;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
@@ -10,9 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,6 +33,7 @@ import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
+import com.aleson.example.nasaapodapp.utils.Permissions;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
@@ -82,12 +81,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         mActivity = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        Permissions permissions = new Permissions(this);
+        permissions.permissions();
         init();
         initListeners();
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         onLoading(false);
         super.onResume();
         apodPresenter.getTodayApod();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("LOG","CallBack");
+                } else {
+                    Log.i("LOG","CallBack");
+                }
+                break;
+        }
     }
 
     @Override
@@ -169,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             @Override
             public void onClick(View v) {
                 if (url != null && !"".equals(url)) {
-                    permission();
                     onLoading(true);
                     apodPresenter.chooseWallpaper(url);
                 }
@@ -358,40 +372,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         Date dataInicial = calendarData.getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         return df.format(dataInicial);
-    }
-
-    private void permission() {
-        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            } else {
-                ActivityCompat.requestPermissions(mActivity,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-                    Manifest.permission.INTERNET)) {
-
-            } else {
-
-                ActivityCompat.requestPermissions(mActivity,
-                        new String[]{Manifest.permission.INTERNET}, 1);
-            }
-        }
-        if(ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-                    Manifest.permission.READ_PHONE_STATE)) {
-
-            } else {
-
-                ActivityCompat.requestPermissions(mActivity,
-                        new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-            }
-        }
     }
 
     public void openSystemWallpaperManager() {
