@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
@@ -125,9 +124,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 LocalDataBase apodBD = new LocalDataBase(context);
                 apodBD.delete(apodList.get(position));
                 Wallpaper wallpaper = new Wallpaper(activity);
-                if (wallpaper.deleteFile(apodList.get(position).getFileLocation())) {
-                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT);
-                }
+                wallpaper.deleteFile(apodList.get(position).getFileLocation());
                 mFavoritesView.reloadFavoritesList();
             }
         });

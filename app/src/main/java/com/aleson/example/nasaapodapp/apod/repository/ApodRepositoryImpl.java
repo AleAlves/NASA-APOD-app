@@ -52,10 +52,10 @@ public class ApodRepositoryImpl implements ApodRepository {
     @Override
     public void onSucess(Apod model) {
         mainActivityView.onFinishLoad();
-        if (model.getUrl() == null || model.getCode() == "400" || model.getDate() == null) {
+        if (model == null || model.getUrl() == null || model.getCode() == "400" || model.getDate() == null) {
             apodPresenter.responseError(model);
         } else {
-            model.setId(Long.parseLong(model.getDate().replace("-","")));
+            model.setId(Long.parseLong(model.getDate().replace("-", "")));
             apodPresenter.responseSucess(model);
         }
     }
