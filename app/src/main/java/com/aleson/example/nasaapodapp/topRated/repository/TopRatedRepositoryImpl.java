@@ -40,5 +40,6 @@ public class TopRatedRepositoryImpl implements TopRatedRepository {
     @Override
     public void onServiceError(String message) {
         Log.i("S","Deu boruim");
+        topRatedPresenter.servieError();
     }
 }

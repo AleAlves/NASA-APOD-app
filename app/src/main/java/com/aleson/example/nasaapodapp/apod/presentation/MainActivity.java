@@ -125,12 +125,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 break;
             case R.id.action_about:
                 break;
-            case R.id.action_exit:
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("EXIT", true);
-                startActivity(intent);
-                break;
             case R.id.action_rate:
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());
                 Intent openPlayStore = new Intent(Intent.ACTION_VIEW, uri);

@@ -21,13 +21,12 @@ import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.apod.presentation.MainActivity;
 import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.aleson.example.nasaapodapp.favorites.presentation.adapter.RecyclerViewAdapter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenterImpl;
-import com.aleson.example.nasaapodapp.utils.LocalDataBase;
 import com.aleson.example.nasaapodapp.utils.HashUtils;
+import com.aleson.example.nasaapodapp.utils.LocalDataBase;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -49,6 +48,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         context = this;
         setContentView(R.layout.activity_favorites);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Favorites");
         setSupportActionBar(myToolbar);
         ArrayList<Apod> apodModelList;
         LocalDataBase apodBD = new LocalDataBase(this);
@@ -99,12 +99,6 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         int id = item.getItemId();
         switch (id) {
             case R.id.action_about:
-                break;
-            case R.id.action_exit:
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("EXIT", true);
-                startActivity(intent);
                 break;
             case R.id.action_rate:
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());

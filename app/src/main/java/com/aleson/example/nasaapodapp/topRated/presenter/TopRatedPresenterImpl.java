@@ -31,4 +31,9 @@ public class TopRatedPresenterImpl implements TopRatedPresenter {
     public void setTopRatedList(List<Apod> apods) {
         topRatedView.loadTopRatedApods(apods);
     }
+
+    @Override
+    public void servieError() {
+        topRatedView.serviceError();
+    }
 }

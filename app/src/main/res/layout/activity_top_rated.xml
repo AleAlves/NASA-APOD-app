@@ -13,18 +13,38 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        app:titleTextColor="@color/colorTextTitle"
-        android:theme="@style/MenuBar"/>
+        android:theme="@style/MenuBar"
+        app:titleTextColor="@color/colorTextTitle" />
+
+    <RelativeLayout
+        android:id="@+id/loading_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|center_vertical|center_horizontal"
+        android:padding="25dp"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/progressbar_loading_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/textview_no_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Service not available" />
+    </RelativeLayout>
 
     <ScrollView
-        android:paddingTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="?attr/actionBarSize">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/top_rated_list"
             android:layout_width="match_parent"
-            android:layout_height="90dp">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="90dp"></android.support.v7.widget.RecyclerView>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

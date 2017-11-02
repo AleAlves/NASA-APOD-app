@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface TopRatedView {
     void loadTopRatedApods(List<Apod> apods);
+    void serviceError();
 }

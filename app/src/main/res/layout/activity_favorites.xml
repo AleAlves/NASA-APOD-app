@@ -15,15 +15,10 @@
         app:titleTextColor="@color/colorTextTitle"
         android:theme="@style/MenuBar"/>
 
-    <ScrollView
-        android:paddingTop="?attr/actionBarSize"
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <include layout="@layout/include_favorites" />
+    </GridLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/favorites_list"
-            android:layout_width="match_parent"
-            android:layout_height="90dp">
-        </android.support.v7.widget.RecyclerView>
-    </ScrollView>
 </android.support.constraint.ConstraintLayout>

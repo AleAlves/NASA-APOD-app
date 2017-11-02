@@ -2,20 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_favorites"
-        android:title="my favorites"/>
+        android:title="My favorites"/>
     <item
         android:id="@+id/action_top_rated"
         android:title="Top rated"/>
     <item
         android:id="@+id/action_lenguage"
-        android:title="language"/>
+        android:title="Language"/>
     <item
         android:id="@+id/action_about"
-        android:title="about"/>
+        android:title="About"/>
     <item
         android:id="@+id/action_rate"
-        android:title="rate"/>
-    <item
-        android:id="@+id/action_exit"
-        android:title="exit"/>
+        android:title="Rate"/>
 </menu>

@@ -12,4 +12,5 @@ public interface TopRatedPresenter {
 
     void getTopRatedList();
     void setTopRatedList(List<Apod> apods);
+    void servieError();
 }
