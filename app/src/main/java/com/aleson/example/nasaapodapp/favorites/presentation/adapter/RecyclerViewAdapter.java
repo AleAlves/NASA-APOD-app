@@ -83,7 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textViewDate = (TextView) v.findViewById(R.id.textview_apod_date);
             textViewTitle = (TextView) v.findViewById(R.id.textview_apod_title);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_apod_image);
-            progressBarLoadingFavImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_fav_image);
+            progressBarLoadingFavImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_image);
             buttonDeleteApod = (ImageButton) v.findViewById(R.id.button_delete_apod);
             buttonWallpaperApod = (ImageButton) v.findViewById(R.id.button_wallpaper_apod);
             buttonWallpaperApod.setOnClickListener(new View.OnClickListener() {

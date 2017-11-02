@@ -25,7 +25,7 @@
                     android:layout_height="match_parent">
 
                     <ProgressBar
-                        android:id="@+id/progressbar_loading_image"
+                        android:id="@+id/progressbar_loading_top_rated_image"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentStart="true"
@@ -35,7 +35,7 @@
                         android:visibility="visible" />
 
                     <ImageView
-                        android:id="@+id/imageview_apod_image"
+                        android:id="@+id/imageview_top_rated_apod_image"
                         android:layout_width="90dp"
                         android:layout_height="80dp"
                         android:layout_marginRight="5dp"
@@ -58,7 +58,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textview_apod_title"
+                    android:id="@+id/textview_top_rated_apod_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center"
@@ -69,7 +69,7 @@
                     android:textSize="12dp" />
 
                 <TextView
-                    android:id="@+id/textview_apod_date"
+                    android:id="@+id/textview_top_rated_apod_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -79,13 +79,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_layout_stars"
+                android:id="@+id/linear_layout_top_rated_stars"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp">
 
                 <ImageButton
-                    android:id="@+id/image_button_start_1"
+                    android:id="@+id/image_button_top_rated_start_1"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@null"
@@ -94,7 +94,7 @@
                     android:src="@drawable/ic_star_border_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/image_button_start_2"
+                    android:id="@+id/image_button_top_rated_start_2"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@null"
@@ -103,7 +103,7 @@
                     android:src="@drawable/ic_star_border_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/image_button_start_3"
+                    android:id="@+id/image_button_top_rated_start_3"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@null"
@@ -112,7 +112,7 @@
                     android:src="@drawable/ic_star_border_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/image_button_start_4"
+                    android:id="@+id/image_button_top_rated_start_4"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@null"
@@ -121,7 +121,7 @@
                     android:src="@drawable/ic_star_border_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/image_button_start_5"
+                    android:id="@+id/image_button_top_rated_start_5"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@null"

@@ -49,6 +49,8 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
 
         public TextView textViewDate;
         public TextView textViewTitle;
+        public TextView textViewIndex;
+        public TextView textViewRates;
         public ImageView imageViewImage;
         public ProgressBar progressBarLoadingTopRatedImage;
         public ImageButton buttonStar1;
@@ -70,6 +72,8 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
 
             textViewDate = (TextView) v.findViewById(R.id.textview_top_rated_apod_date);
             textViewTitle = (TextView) v.findViewById(R.id.textview_top_rated_apod_title);
+            textViewIndex = (TextView) v.findViewById(R.id.textview_apod_index);
+            textViewRates = (TextView) v.findViewById(R.id.textview_apod_rates_count);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_top_rated_apod_image);
             progressBarLoadingTopRatedImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_top_rated_image);
         }
@@ -95,13 +99,15 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
         } catch (Exception e) {
 
         }
+        holder.textViewIndex.setText(String.valueOf(position+1));
+        holder.textViewRates.setText(String.valueOf(apodList.get(position).getRates()));
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingTopRatedImage);
         loadRate(apodList.get(position).getAverageRate(), holder);
     }
 
     private void loadRate( int rate, ViewHolder holder){
-        switch ((int) Math.round(rate)) {
+        switch (rate) {
             case 0:
                 break;
             case 1:
