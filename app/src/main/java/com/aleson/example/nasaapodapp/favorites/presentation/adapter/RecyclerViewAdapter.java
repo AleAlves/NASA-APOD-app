@@ -65,6 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ProgressBar progressBarLoadingFavImage;
         public ImageButton buttonDeleteApod;
         public ImageButton buttonWallpaperApod;
+        public ImageButton buttonSeeApod;
         public ImageButton buttonStar1;
         public ImageButton buttonStar2;
         public ImageButton buttonStar3;
@@ -87,6 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_apod_image);
             progressBarLoadingFavImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_image);
             buttonDeleteApod = (ImageButton) v.findViewById(R.id.button_delete_apod);
+            buttonSeeApod = (ImageButton) v.findViewById(R.id.button_see_apod);
             buttonWallpaperApod = (ImageButton) v.findViewById(R.id.button_wallpaper_apod);
             buttonWallpaperApod.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,6 +120,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
+        holder.imageViewImage.setVisibility(View.VISIBLE);
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingFavImage);
 
         holder.buttonDeleteApod.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +131,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Wallpaper wallpaper = new Wallpaper(activity);
                 wallpaper.deleteFile(apodList.get(position).getFileLocation());
                 mFavoritesView.reloadFavoritesList();
+            }
+        });
+
+        holder.buttonSeeApod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(activity, MainActivity.class);
+                mainIntent.putExtra("Apod",apodList.get(position));
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(mainIntent);
+                activity.finish();
             }
         });
 

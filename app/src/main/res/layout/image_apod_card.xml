@@ -41,7 +41,8 @@
                         android:layout_marginRight="5dp"
                         android:padding="5dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/wyoming" />
+                        android:visibility="gone"
+                        android:src="@drawable/placeholder_image" />
                 </RelativeLayout>
             </LinearLayout>
         </GridLayout>
@@ -78,87 +79,102 @@
                     android:textSize="8dp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_layout_stars"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp">
+            <GridLayout android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/image_button_start_1"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_star_border_black_24dp" />
+                <LinearLayout
+                    android:id="@+id/linear_layout_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp">
 
-                <ImageButton
-                    android:id="@+id/image_button_start_2"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_star_border_black_24dp" />
+                    <ImageButton
+                        android:id="@+id/image_button_start_1"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_star_border_black_24dp" />
 
-                <ImageButton
-                    android:id="@+id/image_button_start_3"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_star_border_black_24dp" />
+                    <ImageButton
+                        android:id="@+id/image_button_start_2"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_star_border_black_24dp" />
 
-                <ImageButton
-                    android:id="@+id/image_button_start_4"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_star_border_black_24dp" />
+                    <ImageButton
+                        android:id="@+id/image_button_start_3"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_star_border_black_24dp" />
 
-                <ImageButton
-                    android:id="@+id/image_button_start_5"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@null"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_star_border_black_24dp" />
-            </LinearLayout>
-        </GridLayout>
+                    <ImageButton
+                        android:id="@+id/image_button_start_4"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_star_border_black_24dp" />
 
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="top"
-            android:orientation="vertical"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp">
+                    <ImageButton
+                        android:id="@+id/image_button_start_5"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_star_border_black_24dp" />
 
-            <ImageButton
-                android:id="@+id/button_wallpaper_apod"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@null"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_image_black_24dp"
-                android:textColor="#000" />
+                </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/button_delete_apod"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@null"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_delete_forever_black_24dp"
-                android:textColor="#000"
-                android:layout_gravity="center"/>
+                <LinearLayout
+                    android:layout_marginLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/button_wallpaper_apod"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_image_black_24dp"
+                        android:textColor="#000"
+                        android:layout_marginLeft="15dp"/>
+
+                    <ImageButton
+                        android:id="@+id/button_see_apod"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_visibility_black_24dp"
+                        android:textColor="#000"
+                        android:layout_marginLeft="15dp"/>
+
+                    <ImageButton
+                        android:id="@+id/button_delete_apod"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:background="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_delete_forever_black_24dp"
+                        android:textColor="#000"
+                        android:layout_marginLeft="15dp"/>
+                </LinearLayout>
+            </GridLayout>
         </GridLayout>
     </GridLayout>
 
