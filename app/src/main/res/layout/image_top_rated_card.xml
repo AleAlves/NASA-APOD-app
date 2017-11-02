@@ -8,6 +8,7 @@
     android:paddingTop="1dp">
 
     <GridLayout
+        android:id="@+id/gridlayout_top_rated"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorAccent"

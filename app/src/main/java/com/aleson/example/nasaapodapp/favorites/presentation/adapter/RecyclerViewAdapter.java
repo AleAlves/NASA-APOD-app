@@ -2,6 +2,7 @@ package com.aleson.example.nasaapodapp.favorites.presentation.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.apod.presentation.MainActivity;
 import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesView;
@@ -146,6 +148,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 saveRate(apodList.get(position), 2);
                 loadRate(apodList.get(position).getRate(), holder);
                 mFavoritesView.reloadFavoritesList();
+            }
+        });
+
+        holder.imageViewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(activity, MainActivity.class);
+                mainIntent.putExtra("Apod",apodList.get(position));
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(mainIntent);
+                activity.finish();
             }
         });
 

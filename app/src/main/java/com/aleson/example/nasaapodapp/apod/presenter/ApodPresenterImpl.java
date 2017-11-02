@@ -47,6 +47,7 @@ public class ApodPresenterImpl implements ApodPresenter {
         } else {
             this.mediaType = Media.VIDEO;
         }
+        mainActivityView.onFinishLoad();
         mainActivityView.setContent(model);
     }
 

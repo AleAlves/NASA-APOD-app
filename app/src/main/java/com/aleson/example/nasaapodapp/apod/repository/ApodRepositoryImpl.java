@@ -51,7 +51,6 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void onSucess(Apod model) {
-        mainActivityView.onFinishLoad();
         if (model == null || model.getUrl() == null || model.getCode() == "400" || model.getDate() == null) {
             apodPresenter.responseError(model);
         } else {

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_favorites"
-        android:title="My favorites"/>
+        android:title="My wallpapers"/>
     <item
         android:id="@+id/action_top_rated"
         android:title="Top rated"/>

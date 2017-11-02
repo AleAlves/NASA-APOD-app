@@ -88,7 +88,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         onLoading(false);
         super.onResume();
-        apodPresenter.getTodayApod();
+        Apod apod = null;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            apod = (Apod) extras.getSerializable("Apod");
+        }
+        if (apod == null) {
+            apodPresenter.getTodayApod();
+        } else {
+            apodPresenter.responseSucess(apod);
+        }
     }
 
     @Override
@@ -97,9 +106,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         switch (requestCode) {
             case 1:
                 if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("LOG","CallBack");
+                    Log.i("LOG", "CallBack");
                 } else {
-                    Log.i("LOG","CallBack");
+                    Log.i("LOG", "CallBack");
                 }
                 break;
         }

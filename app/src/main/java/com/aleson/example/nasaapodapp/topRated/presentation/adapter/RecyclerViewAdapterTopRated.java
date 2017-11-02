@@ -2,12 +2,14 @@ package com.aleson.example.nasaapodapp.topRated.presentation.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.apod.presentation.MainActivity;
 import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -58,6 +61,7 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
         public ImageButton buttonStar3;
         public ImageButton buttonStar4;
         public ImageButton buttonStar5;
+        public GridLayout gridLayoutTopRated;
 
         public ViewHolder(View v) {
 
@@ -76,6 +80,7 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
             textViewRates = (TextView) v.findViewById(R.id.textview_apod_rates_count);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_top_rated_apod_image);
             progressBarLoadingTopRatedImage = (ProgressBar) v.findViewById(R.id.progressbar_loading_top_rated_image);
+            gridLayoutTopRated = (GridLayout) v.findViewById(R.id.gridlayout_top_rated);
         }
     }
 
@@ -104,6 +109,16 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingTopRatedImage);
         loadRate(apodList.get(position).getAverageRate(), holder);
+        holder.gridLayoutTopRated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(activity, MainActivity.class);
+                mainIntent.putExtra("Apod",apodList.get(position));
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(mainIntent);
+                activity.finish();
+            }
+        });
     }
 
     private void loadRate( int rate, ViewHolder holder){
