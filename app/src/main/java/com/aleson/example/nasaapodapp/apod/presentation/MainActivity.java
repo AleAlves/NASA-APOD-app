@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void badRequest(String code) {
         progressBarLoadingImage.setVisibility(View.GONE);
         if (dataSelecionada.contains(today)) {
-            textViewErrorMessage.setText("We dont have an APOD yet");
+            textViewErrorMessage.setText("We dont have an APOD in this day");
             linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
         } else {
             textViewErrorMessage.setText("Houston we have a problem....\n\n code (" + code + ")");

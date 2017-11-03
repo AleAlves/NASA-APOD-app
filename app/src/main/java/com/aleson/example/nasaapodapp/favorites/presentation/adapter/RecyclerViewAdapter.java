@@ -2,9 +2,11 @@ package com.aleson.example.nasaapodapp.favorites.presentation.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,11 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonDeleteApod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LocalDataBase apodBD = new LocalDataBase(context);
-                apodBD.delete(apodList.get(position));
-                Wallpaper wallpaper = new Wallpaper(activity);
-                wallpaper.deleteFile(apodList.get(position).getFileLocation());
-                mFavoritesView.reloadFavoritesList();
+                deleteDialog(position);
             }
         });
 
@@ -150,18 +148,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.buttonStar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveRate(apodList.get(position), 1);
-                loadRate(apodList.get(position).getRate(), holder);
-                mFavoritesView.reloadFavoritesList();
+                rateDialog(position,1, holder);
             }
         });
 
         holder.buttonStar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveRate(apodList.get(position), 2);
-                loadRate(apodList.get(position).getRate(), holder);
-                mFavoritesView.reloadFavoritesList();
+                rateDialog(position,2, holder);
+            }
+        });
+
+        holder.buttonStar3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rateDialog(position,3, holder);
+            }
+        });
+
+        holder.buttonStar4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rateDialog(position,4, holder);
+            }
+        });
+
+        holder.buttonStar5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rateDialog(position,5, holder);
             }
         });
 
@@ -175,36 +190,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 activity.finish();
             }
         });
-
-        holder.buttonStar3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveRate(apodList.get(position), 3);
-                loadRate(apodList.get(position).getRate(), holder);
-                mFavoritesView.reloadFavoritesList();
-            }
-        });
-
-        holder.buttonStar4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveRate(apodList.get(position), 4);
-                loadRate(apodList.get(position).getRate(), holder);
-                mFavoritesView.reloadFavoritesList();
-            }
-        });
-
-        holder.buttonStar5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveRate(apodList.get(position), 5);
-                loadRate(apodList.get(position).getRate(), holder);
-                mFavoritesView.reloadFavoritesList();
-            }
-        });
-
-
-
     }
 
     private void loadRate( int rate, ViewHolder holder){
@@ -277,4 +262,43 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.imageViewImage);
     }
 
+    private void deleteDialog(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage("Do you want to remove this APOD?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                LocalDataBase apodBD = new LocalDataBase(context);
+                apodBD.delete(apodList.get(position));
+                Wallpaper wallpaper = new Wallpaper(activity);
+                wallpaper.deleteFile(apodList.get(position).getFileLocation());
+                mFavoritesView.reloadFavoritesList();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void rateDialog(final int position,final int rate, final ViewHolder holder){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage("Do you want to send your rate?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                saveRate(apodList.get(position), rate);
+                loadRate(apodList.get(position).getRate(), holder);
+                mFavoritesView.reloadFavoritesList();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }
