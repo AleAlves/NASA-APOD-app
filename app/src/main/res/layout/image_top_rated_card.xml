@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorAccent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:foreground="?attr/selectableItemBackground">
 
         <GridLayout android:layout_columnWeight="0">
 
@@ -42,7 +43,8 @@
                         android:layout_marginRight="5dp"
                         android:padding="5dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/wyoming" />
+                        android:src="@drawable/wyoming"
+                        android:foreground="?attr/selectableItemBackground"/>
                 </RelativeLayout>
             </LinearLayout>
         </GridLayout>

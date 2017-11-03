@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorAccent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:foreground="?attr/selectableItemBackground">
 
         <GridLayout android:layout_columnWeight="0">
 
@@ -42,7 +43,8 @@
                         android:padding="5dp"
                         android:scaleType="fitXY"
                         android:visibility="gone"
-                        android:src="@drawable/placeholder_image" />
+                        android:src="@drawable/placeholder_image"
+                        android:foreground="?attr/selectableItemBackground"/>
                 </RelativeLayout>
             </LinearLayout>
         </GridLayout>
