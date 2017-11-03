@@ -52,8 +52,13 @@ public class ApodPresenterImpl implements ApodPresenter {
     }
 
     @Override
-    public void responseError(Apod model) {
-        mainActivityView.onError("");
+    public void serviceError(String code) {
+        if(code.contains("No address associated with hostname")){
+            mainActivityView.nasaApiUnavailable();
+        }
+        else {
+            mainActivityView.onError(code);
+        }
     }
 
     @Override
@@ -67,7 +72,7 @@ public class ApodPresenterImpl implements ApodPresenter {
     }
 
     @Override
-    public String getDataSelecionada() {
-        return date;
+    public void badRequest(String code) {
+        mainActivityView.badRequest(code);
     }
 }

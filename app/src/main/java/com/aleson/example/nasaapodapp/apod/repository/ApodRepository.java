@@ -14,8 +14,7 @@ public interface ApodRepository {
 
     void onError(String response);
 
-    void serviceError(String date);
-
     void setWallpaper(Bitmap bitmap);
 
+    void badRequest(String code);
 }

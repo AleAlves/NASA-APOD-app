@@ -41,11 +41,18 @@ public class ApodRequest {
         call.enqueue(new Callback<Apod>() {
             @Override
             public void onResponse(Call<Apod> call, Response<Apod> response) {
-                apodRepository.onSucess(response.body());
-                if (response == null) {
-                    apodRepository.onError(response.message());
+                if (response == null || response.code() == 404 || response.code() == 500) {
+                    apodRepository.onError(String.valueOf(response.code()));
                 } else {
-                    apodRepository.onSucess(response.body());
+                    if (response.code() == 400) {
+                        apodRepository.badRequest(String.valueOf(response.code()));
+                    } else {
+                        if (response.body() == null) {
+                            apodRepository.onError(String.valueOf(response.code()));
+                        } else {
+                            apodRepository.onSucess(response.body());
+                        }
+                    }
                 }
             }
 

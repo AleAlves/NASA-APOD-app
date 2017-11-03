@@ -51,27 +51,16 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void onSucess(Apod model) {
-        if (model == null || model.getUrl() == null || model.getCode() == "400" || model.getDate() == null) {
-            apodPresenter.responseError(model);
-        } else {
             model.setId(Long.parseLong(model.getDate().replace("-", "")));
             apodPresenter.responseSucess(model);
-        }
     }
 
     @Override
-    public void onError(String response) {
-        mainActivityView.onFinishLoad();
-        mainActivityView.onError("");
-    }
-
-    @Override
-    public void serviceError(String date) {
+    public void onError(String code) {
         if (attempt < 3) {
-            requestData(date);
+            requestData(code);
         } else {
-            mainActivityView.onFinishLoad();
-            mainActivityView.onServiceError();
+            apodPresenter.serviceError(code);
         }
     }
 
@@ -79,5 +68,10 @@ public class ApodRepositoryImpl implements ApodRepository {
     public void setWallpaper(Bitmap bitmap) {
         mainActivityView.onFinishLoad();
         mainActivityView.setWallpaper(bitmap);
+    }
+
+    @Override
+    public void badRequest(String code) {
+        apodPresenter.badRequest(code);
     }
 }

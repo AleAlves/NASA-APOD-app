@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -56,9 +58,11 @@ import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     private ImageView imageView;
+    private TextView textViewErrorMessage;
+    private ProgressBar progressBarLoadingImage;
     private TextView title, copyright, date;
     private JustifiedTextView explanation;
-    private RelativeLayout linearLayoutLoading;
+    private LinearLayout linearLayoutLoading;
     private RelativeLayout linearLayoutImageLoading;
     private ScrollView scrollView;
     private Activity mActivity;
@@ -66,12 +70,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
+    private LinearLayout linearlayoutRandomAfterError;
+    private ImageButton imageButtonRandomAfterError;
     private Calendar calendarAgendada;
     private String dataSelecionada;
     private String dataSelecionadaTitulo;
     private static String url = "";
     private ApodPresenter apodPresenter;
     private Apod model;
+    private String today;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,10 +164,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private void init() {
 
         imageView = (ImageView) findViewById(R.id.page);
+        textViewErrorMessage = (TextView) findViewById(R.id.textview_error_message);
+        progressBarLoadingImage = (ProgressBar) findViewById(R.id.progressbar_loading_image);
         title = (TextView) findViewById(R.id.title);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         copyright = (TextView) findViewById(R.id.copyright);
-        linearLayoutLoading = (RelativeLayout) findViewById(R.id.translucid_loading);
+        linearLayoutLoading = (LinearLayout) findViewById(R.id.translucid_loading);
+        linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
         linearLayoutImageLoading = (RelativeLayout) findViewById(R.id.loading_image);
         scrollView = (ScrollView) findViewById(R.id.main);
         montarDatePickerDialog();
@@ -168,8 +178,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonCalendar = (ImageButton) findViewById(R.id.image_button_calendar);
         imageButtonRandom = (ImageButton) findViewById(R.id.image_button_random);
         imageButtonWallpaper = (ImageButton) findViewById(R.id.image_button_wallpaper);
+        imageButtonRandomAfterError = (ImageButton) findViewById(R.id.image_button_random_after_error);
         calendarAgendada = Calendar.getInstance();
         dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
+        today = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
     }
 
@@ -200,21 +212,41 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });
 
+        imageButtonRandomAfterError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLoading(false);
+                RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
+                apodPresenter.getRandomApod(randomDate.getRandomDate());
+            }
+        });
     }
 
     @Override
-    public void onError(String response) {
-        scrollView.setVisibility(View.VISIBLE);
-        linearLayoutLoading.setVisibility(View.GONE);
-        imageButtonWallpaper.setEnabled(false);
-        clear();
-        date.setText("Try again another day now");
+    public void onError(String code) {
+        progressBarLoadingImage.setVisibility(View.GONE);
+        textViewErrorMessage.setText("Houston we have a problem...\n\n code (" + code + ")");
+        textViewErrorMessage.setVisibility(View.VISIBLE);
+        linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onServiceError() {
-        clear();
-        Toast.makeText(mActivity, "Houston we have a problem...try again later.", Toast.LENGTH_LONG).show();
+    public void badRequest(String code) {
+        progressBarLoadingImage.setVisibility(View.GONE);
+        if (dataSelecionada.contains(today)) {
+            textViewErrorMessage.setText("We dont have an APOD yet");
+            linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
+        } else {
+            textViewErrorMessage.setText("Houston we have a problem....\n\n code (" + code + ")");
+        }
+        textViewErrorMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void nasaApiUnavailable() {
+        progressBarLoadingImage.setVisibility(View.GONE);
+        textViewErrorMessage.setText("Looks like the APOD service is offline, try again later.");
+        textViewErrorMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -230,6 +262,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             linearLayoutLoading.setVisibility(View.VISIBLE);
         } else {
             scrollView.setVisibility(View.GONE);
+            linearlayoutRandomAfterError.setVisibility(View.GONE);
+            textViewErrorMessage.setVisibility(View.GONE);
+            progressBarLoadingImage.setVisibility(View.VISIBLE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
         }
     }
@@ -255,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                     loadImage(model);
                     break;
                 case Media.VIDEO:
+                    imageButtonWallpaper.setEnabled(false);
                     Glide.with(mActivity).load(R.drawable.videoplaceholder).into(imageView);
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override

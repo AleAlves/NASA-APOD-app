@@ -8,8 +8,6 @@ public interface MainActivityView {
 
     void onError(String response);
 
-    void onServiceError();
-
     void onConnectionError();
 
     void onLoading(boolean content);
@@ -19,4 +17,8 @@ public interface MainActivityView {
     void setContent(Apod model);
 
     void setWallpaper(Bitmap bitmap);
+
+    void badRequest(String code);
+
+    void nasaApiUnavailable();
 }

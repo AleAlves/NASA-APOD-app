@@ -12,11 +12,11 @@ public interface ApodPresenter {
 
     void responseSucess(Apod model);
 
-    void responseError(Apod model);
+    void serviceError(String code);
 
     void chooseWallpaper(String url);
 
     int getMediaType();
 
-    String getDataSelecionada();
+    void badRequest(String code);
 }
