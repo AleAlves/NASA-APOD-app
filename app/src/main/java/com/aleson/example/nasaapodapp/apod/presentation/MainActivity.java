@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -183,6 +185,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         today = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_translate);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.languages_array, R.layout.simple_spinner_apod);
+        adapter.setDropDownViewResource(R.layout.simple_spinner_apod_item);
+        spinner.setAdapter(adapter);
     }
 
     private void initListeners() {
