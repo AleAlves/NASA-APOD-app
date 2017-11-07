@@ -263,24 +263,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void deleteDialog(final int position){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("Do you want to remove this APOD?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                LocalDataBase apodBD = new LocalDataBase(context);
-                apodBD.delete(apodList.get(position));
-                Wallpaper wallpaper = new Wallpaper(activity);
-                wallpaper.deleteFile(apodList.get(position).getFileLocation());
-                mFavoritesView.reloadFavoritesList();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        if(apodList.get(position).getRate() > 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("Do you want to remove this APOD?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    LocalDataBase apodBD = new LocalDataBase(context);
+                    apodBD.delete(apodList.get(position));
+                    Wallpaper wallpaper = new Wallpaper(activity);
+                    wallpaper.deleteFile(apodList.get(position).getFileLocation());
+                    mFavoritesView.reloadFavoritesList();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("Help us, rate it before delete.");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     private void rateDialog(final int position,final int rate, final ViewHolder holder){
