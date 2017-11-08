@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.i("LOG", "CallBack");
                 } else {
-                    Log.i("LOG", "CallBack");
+                    progressBarLoadingImage.setVisibility(View.GONE);
+                    textViewErrorMessage.setText("Permissions needed");
+                    textViewErrorMessage.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -257,8 +259,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void onConnectionError() {
-        clear();
-        Toast.makeText(mActivity, "Internet connection required", Toast.LENGTH_LONG).show();
+        progressBarLoadingImage.setVisibility(View.GONE);
+        textViewErrorMessage.setText("Internet connection required");
+        textViewErrorMessage.setVisibility(View.VISIBLE);
     }
 
     @Override

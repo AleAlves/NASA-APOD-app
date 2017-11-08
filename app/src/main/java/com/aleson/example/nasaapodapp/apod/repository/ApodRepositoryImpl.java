@@ -26,8 +26,7 @@ public class ApodRepositoryImpl implements ApodRepository {
     }
 
     public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) mActivity.getSystemService(mActivity.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) mActivity.getSystemService(mActivity.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
@@ -38,7 +37,6 @@ public class ApodRepositoryImpl implements ApodRepository {
             attempt++;
             new ApodRequest(this, date);
         } else {
-            mainActivityView.onFinishLoad();
             mainActivityView.onConnectionError();
         }
     }
@@ -66,7 +64,6 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void setWallpaper(Bitmap bitmap) {
-        mainActivityView.onFinishLoad();
         mainActivityView.setWallpaper(bitmap);
     }
 

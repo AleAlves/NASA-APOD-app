@@ -29,6 +29,9 @@ public class Permissions {
                     Manifest.permission.INTERNET
             }, COMMON);
         }
+        else{
+            ActivityCompat.requestPermissions(mActivity, null, COMMON);
+        }
     }
 
 }
