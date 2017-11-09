@@ -1,9 +1,4 @@
 package com.aleson.example.nasaapodapp.topRated.repository.task;
-
-/**
- * Created by GAMER on 28/10/2017.
- */
-
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.topRated.repository.NasaApodTopRated;
 import com.aleson.example.nasaapodapp.topRated.repository.TopRatedRepository;
@@ -17,10 +12,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by GAMER on 28/10/2017.
- */
 
 public class TopRatedRequest {
 

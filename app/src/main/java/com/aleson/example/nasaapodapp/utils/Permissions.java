@@ -6,10 +6,6 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-/**
- * Created by Santander on 01/11/17.
- */
-
 public class Permissions {
 
     private Activity mActivity;

@@ -5,10 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by GAMER on 28/10/2017.
- */
-
 public class HashUtils {
 
     public static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException

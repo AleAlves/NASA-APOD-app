@@ -2,10 +2,6 @@ package com.aleson.example.nasaapodapp.favorites.domain;
 
 import java.io.Serializable;
 
-/**
- * Created by GAMER on 27/10/2017.
- */
-
 public class Device implements Serializable{
 
     private int id;

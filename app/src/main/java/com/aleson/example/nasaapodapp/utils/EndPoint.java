@@ -1,9 +1,5 @@
 package com.aleson.example.nasaapodapp.utils;
 
-/**
- * Created by Santander on 30/10/17.
- */
-
 public class EndPoint {
 
     public static final String APOD_API = "https://api.nasa.gov/planetary/";

@@ -11,10 +11,6 @@ import java.util.List;
 
 import retrofit2.Response;
 
-/**
- * Created by GAMER on 28/10/2017.
- */
-
 public class TopRatedRepositoryImpl implements TopRatedRepository {
 
     private TopRatedPresenterImpl topRatedPresenter;

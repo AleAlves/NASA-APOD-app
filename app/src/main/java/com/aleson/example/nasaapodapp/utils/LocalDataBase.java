@@ -12,10 +12,6 @@ import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by GAMER on 22/10/2017.
- */
-
 public class LocalDataBase extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "nasa.apod.app.android.sqlite";

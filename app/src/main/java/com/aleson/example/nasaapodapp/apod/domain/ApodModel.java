@@ -1,9 +1,5 @@
 package com.aleson.example.nasaapodapp.apod.domain;
 
-/**
- * Created by GAMER on 28/10/2017.
- */
-
 import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

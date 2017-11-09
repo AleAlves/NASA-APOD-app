@@ -19,10 +19,6 @@ import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by GAMER on 25/10/2017.
- */
-
 public class Wallpaper extends AppCompatActivity{
 
     Activity activity;

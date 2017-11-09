@@ -7,10 +7,6 @@ import com.aleson.example.nasaapodapp.favorites.domain.Device;
 import com.aleson.example.nasaapodapp.favorites.repository.FavoritesRepository;
 import com.aleson.example.nasaapodapp.favorites.repository.FavoritesRepositoryImpl;
 
-/**
- * Created by GAMER on 27/10/2017.
- */
-
 public class FavoritesPresenterImpl implements FavoritesPresenter{
 
     private Activity mActivity;

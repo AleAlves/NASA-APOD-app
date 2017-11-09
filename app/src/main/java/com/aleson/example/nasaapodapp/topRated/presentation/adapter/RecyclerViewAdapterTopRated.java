@@ -30,9 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by JUNED on 6/10/2016.
- */
 public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerViewAdapterTopRated.ViewHolder> {
 
     ArrayList<Apod> apodList = new ArrayList<>();

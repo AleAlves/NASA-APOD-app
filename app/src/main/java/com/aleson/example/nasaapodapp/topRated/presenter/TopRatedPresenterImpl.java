@@ -7,10 +7,6 @@ import com.aleson.example.nasaapodapp.topRated.repository.TopRatedRepositoryImpl
 
 import java.util.List;
 
-/**
- * Created by GAMER on 28/10/2017.
- */
-
 public class TopRatedPresenterImpl implements TopRatedPresenter {
 
     TopRatedRepositoryImpl topRatedRepository;

@@ -36,9 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by JUNED on 6/10/2016.
- */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     ArrayList<Apod> apodList = new ArrayList<>();
