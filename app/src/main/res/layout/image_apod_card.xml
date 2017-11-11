@@ -43,7 +43,6 @@
                         android:padding="5dp"
                         android:scaleType="fitXY"
                         android:visibility="gone"
-                        android:src="@drawable/placeholder_image"
                         android:foreground="?attr/selectableItemBackground"/>
                 </RelativeLayout>
             </LinearLayout>

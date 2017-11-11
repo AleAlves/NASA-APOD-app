@@ -2,14 +2,13 @@ package com.aleson.example.nasaapodapp.apod.repository;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.repository.task.ApodRequest;
 import com.aleson.example.nasaapodapp.apod.repository.task.BitmapService;
+import com.aleson.example.nasaapodapp.utils.NetWorkingUtils;
 
 public class ApodRepositoryImpl implements ApodRepository {
 
@@ -25,15 +24,9 @@ public class ApodRepositoryImpl implements ApodRepository {
         attempt = 0;
     }
 
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) mActivity.getSystemService(mActivity.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
     @Override
     public void requestData(String date) {
-        if (isOnline()) {
+        if (NetWorkingUtils.isOnline(mActivity)) {
             attempt++;
             new ApodRequest(this, date);
         } else {

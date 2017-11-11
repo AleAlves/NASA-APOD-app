@@ -40,8 +40,7 @@
                         android:layout_height="80dp"
                         android:layout_marginRight="5dp"
                         android:padding="5dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/wyoming" />
+                        android:scaleType="fitXY"/>
                 </RelativeLayout>
             </LinearLayout>
         </GridLayout>

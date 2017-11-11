@@ -54,7 +54,6 @@ import java.util.Date;
 
 import io.fabric.sdk.android.Fabric;
 
-import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
 
@@ -409,7 +408,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     private void clear() {
-        Glide.with(mActivity).load(placeholder_image).into(imageView);
         title.setText("");
         explanation.setText("");
         copyright.setText("");

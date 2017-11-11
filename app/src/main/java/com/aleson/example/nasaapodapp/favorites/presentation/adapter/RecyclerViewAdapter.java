@@ -24,6 +24,7 @@ import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesView;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.utils.LocalDataBase;
+import com.aleson.example.nasaapodapp.utils.NetWorkingUtils;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -294,21 +295,39 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void rateDialog(final int position,final int rate, final ViewHolder holder){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("Do you want to send your rate?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                saveRate(apodList.get(position), rate);
-                loadRate(apodList.get(position).getRate(), holder);
-                mFavoritesView.reloadFavoritesList();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        if(NetWorkingUtils.isOnline(activity)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("Do you want to send your rate?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    saveRate(apodList.get(position), rate);
+                    loadRate(apodList.get(position).getRate(), holder);
+                    mFavoritesView.reloadFavoritesList();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage("Internet connection required");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 }
