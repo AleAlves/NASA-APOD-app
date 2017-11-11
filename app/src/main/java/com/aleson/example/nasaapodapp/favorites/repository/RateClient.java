@@ -4,7 +4,7 @@ import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.PUT;
+import retrofit2.http.POST;
 
 /**
  * Created by GAMER on 28/10/2017.
@@ -12,6 +12,6 @@ import retrofit2.http.PUT;
 
 public interface RateClient {
 
-    @PUT("rate")
+    @POST("rate")
     Call<String> rate(@Body ApodModel model);
 }

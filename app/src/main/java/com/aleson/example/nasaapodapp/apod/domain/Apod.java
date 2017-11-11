@@ -10,7 +10,7 @@ public class Apod implements Serializable {
 
     private int rate;
 
-    private int rates;
+    private int votes;
 
     @SerializedName("averageRate")
     private int averageRate;
@@ -169,11 +169,11 @@ public class Apod implements Serializable {
         this.averageRate = avarageRate;
     }
 
-    public int getRates() {
-        return rates;
+    public int getVotes() {
+        return votes;
     }
 
-    public void setRates(int rates) {
-        this.rates = rates;
+    public void setVotes(int rates) {
+        this.votes = rates;
     }
 }

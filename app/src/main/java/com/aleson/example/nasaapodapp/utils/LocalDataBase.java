@@ -25,23 +25,23 @@ public class LocalDataBase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS device (" +
                 "    _id integer primary key autoincrement, " +
-                "    imei text," +
-                "    model_name text," +
-                "    screen_size text," +
-                "    manufacturer text," +
-                "    rate_value integer" +
+                "    imei text NOT NULL," +
+                "    deviceName text NOT NULL," +
+                "    screenSize text NOT NULL," +
+                "    manufacturer text NOT NULL," +
+                "    rateValue integer NOT NULL" +
                 "); ");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS fav_apod (" +
-                "    _id integer primary key," +
-                "    apod_date text ," +
+                "    _id integer primary key NOT NULL," +
+                "    apod_date text NOT NULL," +
                 "    copyright text," +
-                "    explanation text," +
+                "    explanation text NOT NULL," +
                 "    hdurl text," +
                 "    media_type text," +
                 "    service_version text," +
-                "    title text," +
-                "    url text," +
+                "    title text NOT NULL," +
+                "    url text NOT NULL," +
                 "    rate integer," +
                 "    file_location text" +
                 ");");

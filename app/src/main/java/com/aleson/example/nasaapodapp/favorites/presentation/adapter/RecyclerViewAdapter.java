@@ -229,7 +229,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         deviceModel.setRateValue(rate);
         apodBD.saveDeviceInfo(deviceModel);
         apodBD.saveApod(model);
-        favoritesPresenter.sendRate(model, deviceModel);
+        favoritesPresenter.sendRate(model, deviceModel, rate);
     }
 
     @Override

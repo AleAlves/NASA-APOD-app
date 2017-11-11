@@ -8,5 +8,5 @@ import com.aleson.example.nasaapodapp.favorites.domain.Device;
  */
 
 public interface FavoritesRepository {
-    void sendRate(Apod model, Device deviceModel);
+    void sendRate(Apod apod, Device device, int rate);
 }

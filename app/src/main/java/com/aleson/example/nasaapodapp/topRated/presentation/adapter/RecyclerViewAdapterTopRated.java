@@ -102,7 +102,7 @@ public class RecyclerViewAdapterTopRated extends RecyclerView.Adapter<RecyclerVi
 
         }
         holder.textViewIndex.setText(String.valueOf(position+1));
-        holder.textViewRates.setText(String.valueOf(apodList.get(position).getRates()));
+        holder.textViewRates.setText(String.valueOf(apodList.get(position).getVotes()));
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingTopRatedImage);
         loadRate(apodList.get(position).getAverageRate(), holder);

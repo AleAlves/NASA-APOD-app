@@ -16,8 +16,8 @@ public class FavoritesPresenterImpl implements FavoritesPresenter{
     }
 
     @Override
-    public void sendRate(Apod apodModel, Device deviceModel) {
+    public void sendRate(Apod apodModel, Device deviceModel, int rate) {
         favoritesRepository = new FavoritesRepositoryImpl();
-        favoritesRepository.sendRate(apodModel, deviceModel);
+        favoritesRepository.sendRate(apodModel, deviceModel, rate);
     }
 }
