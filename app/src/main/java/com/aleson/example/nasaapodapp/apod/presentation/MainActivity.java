@@ -455,6 +455,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     public void openSystemWallpaperManager() {
+        linearLayoutLoading.setVisibility(View.GONE);
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
         startActivity(Intent.createChooser(intent, "Select Wallpaper"));
     }
