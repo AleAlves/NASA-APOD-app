@@ -61,7 +61,7 @@
 
         <activity android:name=".favorites.presentation.Favorites" />
         <activity android:name=".favorites.presentation.FavoritesActivity" />
-        <activity android:name=".topRated.presentation.TopRatedActivity"></activity>
+        <activity android:name=".toprated.presentation.TopRatedActivity"></activity>
     </application>
 
 </manifest>

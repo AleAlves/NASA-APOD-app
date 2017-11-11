@@ -1,10 +1,10 @@
-package com.aleson.example.nasaapodapp.topRated.repository;
+package com.aleson.example.nasaapodapp.toprated.repository;
 
 import android.util.Log;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenterImpl;
-import com.aleson.example.nasaapodapp.topRated.repository.task.TopRatedRequest;
+import com.aleson.example.nasaapodapp.toprated.presenter.TopRatedPresenterImpl;
+import com.aleson.example.nasaapodapp.toprated.repository.task.TopRatedRequest;
 
 import java.util.ArrayList;
 import java.util.List;
