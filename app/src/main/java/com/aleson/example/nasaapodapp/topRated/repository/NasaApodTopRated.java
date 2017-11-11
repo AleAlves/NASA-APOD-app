@@ -8,6 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface NasaApodTopRated {
-    @GET("topRated")
+    @GET("top")
     Call<List<Apod>> topRatedList();
 }
