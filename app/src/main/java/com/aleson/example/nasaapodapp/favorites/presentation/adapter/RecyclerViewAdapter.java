@@ -24,7 +24,7 @@ import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesView;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.utils.LocalDataBase;
-import com.aleson.example.nasaapodapp.utils.NetWorkingUtils;
+import com.aleson.example.nasaapodapp.utils.NetworkingUtils;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -295,7 +295,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void rateDialog(final int position,final int rate, final ViewHolder holder){
-        if(NetWorkingUtils.isOnline(activity)) {
+        if(NetworkingUtils.isOnline(activity)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage("Do you want to send your rate?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

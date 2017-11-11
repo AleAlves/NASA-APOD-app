@@ -8,7 +8,7 @@ import com.aleson.example.nasaapodapp.apod.presentation.MainActivityView;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.repository.task.ApodRequest;
 import com.aleson.example.nasaapodapp.apod.repository.task.BitmapService;
-import com.aleson.example.nasaapodapp.utils.NetWorkingUtils;
+import com.aleson.example.nasaapodapp.utils.NetworkingUtils;
 
 public class ApodRepositoryImpl implements ApodRepository {
 
@@ -26,7 +26,7 @@ public class ApodRepositoryImpl implements ApodRepository {
 
     @Override
     public void requestData(String date) {
-        if (NetWorkingUtils.isOnline(mActivity)) {
+        if (NetworkingUtils.isOnline(mActivity)) {
             attempt++;
             new ApodRequest(this, date);
         } else {
