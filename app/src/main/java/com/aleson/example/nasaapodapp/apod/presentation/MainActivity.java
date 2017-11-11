@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 1:
+            case Permissions.COMMON:
                 if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     start();
                 } else {

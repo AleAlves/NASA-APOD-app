@@ -7,7 +7,7 @@ import android.support.v4.app.ActivityCompat;
 public class Permissions {
 
     private Activity mActivity;
-    private final int COMMON = 1;
+    public static final int COMMON = 1;
 
     public Permissions(Activity activity) {
         this.mActivity = activity;
