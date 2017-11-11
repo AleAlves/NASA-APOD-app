@@ -7,9 +7,6 @@
         android:id="@+id/action_top_rated"
         android:title="Top rated"/>
     <item
-        android:id="@+id/action_lenguage"
-        android:title="Language"/>
-    <item
         android:id="@+id/action_about"
         android:title="About"/>
     <item

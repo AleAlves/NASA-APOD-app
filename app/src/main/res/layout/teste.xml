@@ -156,7 +156,7 @@
                 android:background="@null"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_delete_forever_black_24dp"
+                android:src="@drawable/ic_delete_black_24dp"
                 android:textColor="#000"
                 android:layout_gravity="center"/>
         </GridLayout>

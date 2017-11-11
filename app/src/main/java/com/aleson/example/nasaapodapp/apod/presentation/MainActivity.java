@@ -19,7 +19,6 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,31 +58,48 @@ import static com.aleson.example.nasaapodapp.R.drawable.placeholder_image;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
 
-    private ImageView imageView;
-    private TextView textViewErrorMessage;
-    private ProgressBar progressBarLoadingImage;
-    private TextView title, copyright, date;
-    private JustifiedTextView explanation;
-    private LinearLayout linearLayoutLoading;
-    private RelativeLayout linearLayoutImageLoading;
-    private ScrollView scrollView;
     private Activity mActivity;
-    private DatePickerDialog getDatePickerDialog;
+
+    private TextView title;
+    private TextView copyright;
+    private TextView date;
+    private TextView textViewErrorMessage;
+
+    private Apod model;
+    private String today;
+    private static String url = "";
+
+    private ImageView imageView;
+
+    private ScrollView scrollView;
+
+    private Calendar calendarAgendada;
+
+    private ApodPresenter apodPresenter;
+
+    private String dataSelecionada;
+    private String dataSelecionadaTitulo;
+
+    private JustifiedTextView explanation;
+
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
     private ImageButton imageButtonPermission;
+    private ImageButton imageButtonRandomAfterError;
+
+    private LinearLayout linearLayoutLoading;
     private LinearLayout linearlayoutRandomAfterError;
     private LinearLayout linearLayoutPermission;
-    private ImageButton imageButtonRandomAfterError;
-    private Calendar calendarAgendada;
-    private String dataSelecionada;
-    private String dataSelecionadaTitulo;
-    private static String url = "";
-    private ApodPresenter apodPresenter;
-    private Apod model;
-    private String today;
+
     private boolean permissionsAllowed = false;
+
+    private DatePickerDialog getDatePickerDialog;
+
+    private RelativeLayout linearLayoutImageLoading;
+
+    private ProgressBar progressBarLoadingImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,33 +144,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private void init() {
 
-        imageView = (ImageView) findViewById(R.id.page);
-        textViewErrorMessage = (TextView) findViewById(R.id.textview_error_message);
-        progressBarLoadingImage = (ProgressBar) findViewById(R.id.progressbar_loading_image);
-        title = (TextView) findViewById(R.id.title);
-        explanation = (JustifiedTextView) findViewById(R.id.explanation);
-        copyright = (TextView) findViewById(R.id.copyright);
-        linearLayoutLoading = (LinearLayout) findViewById(R.id.translucid_loading);
-        linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
-        linearLayoutPermission = (LinearLayout) findViewById(R.id.linearlayout_permission);
-        linearLayoutImageLoading = (RelativeLayout) findViewById(R.id.loading_image);
-        scrollView = (ScrollView) findViewById(R.id.main);
-        montarDatePickerDialog();
         date = (TextView) findViewById(R.id.date);
-        imageButtonCalendar = (ImageButton) findViewById(R.id.image_button_calendar);
+        title = (TextView) findViewById(R.id.title);
+        imageView = (ImageView) findViewById(R.id.page);
+        scrollView = (ScrollView) findViewById(R.id.main);
+        copyright = (TextView) findViewById(R.id.copyright);
+        explanation = (JustifiedTextView) findViewById(R.id.explanation);
         imageButtonRandom = (ImageButton) findViewById(R.id.image_button_random);
+        linearLayoutLoading = (LinearLayout) findViewById(R.id.translucid_loading);
+        textViewErrorMessage = (TextView) findViewById(R.id.textview_error_message);
+        imageButtonCalendar = (ImageButton) findViewById(R.id.image_button_calendar);
+        linearLayoutImageLoading = (RelativeLayout) findViewById(R.id.loading_image);
         imageButtonWallpaper = (ImageButton) findViewById(R.id.image_button_wallpaper);
+        linearLayoutPermission = (LinearLayout) findViewById(R.id.linearlayout_permission);
+        progressBarLoadingImage = (ProgressBar) findViewById(R.id.progressbar_loading_image);
         imageButtonPermission = (ImageButton) findViewById(R.id.image_button_permisison_after_error);
         imageButtonRandomAfterError = (ImageButton) findViewById(R.id.image_button_random_after_error);
+        linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
+        montarDatePickerDialog();
         calendarAgendada = Calendar.getInstance();
         dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         today = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_translate);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.languages_array, R.layout.simple_spinner_apod);
-        adapter.setDropDownViewResource(R.layout.simple_spinner_apod_item);
-        spinner.setAdapter(adapter);
-
         initListeners();
     }
 
@@ -251,8 +261,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(mActivity, " unable to find market app", Toast.LENGTH_LONG).show();
                 }
-                break;
-            case R.id.action_lenguage:
                 break;
             case R.id.action_top_rated:
                 Intent intentTopRated = new Intent(this, TopRatedActivity.class);
