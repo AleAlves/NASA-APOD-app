@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.toprated.presentation;
+package com.aleson.example.nasaapodapp.topRated.presentation;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.toprated.presentation.adapter.RecyclerViewAdapterTopRated;
-import com.aleson.example.nasaapodapp.toprated.presenter.TopRatedPresenter;
-import com.aleson.example.nasaapodapp.toprated.presenter.TopRatedPresenterImpl;
+import com.aleson.example.nasaapodapp.topRated.presentation.adapter.RecyclerViewAdapterTopRated;
+import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenter;
+import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenterImpl;
 
 import java.util.List;
 

@@ -47,7 +47,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".apod.presentation.MainActivity">
+        <activity android:name=".apod.presentation.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,9 +59,8 @@
             android:name="io.fabric.ApiKey"
             android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
 
-        <activity android:name=".favorites.presentation.Favorites" />
-        <activity android:name=".favorites.presentation.FavoritesActivity" />
-        <activity android:name=".toprated.presentation.TopRatedActivity"></activity>
+        <activity android:name=".favorites.presentation.FavoritesActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".topRated.presentation.TopRatedActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

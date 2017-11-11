@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.toprated.repository;
+package com.aleson.example.nasaapodapp.topRated.repository;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 

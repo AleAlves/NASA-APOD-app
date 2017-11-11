@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.toprated.presentation.adapter;
+package com.aleson.example.nasaapodapp.topRated.presentation.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.presentation.MainActivity;
-import com.aleson.example.nasaapodapp.toprated.presentation.TopRatedActivity;
+import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;

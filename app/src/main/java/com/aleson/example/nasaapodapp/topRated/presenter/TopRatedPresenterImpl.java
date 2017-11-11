@@ -1,9 +1,9 @@
-package com.aleson.example.nasaapodapp.toprated.presenter;
+package com.aleson.example.nasaapodapp.topRated.presenter;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.toprated.presentation.TopRatedActivity;
-import com.aleson.example.nasaapodapp.toprated.presentation.TopRatedView;
-import com.aleson.example.nasaapodapp.toprated.repository.TopRatedRepositoryImpl;
+import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
+import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedView;
+import com.aleson.example.nasaapodapp.topRated.repository.TopRatedRepositoryImpl;
 
 import java.util.List;
 
