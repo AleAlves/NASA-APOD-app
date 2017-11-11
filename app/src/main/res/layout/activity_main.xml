@@ -73,11 +73,39 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_casino_black_24dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Random"/>
         </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearlayout_permission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/image_button_permisison_after_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_lock_open_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Allow"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.v7.widget.ContentFrameLayout>

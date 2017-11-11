@@ -1,5 +1,6 @@
 package com.aleson.example.nasaapodapp.apod.presentation;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
@@ -9,8 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -72,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
+    private ImageButton imageButtonPermission;
     private LinearLayout linearlayoutRandomAfterError;
+    private LinearLayout linearLayoutPermission;
     private ImageButton imageButtonRandomAfterError;
     private Calendar calendarAgendada;
     private String dataSelecionada;
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private ApodPresenter apodPresenter;
     private Apod model;
     private String today;
+    private boolean permissionsAllowed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +94,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         mActivity = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        Permissions permissions = new Permissions(this);
-        permissions.permissions();
         init();
-        initListeners();
+        checkPermission();
+    }
+
+    private void start(){
+        permissionsAllowed = true;
+        linearLayoutPermission.setVisibility(View.GONE);
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
         onLoading(false);
         super.onResume();
@@ -109,61 +116,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("LOG", "CallBack");
-                } else {
-                    progressBarLoadingImage.setVisibility(View.GONE);
-                    textViewErrorMessage.setText("Permissions needed");
-                    textViewErrorMessage.setVisibility(View.VISIBLE);
-                }
-                break;
+    private void checkPermission(){
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Permissions permissions = new Permissions(this);
+            permissions.permissions();
+        }
+        else{
+            start();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_favorites:
-                Intent intentFavorites = new Intent(this, FavoritesActivity.class);
-                Bundle bundle = new Bundle();
-                Apod apodModel = model;
-                bundle.putSerializable("apod", apodModel);
-                intentFavorites.putExtras(bundle);
-                startActivity(intentFavorites);
-                break;
-            case R.id.action_about:
-                break;
-            case R.id.action_rate:
-                Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                Intent openPlayStore = new Intent(Intent.ACTION_VIEW, uri);
-                try {
-                    startActivity(openPlayStore);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(mActivity, " unable to find market app", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.action_lenguage:
-                break;
-            case R.id.action_top_rated:
-                Intent intentTopRated = new Intent(this, TopRatedActivity.class);
-                startActivity(intentTopRated);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     private void init() {
 
@@ -175,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         copyright = (TextView) findViewById(R.id.copyright);
         linearLayoutLoading = (LinearLayout) findViewById(R.id.translucid_loading);
         linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
+        linearLayoutPermission = (LinearLayout) findViewById(R.id.linearlayout_permission);
         linearLayoutImageLoading = (RelativeLayout) findViewById(R.id.loading_image);
         scrollView = (ScrollView) findViewById(R.id.main);
         montarDatePickerDialog();
@@ -182,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonCalendar = (ImageButton) findViewById(R.id.image_button_calendar);
         imageButtonRandom = (ImageButton) findViewById(R.id.image_button_random);
         imageButtonWallpaper = (ImageButton) findViewById(R.id.image_button_wallpaper);
+        imageButtonPermission = (ImageButton) findViewById(R.id.image_button_permisison_after_error);
         imageButtonRandomAfterError = (ImageButton) findViewById(R.id.image_button_random_after_error);
         calendarAgendada = Calendar.getInstance();
         dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
@@ -191,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.languages_array, R.layout.simple_spinner_apod);
         adapter.setDropDownViewResource(R.layout.simple_spinner_apod_item);
         spinner.setAdapter(adapter);
+
+        initListeners();
     }
 
     private void initListeners() {
@@ -228,6 +194,72 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
         });
+
+        imageButtonPermission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Permissions permissions = new Permissions(mActivity);
+                permissions.permissions();
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    start();
+                } else {
+                    permissionsAllowed = false;
+                    progressBarLoadingImage.setVisibility(View.GONE);
+                    textViewErrorMessage.setText("Permissions needed");
+                    textViewErrorMessage.setVisibility(View.VISIBLE);
+                    linearLayoutPermission.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(permissionsAllowed)
+        switch (id) {
+            case R.id.action_favorites:
+                Intent intentFavorites = new Intent(this, FavoritesActivity.class);
+                Bundle bundle = new Bundle();
+                Apod apodModel = model;
+                bundle.putSerializable("apod", apodModel);
+                intentFavorites.putExtras(bundle);
+                startActivity(intentFavorites);
+                break;
+            case R.id.action_about:
+                break;
+            case R.id.action_rate:
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent openPlayStore = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(openPlayStore);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(mActivity, " unable to find market app", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.action_lenguage:
+                break;
+            case R.id.action_top_rated:
+                Intent intentTopRated = new Intent(this, TopRatedActivity.class);
+                startActivity(intentTopRated);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
