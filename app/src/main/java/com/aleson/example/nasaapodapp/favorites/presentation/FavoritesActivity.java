@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,7 +50,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         LocalDataBase apodBD = new LocalDataBase(this);
         if (!apodBD.hasDeviceInformation()) {
             String imei = null;
-            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+            if (Build.VERSION.SDK_INT > 19 && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
             } else {
