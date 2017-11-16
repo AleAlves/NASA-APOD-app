@@ -45,6 +45,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.text.ParseException;
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         setSupportActionBar(myToolbar);
         init();
         checkPermission();
+        FirebaseMessaging.getInstance().subscribeToTopic("apod");
+        String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
     }
 
     private void start(){
