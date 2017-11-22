@@ -60,8 +60,13 @@
             android:name="io.fabric.ApiKey"
             android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_casino_black_24dp" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
+
         <activity android:name=".favorites.presentation.FavoritesActivity" android:screenOrientation="portrait"/>
         <activity android:name=".topRated.presentation.TopRatedActivity" android:screenOrientation="portrait"/>
     </application>
-
 </manifest>
