@@ -50,7 +50,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="android.support.multidex.MultiDexApplication">
-        <activity android:name=".apod.presentation.MainActivity" android:screenOrientation="portrait">
+        <activity android:name=".apod.presentation.MainActivity" android:screenOrientation="user">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +68,7 @@
         <meta-data android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
 
-        <activity android:name=".favorites.presentation.FavoritesActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".topRated.presentation.TopRatedActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".favorites.presentation.FavoritesActivity" android:screenOrientation="user"/>
+        <activity android:name=".topRated.presentation.TopRatedActivity" android:screenOrientation="user"/>
     </application>
 </manifest>
