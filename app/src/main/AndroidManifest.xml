@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.aleson.example.nasaapodapp">
 
     <dependency>
@@ -42,9 +43,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        tools:replace="android:icon"
+        android:icon="@mipmap/ico_launcher_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ico_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="android.support.multidex.MultiDexApplication">
@@ -62,7 +64,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_casino_black_24dp" />
+            android:resource="@drawable/ic_launcher_apod" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
 
