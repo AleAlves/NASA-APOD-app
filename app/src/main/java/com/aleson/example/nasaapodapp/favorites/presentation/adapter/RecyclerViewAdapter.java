@@ -48,8 +48,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     FavoritesPresenter favoritesPresenter;
 
 
-    public RecyclerViewAdapter(Context context, List<Apod> messages, FavoritesActivity activity, FavoritesPresenter favoritesPresenter) {
-        this.apodList.addAll(messages);
+    public RecyclerViewAdapter(Context context, List<Apod> apods, FavoritesActivity activity, FavoritesPresenter favoritesPresenter) {
+        this.apodList.addAll(apods);
         this.context = context;
         this.activity = activity;
         this.mFavoritesView = (FavoritesView) activity;

@@ -14,6 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.view.Display;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
@@ -32,7 +36,10 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
 
     private Activity mActivity;
     private Context context;
+    private TextView textViewNofavorites;
+    private ProgressBar progressBarLoading;
     private FavoritesPresenter favoritesPresenter;
+    private RelativeLayout relativeLayoutLoading;
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recylerViewLayoutManager;
@@ -43,6 +50,9 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         mActivity = this;
         context = this;
         setContentView(R.layout.activity_favorites);
+        textViewNofavorites = (TextView) findViewById(R.id.textview_no_service);
+        progressBarLoading = (ProgressBar) findViewById(R.id.progressbar_loading_image);
+        relativeLayoutLoading = (RelativeLayout) findViewById(R.id.loading_image);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("Favorites");
         setSupportActionBar(myToolbar);
@@ -50,7 +60,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         LocalDataBase apodBD = new LocalDataBase(this);
         if (!apodBD.hasDeviceInformation()) {
             String imei = null;
-            if (Build.VERSION.SDK_INT > 19 && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
             } else {
@@ -90,6 +100,15 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         recyclerView.setLayoutManager(recylerViewLayoutManager);
         recyclerViewAdapter = new RecyclerViewAdapter(context, model, this, favoritesPresenter);
         recyclerView.setAdapter(recyclerViewAdapter);
+        if (model.size() == 0) {
+            textViewNofavorites.setVisibility(View.VISIBLE);
+            textViewNofavorites.setText("Nothing here yet");
+            progressBarLoading.setVisibility(View.GONE);
+        } else {
+            relativeLayoutLoading.setGravity(View.GONE);
+            textViewNofavorites.setVisibility(View.GONE);
+            progressBarLoading.setVisibility(View.GONE);
+        }
     }
 
     @Override

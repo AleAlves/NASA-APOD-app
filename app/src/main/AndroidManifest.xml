@@ -44,9 +44,9 @@
     <application
         android:allowBackup="true"
         tools:replace="android:icon"
-        android:icon="@mipmap/ico_launcher_round"
+        android:icon="@mipmap/icon_apod"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ico_launcher_round"
+        android:roundIcon="@mipmap/icon_apod"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="android.support.multidex.MultiDexApplication">
@@ -64,7 +64,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_apod" />
+            android:resource="@drawable/icon_apod_notif" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
 

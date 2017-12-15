@@ -6,11 +6,12 @@ import java.io.Serializable;
 
 public class Apod implements Serializable {
 
-    private long id;
-
     private int rate;
 
     private int votes;
+
+    @SerializedName("id")
+    private long id;
 
     @SerializedName("averageRate")
     private int averageRate;

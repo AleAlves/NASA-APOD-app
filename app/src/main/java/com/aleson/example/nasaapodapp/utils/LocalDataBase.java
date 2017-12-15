@@ -54,28 +54,33 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
     public long saveApod(Apod apodModel) {
         long _id = apodModel.getId();
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("_id", apodModel.getId());
-            contentValues.put("copyright", apodModel.getCopyright());
-            contentValues.put("apod_date", apodModel.getDate());
-            contentValues.put("explanation", apodModel.getExplanation());
-            contentValues.put("hdurl", apodModel.getHdurl());
-            contentValues.put("url", apodModel.getUrl());
-            contentValues.put("media_type", apodModel.getMedia_type());
-            contentValues.put("service_version", apodModel.getService_version());
-            contentValues.put("title", apodModel.getTitle());
-            contentValues.put("rate", apodModel.getRate());
-            contentValues.put("file_location", apodModel.getFileLocation());
-            if (exists(apodModel.getId(), db)) {
-                String[] whereArgs = new String[]{String.valueOf(_id)};
-                return db.update("fav_apod", contentValues, "_id=?", whereArgs);
-            } else {
-                return db.insert("fav_apod", "", contentValues);
+        if(_id != 0) {
+            SQLiteDatabase db = getWritableDatabase();
+            try {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("_id", apodModel.getId());
+                contentValues.put("copyright", apodModel.getCopyright());
+                contentValues.put("apod_date", apodModel.getDate());
+                contentValues.put("explanation", apodModel.getExplanation());
+                contentValues.put("hdurl", apodModel.getHdurl());
+                contentValues.put("url", apodModel.getUrl());
+                contentValues.put("media_type", apodModel.getMedia_type());
+                contentValues.put("service_version", apodModel.getService_version());
+                contentValues.put("title", apodModel.getTitle());
+                contentValues.put("rate", apodModel.getRate());
+                contentValues.put("file_location", apodModel.getFileLocation());
+                if (exists(apodModel.getId(), db)) {
+                    String[] whereArgs = new String[]{String.valueOf(_id)};
+                    return db.update("fav_apod", contentValues, "_id=?", whereArgs);
+                } else {
+                    return db.insert("fav_apod", "", contentValues);
+                }
+            } finally {
+                db.close();
             }
-        } finally {
-            db.close();
+        }
+        else{
+            return 0;
         }
     }
 
