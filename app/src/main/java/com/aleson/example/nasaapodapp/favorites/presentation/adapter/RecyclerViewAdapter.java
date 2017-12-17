@@ -102,7 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        view1 = LayoutInflater.from(context).inflate(R.layout.image_apod_card, parent, false);
+        view1 = LayoutInflater.from(context).inflate(R.layout.image_favorite_card, parent, false);
 
         viewHolder1 = new ViewHolder(view1);
 

@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:gravity="center|center_vertical|center_horizontal"
         android:padding="25dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressbar_loading_image"
