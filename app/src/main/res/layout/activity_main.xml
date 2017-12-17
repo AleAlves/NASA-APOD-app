@@ -108,4 +108,5 @@
 
     </LinearLayout>
 
+    <include layout="@layout/include_options"/>
 </android.support.v7.widget.ContentFrameLayout>

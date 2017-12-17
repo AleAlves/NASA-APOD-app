@@ -57,7 +57,7 @@ import java.util.Date;
 import io.fabric.sdk.android.Fabric;
 
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivity extends AppCompatActivity implements MainActivityView, View.OnClickListener {
 
     private Activity mActivity;
 
@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private Apod model;
     private String today;
+
+    private boolean collapseOptions = true;
     private static String url = "";
 
     private ImageView imageView;
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private JustifiedTextView explanation;
 
+    private ImageButton imageButtonExpandCollapseIcon;
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
@@ -92,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private LinearLayout linearLayoutLoading;
     private LinearLayout linearlayoutRandomAfterError;
     private LinearLayout linearLayoutPermission;
+    private LinearLayout linearLayoutOptions;
+    private LinearLayout linearLayoutOptionsContent;
 
     private boolean permissionsAllowed = false;
 
@@ -101,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private ProgressBar progressBarLoadingImage;
 
+    private android.support.v4.app.FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,12 +170,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         imageButtonPermission = (ImageButton) findViewById(R.id.image_button_permisison_after_error);
         imageButtonRandomAfterError = (ImageButton) findViewById(R.id.image_button_random_after_error);
         linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
+        imageButtonExpandCollapseIcon = (ImageButton) findViewById(R.id.image_button_expand_collapse_options);
+        linearLayoutOptions = (LinearLayout) findViewById(R.id.linear_layout_expand_collapse_options);
+        linearLayoutOptionsContent = (LinearLayout) findViewById(R.id.linear_layout_options_content);
+
         montarDatePickerDialog();
         calendarAgendada = Calendar.getInstance();
         dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         today = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
         initListeners();
+        handleOptionMenu();
     }
 
     private void initListeners() {
@@ -215,6 +226,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 permissions.permissions();
             }
         });
+
+        linearLayoutOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleOptionMenu();
+            }
+        });
+        imageButtonExpandCollapseIcon.setOnClickListener(this);
     }
 
     @Override
@@ -468,5 +487,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         linearLayoutLoading.setVisibility(View.GONE);
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
         startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+    }
+
+    private void handleOptionMenu(){
+        if(collapseOptions){
+            collapseOptions = false;
+            linearLayoutOptionsContent.setVisibility(View.VISIBLE);
+            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        }
+        else{
+            collapseOptions = true;
+            linearLayoutOptionsContent.setVisibility(View.GONE);
+            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_arrow_drop_up_black_24dp);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.image_button_expand_collapse_options:
+            case R.id.linear_layout_expand_collapse_options:
+                handleOptionMenu();
+            break;
+        }
     }
 }
