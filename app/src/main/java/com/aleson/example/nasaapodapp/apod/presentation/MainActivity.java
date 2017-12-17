@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -68,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     private Apod model;
     private String today;
-
-    private boolean collapseOptions = true;
     private static String url = "";
 
     private ImageView imageView;
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
     }
 
-    private void start(){
+    private void start() {
         permissionsAllowed = true;
         linearLayoutPermission.setVisibility(View.GONE);
         apodPresenter = new ApodPresenterImpl(mActivity, dataSelecionada);
@@ -140,13 +139,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         }
     }
 
-    private void checkPermission(){
+    private void checkPermission() {
         if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             Permissions permissions = new Permissions(this);
             permissions.permissions();
-        }
-        else{
+        } else {
             start();
         }
     }
@@ -227,12 +225,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             }
         });
 
-        linearLayoutOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleOptionMenu();
-            }
-        });
+        linearLayoutOptions.setOnClickListener(this);
         imageButtonExpandCollapseIcon.setOnClickListener(this);
     }
 
@@ -263,32 +256,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(permissionsAllowed)
-        switch (id) {
-            case R.id.action_favorites:
-                Intent intentFavorites = new Intent(this, FavoritesActivity.class);
-                Bundle bundle = new Bundle();
-                Apod apodModel = model;
-                bundle.putSerializable("apod", apodModel);
-                intentFavorites.putExtras(bundle);
-                startActivity(intentFavorites);
-                break;
-            case R.id.action_about:
-                break;
-            case R.id.action_rate:
-                Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                Intent openPlayStore = new Intent(Intent.ACTION_VIEW, uri);
-                try {
-                    startActivity(openPlayStore);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(mActivity, " unable to find market app", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.action_top_rated:
-                Intent intentTopRated = new Intent(this, TopRatedActivity.class);
-                startActivity(intentTopRated);
-                break;
-        }
+        if (permissionsAllowed)
+            switch (id) {
+                case R.id.action_favorites:
+                    Intent intentFavorites = new Intent(this, FavoritesActivity.class);
+                    Bundle bundle = new Bundle();
+                    Apod apodModel = model;
+                    bundle.putSerializable("apod", apodModel);
+                    intentFavorites.putExtras(bundle);
+                    startActivity(intentFavorites);
+                    break;
+                case R.id.action_about:
+                    break;
+                case R.id.action_rate:
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                    Intent openPlayStore = new Intent(Intent.ACTION_VIEW, uri);
+                    try {
+                        startActivity(openPlayStore);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(mActivity, " unable to find market app", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case R.id.action_top_rated:
+                    Intent intentTopRated = new Intent(this, TopRatedActivity.class);
+                    startActivity(intentTopRated);
+                    break;
+            }
         return super.onOptionsItemSelected(item);
     }
 
@@ -489,26 +482,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         startActivity(Intent.createChooser(intent, "Select Wallpaper"));
     }
 
-    private void handleOptionMenu(){
-        if(collapseOptions){
-            collapseOptions = false;
+    private boolean handleOptionMenu() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("collapseOptions", 0);
+        if (sharedPreferences.getBoolean("showOptions",true)) {
             linearLayoutOptionsContent.setVisibility(View.VISIBLE);
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_arrow_drop_down_black_24dp);
-        }
-        else{
-            collapseOptions = true;
+            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_less_24dp);
+            return true;
+        } else {
             linearLayoutOptionsContent.setVisibility(View.GONE);
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_more_24dp);
+            return false;
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.image_button_expand_collapse_options:
             case R.id.linear_layout_expand_collapse_options:
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("collapseOptions", 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if(sharedPreferences.getBoolean("showOptions",true)){
+                    editor.putBoolean("showOptions", false);
+                }
+                else{
+                    editor.putBoolean("showOptions", true);
+                }
+                editor.commit();
                 handleOptionMenu();
-            break;
+                break;
         }
     }
 }
