@@ -36,6 +36,7 @@ import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
+import com.aleson.example.nasaapodapp.settings.SettingsActivity;
 import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
 import com.aleson.example.nasaapodapp.utils.Permissions;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
@@ -280,6 +281,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 case R.id.action_top_rated:
                     Intent intentTopRated = new Intent(this, TopRatedActivity.class);
                     startActivity(intentTopRated);
+                    break;
+                case R.id.action_config:
+                    Intent intentSettings = new Intent(this, SettingsActivity.class);
+                    startActivity(intentSettings);
                     break;
             }
         return super.onOptionsItemSelected(item);

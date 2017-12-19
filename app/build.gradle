@@ -47,8 +47,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true;
     }
-    compile 'com.android.support:multidex:1.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
