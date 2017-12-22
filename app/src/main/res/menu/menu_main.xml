@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_favorites"
+        android:title="My wallpapers"/>
+    <item
+        android:id="@+id/action_top_rated"
+        android:title="Populars"/>
+    <item
+        android:id="@+id/action_config"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/action_about"
+        android:title="About"/>
+    <item
+        android:id="@+id/action_rate"
+        android:title="Rate"/>
+</menu>
