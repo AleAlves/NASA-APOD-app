@@ -4,6 +4,7 @@ buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
         jcenter()
+        google()
     }
 
     dependencies {
@@ -14,13 +15,14 @@ buildscript {
         // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
         classpath 'io.fabric.tools:gradle:1.+'
         classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 }
 
