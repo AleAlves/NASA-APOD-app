@@ -1,11 +1,12 @@
 package com.aleson.example.nasaapodapp.apod.presentation;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -41,6 +42,7 @@ import com.aleson.example.nasaapodapp.settings.SettingsActivity;
 import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
 import com.aleson.example.nasaapodapp.utils.Permissions;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
+import com.aleson.example.nasaapodapp.utils.SettingsUtil;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -48,7 +50,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.text.ParseException;
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     private ProgressBar progressBarLoadingImage;
 
+    private SettingsUtil settingsUtil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,13 +119,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         mActivity = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        settingsUtil = new SettingsUtil(this, "settings");
+        settingsUtil.updateSettings();
         init();
         checkPermission();
-        FirebaseMessaging.getInstance().subscribeToTopic("apod");
     }
-
-    //        String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
-
 
     private void start() {
         permissionsAllowed = true;
@@ -498,13 +499,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     }
 
     private boolean handleOptionMenu() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("collapseOptions", 0);
-        if (sharedPreferences.getBoolean("showOptions",true)) {
-            linearLayoutOptionsContent.setVisibility(View.VISIBLE);
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_less_24dp);
+        if (settingsUtil.getSharedPreferences().getBoolean("showOptions", true)) {
+            linearLayoutOptionsContent.animate()
+                    .alpha(1.0f)
+                    .setDuration(100)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            linearLayoutOptionsContent.setVisibility(View.VISIBLE);
+                        }
+                    });
+            linearLayoutOptionsContent.clearAnimation();
+            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_remove_black_24dp);
             return true;
         } else {
-            linearLayoutOptionsContent.setVisibility(View.GONE);
+            linearLayoutOptionsContent.animate()
+                    .alpha(0.0f)
+                    .setDuration(100)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            linearLayoutOptionsContent.setVisibility(View.GONE);
+                        }
+                    });
             imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_more_24dp);
             return false;
         }
@@ -515,15 +534,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         switch (v.getId()) {
             case R.id.image_button_expand_collapse_options:
             case R.id.linear_layout_expand_collapse_options:
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("collapseOptions", 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if(sharedPreferences.getBoolean("showOptions",true)){
-                    editor.putBoolean("showOptions", false);
+                if (settingsUtil.getSharedPreferences().getBoolean("showOptions", true)) {
+                    settingsUtil.getEditor().putBoolean("showOptions", false);
+                } else {
+                    settingsUtil.getEditor().putBoolean("showOptions", true);
                 }
-                else{
-                    editor.putBoolean("showOptions", true);
-                }
-                editor.commit();
+                settingsUtil.getEditor().commit();
                 handleOptionMenu();
                 break;
             default:

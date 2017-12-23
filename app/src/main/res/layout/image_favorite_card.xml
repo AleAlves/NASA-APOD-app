@@ -10,7 +10,7 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="@color/colorCards"
         android:orientation="horizontal"
         android:foreground="?attr/selectableItemBackground">
 
