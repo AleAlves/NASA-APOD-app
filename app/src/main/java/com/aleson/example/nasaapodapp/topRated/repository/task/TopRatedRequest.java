@@ -1,6 +1,6 @@
 package com.aleson.example.nasaapodapp.topRated.repository.task;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.topRated.repository.NasaApodTopRated;
+import com.aleson.example.nasaapodapp.topRated.domain.TopRatedList;
 import com.aleson.example.nasaapodapp.topRated.repository.TopRatedRepository;
 import com.aleson.example.nasaapodapp.utils.EndPoint;
 
@@ -17,7 +17,7 @@ public class TopRatedRequest {
 
     private TopRatedRepository topRatedRepository;
 
-    public TopRatedRequest(final TopRatedRepository topRatedRepository) {
+    public TopRatedRequest(final TopRatedRepository topRatedRepository, final TopRatedList listSize) {
 
         this.topRatedRepository = topRatedRepository;
 
@@ -29,7 +29,7 @@ public class TopRatedRequest {
 
         NasaApodTopRated client = retrofit.create(NasaApodTopRated.class);
 
-        Call<List<Apod>> call = client.topRatedList();
+        Call<List<Apod>> call = client.topRatedList(listSize);
 
         call.enqueue(new Callback<List<Apod>>() {
             @Override

@@ -12,15 +12,15 @@ public class TopRatedPresenterImpl implements TopRatedPresenter {
     TopRatedRepositoryImpl topRatedRepository;
     TopRatedView topRatedView;
 
-    public TopRatedPresenterImpl(TopRatedActivity topRatedActivity){
+    public TopRatedPresenterImpl(TopRatedActivity topRatedActivity, String listSize){
         topRatedRepository = new TopRatedRepositoryImpl(this);
         topRatedView = (TopRatedView) topRatedActivity;
-        getTopRatedList();
+        getTopRatedList(listSize);
     }
 
     @Override
-    public void getTopRatedList() {
-        topRatedRepository.requestTopratedList();
+    public void getTopRatedList(String listSize) {
+        topRatedRepository.requestTopratedList(listSize);
     }
 
     @Override

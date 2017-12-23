@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TopRatedPresenter {
 
-    void getTopRatedList();
+    void getTopRatedList(String listSize);
     void setTopRatedList(List<Apod> apods);
     void servieError();
 }

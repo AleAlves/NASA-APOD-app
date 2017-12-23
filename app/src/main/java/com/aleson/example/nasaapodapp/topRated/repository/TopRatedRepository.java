@@ -8,7 +8,7 @@ import retrofit2.Response;
 
 public interface TopRatedRepository {
 
-    void requestTopratedList();
+    void requestTopratedList(String listSize);
 
     void onServiceSuccess(Response<List<Apod>> apods);
 

@@ -17,6 +17,7 @@ import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.topRated.presentation.adapter.RecyclerViewAdapterTopRated;
 import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenter;
 import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenterImpl;
+import com.aleson.example.nasaapodapp.utils.SettingsUtil;
 
 import java.util.List;
 
@@ -41,10 +42,11 @@ public class TopRatedActivity extends AppCompatActivity  implements TopRatedView
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("Top rated");
         setSupportActionBar(myToolbar);
+        SettingsUtil settingsUtil = new SettingsUtil(this, "settings");
         relativeLayoutLaoding = (RelativeLayout) findViewById(R.id.loading_image);
         progressBarLoading = ( ProgressBar) findViewById(R.id.progressbar_loading_image);
         textViewServiceError = (TextView) findViewById(R.id.textview_no_service);
-        topRatedPresenter = new TopRatedPresenterImpl(this);
+        topRatedPresenter = new TopRatedPresenterImpl(this, settingsUtil.getSharedPreferences().getString("topRatedListSize","10"));
     }
 
     private void adapter(List<Apod> model) {

@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.favorites.repository;
+package com.aleson.example.nasaapodapp.favorites.repository.task;
 
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
 

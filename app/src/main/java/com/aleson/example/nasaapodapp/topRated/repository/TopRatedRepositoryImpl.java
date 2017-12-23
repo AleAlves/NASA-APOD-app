@@ -3,6 +3,7 @@ package com.aleson.example.nasaapodapp.topRated.repository;
 import android.util.Log;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.topRated.domain.TopRatedList;
 import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenterImpl;
 import com.aleson.example.nasaapodapp.topRated.repository.task.TopRatedRequest;
 
@@ -20,8 +21,10 @@ public class TopRatedRepositoryImpl implements TopRatedRepository {
     }
 
     @Override
-    public void requestTopratedList() {
-        new TopRatedRequest(this);
+    public void requestTopratedList(String listSize) {
+        TopRatedList topRatedList = new TopRatedList();
+        topRatedList.setListSize(listSize);
+        new TopRatedRequest(this, topRatedList);
     }
 
     @Override
@@ -35,7 +38,7 @@ public class TopRatedRepositoryImpl implements TopRatedRepository {
 
     @Override
     public void onServiceError(String message) {
-        Log.i("S","Deu boruim");
+        Log.i("S","Deu ruim");
         topRatedPresenter.servieError();
     }
 }
