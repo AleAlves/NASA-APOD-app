@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
+import com.aleson.example.nasaapodapp.about.presentation.AboutActivity;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
@@ -47,7 +48,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private Apod model;
     private String today;
     private static String url = "";
+    private static String defaultTDateFormat = "yyyy-MM-dd";
+    private static String defaultTDateFormatPresentation = "dd/MM/yyyy";
 
     private ImageView imageView;
 
@@ -106,8 +108,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     private ProgressBar progressBarLoadingImage;
 
-    private android.support.v4.app.FragmentManager fragmentManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +119,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         init();
         checkPermission();
         FirebaseMessaging.getInstance().subscribeToTopic("apod");
-        String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
     }
+
+    //        String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
+
 
     private void start() {
         permissionsAllowed = true;
@@ -175,8 +177,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
         montarDatePickerDialog();
         calendarAgendada = Calendar.getInstance();
-        dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
-        today = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
+        dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
+        today = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
         initListeners();
         handleOptionMenu();
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 onLoading(false);
-                RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
+                RandomDate randomDate = new RandomDate(new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
         });
@@ -213,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 onLoading(false);
-                RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
+                RandomDate randomDate = new RandomDate(new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
         });
@@ -245,6 +247,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     linearLayoutPermission.setVisibility(View.VISIBLE);
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -268,6 +272,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     startActivity(intentFavorites);
                     break;
                 case R.id.action_about:
+                    Intent intentAbout = new Intent(this, AboutActivity.class);
+                    startActivity(intentAbout);
                     break;
                 case R.id.action_rate:
                     Uri uri = Uri.parse("market://details?id=" + getPackageName());
@@ -285,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 case R.id.action_config:
                     Intent intentSettings = new Intent(this, SettingsActivity.class);
                     startActivity(intentSettings);
+                    break;
+                default:
                     break;
             }
         return super.onOptionsItemSelected(item);
@@ -373,6 +381,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         }
                     });
                     break;
+                default:
+                    break;
             }
             if (model.getTitle() != null)
                 title.setText(model.getTitle());
@@ -383,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             if (model.getDate() != null) {
                 dataSelecionadaTitulo = model.getDate();
                 try {
-                    SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat inFormat = new SimpleDateFormat(defaultTDateFormat);
                     SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
                     date.setText(outFormat.format(inFormat.parse(model.getDate())));
                 } catch (Exception e) {
@@ -442,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 if (view.isShown()) {
                     calendarAgendada = Calendar.getInstance();
                     calendarAgendada.set(year, monthOfYear, dayOfMonth);
-                    dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
+                    dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
                     date.setText(dataSelecionada);
                     scrollView.setVisibility(View.GONE);
                     onLoading(false);
@@ -456,8 +466,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         Date dateFormatInitial = null;
         Date dateFormatFinal = null;
         try {
-            dateFormatInitial = new SimpleDateFormat("dd/MM/yyyy").parse(sumDate());
-            dateFormatFinal = new SimpleDateFormat("dd/MM/yyyy").parse("16-06-1995");
+            dateFormatInitial = new SimpleDateFormat(defaultTDateFormatPresentation).parse(sumDate());
+            dateFormatFinal = new SimpleDateFormat(defaultTDateFormatPresentation).parse("16-06-1995");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -515,6 +525,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 }
                 editor.commit();
                 handleOptionMenu();
+                break;
+            default:
                 break;
         }
     }
