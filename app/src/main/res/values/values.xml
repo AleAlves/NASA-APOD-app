@@ -2,5 +2,17 @@
 <resources>
 
     <dimen name="icon_default_size">50dp</dimen>
-
+    <dimen name="text_settings_size">20sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="padding_5">5sp</dimen>
+    <dimen name="padding_10">10sp</dimen>
+    <dimen name="padding_15">15sp</dimen>
+    <dimen name="padding_20">20sp</dimen>
+    <dimen name="padding_50">50sp</dimen>
 </resources>

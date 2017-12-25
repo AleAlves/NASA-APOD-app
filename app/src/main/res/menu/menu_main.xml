@@ -5,7 +5,7 @@
         android:title="My wallpapers"/>
     <item
         android:id="@+id/action_top_rated"
-        android:title="Populars"/>
+        android:title="Top rated"/>
     <item
         android:id="@+id/action_config"
         android:title="Settings"/>

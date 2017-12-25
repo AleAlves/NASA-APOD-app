@@ -19,15 +19,16 @@ import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Wallpaper extends AppCompatActivity{
+public class Wallpaper extends AppCompatActivity {
 
     Activity activity;
+    private String lastFileSrc = "";
 
-    public Wallpaper(Activity activity){
+    public Wallpaper(Activity activity) {
         this.activity = activity;
     }
 
-    public boolean setWallpaper(Apod model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display){
+    public boolean setWallpaper(Apod model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display) {
         Point size = new Point();
         display.getSize(size);
         int width = 0;
@@ -68,6 +69,7 @@ public class Wallpaper extends AppCompatActivity{
             out.close();
             model.setFileLocation(file.getAbsolutePath());
             saveFavoriteApod(model);
+            lastFileSrc = model.getFileLocation();
             addImageToGallery(file.toString(), activity);
             return true;
         } catch (Exception e) {
@@ -85,17 +87,28 @@ public class Wallpaper extends AppCompatActivity{
         context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-    private void saveFavoriteApod(Apod apodModel){
+    private void saveFavoriteApod(Apod apodModel) {
         LocalDataBase apodBD = new LocalDataBase(activity);
         apodBD.saveApod(apodModel);
     }
 
-    public boolean deleteFile(String fileLocation){
+    public boolean deleteFile(String fileLocation) {
         File file = new File(fileLocation);
         if (file.exists()) {
             file.delete();
             return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    public boolean deleteLastFile() {
+        File file = new File(lastFileSrc);
+        if (file.exists()) {
+            file.delete();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

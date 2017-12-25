@@ -1,81 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="left"
-            android:padding="4dp"
-            android:layout_marginLeft="5dp">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_20">
 
-            <ImageButton
-                android:id="@+id/image_button_wallpaper"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_image_black_24dp"
-                android:background="@null"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitCenter" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wallpaper"
-                android:textSize="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="4dp">
+            android:layout_gravity="left">
 
-            <ImageButton
-                android:id="@+id/image_button_calendar"
-                android:layout_marginLeft="5dp"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_today_black_24dp"
-                android:background="@null"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitCenter" />
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quarta, 25 ago 1993"
-                android:textSize="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/image_button_wallpaper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_image_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wallpaper"
+                    android:textSize="10dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="right"
-            android:padding="4dp"
-            android:layout_marginRight="5dp">
+            android:layout_gravity="center">
 
-            <ImageButton
-                android:id="@+id/image_button_random"
-                android:layout_marginLeft="5dp"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_casino_black_24dp"
-                android:background="@null"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitCenter" />
-            <TextView
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/image_button_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_today_black_24dp" />
+
+                <TextView
+                    android:id="@+id/dates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="10dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Random"
-                android:textSize="10dp"/>
-        </LinearLayout>
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/image_button_random"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_casino_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Random"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
     </FrameLayout>
 
 </LinearLayout>

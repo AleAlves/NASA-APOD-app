@@ -16,13 +16,15 @@
         <ImageView
             android:id="@+id/page"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"/>
 
         <ImageView
             android:id="@+id/video"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:foreground="?attr/selectableItemBackground"/>
 
     </RelativeLayout>
 

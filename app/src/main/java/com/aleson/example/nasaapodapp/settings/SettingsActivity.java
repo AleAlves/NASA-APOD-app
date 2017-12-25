@@ -21,6 +21,7 @@ import java.util.List;
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private CheckBox checkBoxSubscribe;
+    private CheckBox checkBoxSaveImages;
     private Spinner spinnerListSize;
     private SettingsUtil settings;
 
@@ -32,15 +33,23 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         setSupportActionBar(myToolbar);
         settings = new SettingsUtil(this, "settings");
         init();
-        handleDailyNotificationCheckbox();
     }
 
     private void init() {
         checkBoxSubscribe = (CheckBox) findViewById(R.id.checkbox_suscribe);
+        checkBoxSubscribe.setChecked(settings.getSharedPreferences().getBoolean("dailyNotification", true));
         checkBoxSubscribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 changeDailyNotification(b);
+            }
+        });
+        checkBoxSaveImages = (CheckBox) findViewById(R.id.checkbox_save_images);
+        checkBoxSaveImages.setChecked(settings.getSharedPreferences().getBoolean("saveImages", false));
+        checkBoxSaveImages.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                changeSaveImages(b);
             }
         });
         spinnerListSize = (Spinner) findViewById(R.id.spinner_list_size);
@@ -67,6 +76,18 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
+    private void changeSaveImages(boolean b){
+        if (!b) {
+            checkBoxSaveImages.setChecked(false);
+            settings.getEditor().putBoolean("saveImages", false);
+        } else {
+            checkBoxSaveImages.setChecked(true);
+            settings.getEditor().putBoolean("saveImages", true);
+        }
+        settings.getEditor().commit();
+        settings.updateSettings();
+    }
+
     private void changeDailyNotification(boolean b) {
         if (!b) {
             checkBoxSubscribe.setChecked(false);
@@ -77,15 +98,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         }
         settings.getEditor().commit();
         settings.updateSettings();
-    }
-
-    public void handleDailyNotificationCheckbox(){
-        if(settings.getSharedPreferences().getBoolean("dailyNotification", true)){
-            checkBoxSubscribe.setChecked(true);
-        }
-        else{
-            checkBoxSubscribe.setChecked(false);
-        }
     }
 
     @Override

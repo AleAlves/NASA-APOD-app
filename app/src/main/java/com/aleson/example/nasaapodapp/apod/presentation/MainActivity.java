@@ -52,6 +52,7 @@ import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -74,12 +75,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private static String url = "";
     private static String defaultTDateFormat = "yyyy-MM-dd";
     private static String defaultTDateFormatPresentation = "dd/MM/yyyy";
+    private static String sharedPrefsShowOptions = "showOptions";
+    private static String getSharedPrefsSaveImages = "saveImages";
 
     private ImageView imageView;
 
     private ScrollView scrollView;
 
     private Calendar calendarAgendada;
+    private Wallpaper wallpaper;
 
     private ApodPresenter apodPresenter;
 
@@ -430,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
         scrollView.setVisibility(View.VISIBLE);
-        Wallpaper wallpaper = new Wallpaper(mActivity);
+        wallpaper = new Wallpaper(mActivity);
         Display display = getWindowManager().getDefaultDisplay();
         if (wallpaper.setWallpaper(model, bitMapImg, url, dataSelecionadaTitulo, display)) {
             openSystemWallpaperManager();
@@ -495,11 +499,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     public void openSystemWallpaperManager() {
         linearLayoutLoading.setVisibility(View.GONE);
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
-        startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+        startActivityForResult(Intent.createChooser(intent, "Select Wallpaper"), 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 0:
+                if(!settingsUtil.getSharedPreferences().getBoolean(getSharedPrefsSaveImages, false)){
+                    if(wallpaper != null){
+                        if(wallpaper.deleteLastFile()){
+                            this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(model.getFileLocation()))));
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private boolean handleOptionMenu() {
-        if (settingsUtil.getSharedPreferences().getBoolean("showOptions", true)) {
+        if (settingsUtil.getSharedPreferences().getBoolean(sharedPrefsShowOptions, true)) {
             linearLayoutOptionsContent.animate()
                     .alpha(1.0f)
                     .setDuration(100)
@@ -534,10 +556,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         switch (v.getId()) {
             case R.id.image_button_expand_collapse_options:
             case R.id.linear_layout_expand_collapse_options:
-                if (settingsUtil.getSharedPreferences().getBoolean("showOptions", true)) {
-                    settingsUtil.getEditor().putBoolean("showOptions", false);
+                if (settingsUtil.getSharedPreferences().getBoolean(sharedPrefsShowOptions, true)) {
+                    settingsUtil.getEditor().putBoolean(sharedPrefsShowOptions, false);
                 } else {
-                    settingsUtil.getEditor().putBoolean("showOptions", true);
+                    settingsUtil.getEditor().putBoolean(sharedPrefsShowOptions, true);
                 }
                 settingsUtil.getEditor().commit();
                 handleOptionMenu();
