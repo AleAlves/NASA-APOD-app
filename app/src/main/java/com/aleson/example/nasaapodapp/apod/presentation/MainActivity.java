@@ -203,8 +203,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 if (url != null && !"".equals(url)) {
-                    onLoading(true);
-                    apodPresenter.chooseWallpaper(url);
+                    if(apodPresenter.getMediaType() == Media.IMAGE) {
+                        onLoading(true);
+                        apodPresenter.chooseWallpaper(url);
+                    }
+                    else{
+                        Toast.makeText(mActivity,"Media type not allowed",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -434,6 +439,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
         scrollView.setVisibility(View.VISIBLE);
+        onLoading(true);
         wallpaper = new Wallpaper(mActivity);
         Display display = getWindowManager().getDefaultDisplay();
         if (wallpaper.setWallpaper(model, bitMapImg, url, dataSelecionadaTitulo, display)) {
@@ -497,9 +503,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     }
 
     public void openSystemWallpaperManager() {
-        linearLayoutLoading.setVisibility(View.GONE);
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
         startActivityForResult(Intent.createChooser(intent, "Select Wallpaper"), 0);
+        onFinishLoad();
     }
 
     @Override
