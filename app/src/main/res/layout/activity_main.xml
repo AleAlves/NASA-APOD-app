@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9e9e9e"
+    android:background="@color/colorBackground"
     tools:context=".apod.presentation.MainActivity">
 
     <android.support.v7.widget.Toolbar
@@ -34,7 +34,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:visibility="gone"
-        android:background="#CCA9A9A9"
+        android:background="@color/colorBackground"
         android:orientation="vertical">
 
         <LinearLayout

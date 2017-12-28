@@ -56,7 +56,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         progressBarLoading = (ProgressBar) findViewById(R.id.progressbar_loading_image);
         relativeLayoutLoading = (LinearLayout) findViewById(R.id.loading_image);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("Favorites");
+        myToolbar.setTitle("Wallpapers");
         setSupportActionBar(myToolbar);
         ArrayList<Apod> apodModelList;
         LocalDataBase apodBD = new LocalDataBase(this);
