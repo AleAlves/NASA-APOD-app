@@ -5,7 +5,7 @@
     <color name="colorAccent">#777777</color>
     <color name="colorTextTitle">#F9F9F9</color>
     <color name="colorText">#000</color>"
-    <color name="colorBackground">#FFF</color>
+    <color name="colorBackground">#FFF1F1</color>
     <color name="colorCards">#CCC</color>
     <color name="colorOptions">#CCC</color>
 </resources>
