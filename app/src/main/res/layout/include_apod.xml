@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginBottom="50dp"
-    android:background="@color/colorOptions"
+    android:background="@color/colorBackground"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -66,7 +67,7 @@
         android:layout_gravity="bottom"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
-        android:background="#909090" />
+        android:background="@color/colorBackground" />
 
     <LinearLayout
         android:layout_width="wrap_content"
