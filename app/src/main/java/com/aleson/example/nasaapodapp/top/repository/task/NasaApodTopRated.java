@@ -1,7 +1,7 @@
-package com.aleson.example.nasaapodapp.topRated.repository.task;
+package com.aleson.example.nasaapodapp.top.repository.task;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.topRated.domain.TopRatedList;
+import com.aleson.example.nasaapodapp.top.domain.TopRatedList;
 
 import java.util.List;
 

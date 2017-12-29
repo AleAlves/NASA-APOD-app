@@ -1,13 +1,14 @@
-package com.aleson.example.nasaapodapp.topRated.repository;
+package com.aleson.example.nasaapodapp.top.repository;
 
 import android.util.Log;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.topRated.domain.TopRatedList;
-import com.aleson.example.nasaapodapp.topRated.presenter.TopRatedPresenterImpl;
-import com.aleson.example.nasaapodapp.topRated.repository.task.TopRatedRequest;
+import com.aleson.example.nasaapodapp.top.domain.TopRatedList;
+import com.aleson.example.nasaapodapp.top.presenter.TopRatedPresenterImpl;
+import com.aleson.example.nasaapodapp.top.repository.task.TopRatedRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Response;

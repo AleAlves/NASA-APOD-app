@@ -8,4 +8,5 @@
     <color name="colorBackground">#FFF1F1</color>
     <color name="colorCards">#CCC</color>
     <color name="colorOptions">#CCC</color>
+    <color name="colorTranslucid">#CCF1F1F1</color>
 </resources>

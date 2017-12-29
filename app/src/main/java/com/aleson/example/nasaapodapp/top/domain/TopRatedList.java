@@ -1,4 +1,4 @@
-package com.aleson.example.nasaapodapp.topRated.domain;
+package com.aleson.example.nasaapodapp.top.domain;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

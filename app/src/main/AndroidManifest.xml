@@ -74,7 +74,7 @@
             android:name=".favorites.presentation.FavoritesActivity"
             android:screenOrientation="user" />
         <activity
-            android:name=".topRated.presentation.TopRatedActivity"
+            android:name=".top.presentation.TopRatedActivity"
             android:screenOrientation="user" />
         <activity android:name=".settings.SettingsActivity" />
         <activity android:name=".about.presentation.AboutActivity"></activity>

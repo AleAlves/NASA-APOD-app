@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
@@ -54,26 +55,32 @@ public class Wallpaper extends AppCompatActivity {
                 case "png":
                     bcf = Bitmap.CompressFormat.PNG;
                     break;
+                default:
+                    break;
             }
             String fname = dataSelecionadaTitulo + "." + format;
             File file = new File(mediaStorageDir, fname);
             if (file.exists()) {
-                file.delete();
+                delete(file);
             }
-            file.createNewFile();
-            Date currentTime = Calendar.getInstance().getTime();
-            file.setLastModified(currentTime.getTime());
-            FileOutputStream out = new FileOutputStream(file);
-            bitMapImg.compress(bcf, 100, out);
-            out.flush();
-            out.close();
-            model.setFileLocation(file.getAbsolutePath());
-            saveFavoriteApod(model);
-            lastFileSrc = model.getFileLocation();
-            addImageToGallery(file.toString(), activity);
-            return true;
+            if(file.createNewFile()){
+                Date currentTime = Calendar.getInstance().getTime();
+                file.setLastModified(currentTime.getTime());
+                FileOutputStream out = new FileOutputStream(file);
+                bitMapImg.compress(bcf, 100, out);
+                out.flush();
+                out.close();
+                model.setFileLocation(file.getAbsolutePath());
+                saveFavoriteApod(model);
+                lastFileSrc = model.getFileLocation();
+                addImageToGallery(file.toString(), activity);
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("WALLPAPER",e.getMessage());
             return false;
         }
     }
@@ -95,7 +102,7 @@ public class Wallpaper extends AppCompatActivity {
     public boolean deleteFile(String fileLocation) {
         File file = new File(fileLocation);
         if (file.exists()) {
-            file.delete();
+            delete(file);
             return true;
         } else {
             return false;
@@ -105,10 +112,14 @@ public class Wallpaper extends AppCompatActivity {
     public boolean deleteLastFile() {
         File file = new File(lastFileSrc);
         if (file.exists()) {
-            file.delete();
+            delete(file);
             return true;
         } else {
             return false;
         }
+    }
+
+    private boolean delete(File file){
+        return file.delete();
     }
 }

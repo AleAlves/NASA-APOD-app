@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 
 public class SettingsUtil {
 
-    private Context context;
-
     private SharedPreferences.Editor editor;
 
     private SharedPreferences sharedPreferences;
@@ -26,10 +24,9 @@ public class SettingsUtil {
     public SettingsUtil(Context context, String varId){
         sharedPreferences = context.getSharedPreferences(varId, 0);
         editor = sharedPreferences.edit();
-        this.context = context;
     }
 
     public void updateSettings(){
-        new FirebaseUtil(context, this);
+        new FirebaseUtil(this);
     }
 }

@@ -7,6 +7,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class HashUtils {
 
+    private HashUtils(){}
+
     public static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         try {

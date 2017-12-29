@@ -34,7 +34,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:visibility="gone"
-        android:background="@color/colorBackground"
+        android:background="@color/colorTranslucid"
         android:orientation="vertical">
 
         <LinearLayout

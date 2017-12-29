@@ -13,7 +13,7 @@ public class FirebaseUtil {
 
     SettingsUtil settings;
 
-    public FirebaseUtil(Context context, SettingsUtil settingsUtil){
+    public FirebaseUtil(SettingsUtil settingsUtil){
         this.settings = settingsUtil;
         String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
         updateSettings();

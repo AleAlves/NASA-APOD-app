@@ -39,7 +39,7 @@ import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.settings.SettingsActivity;
-import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
+import com.aleson.example.nasaapodapp.top.presentation.TopRatedActivity;
 import com.aleson.example.nasaapodapp.utils.Permissions;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
 import com.aleson.example.nasaapodapp.utils.SettingsUtil;
