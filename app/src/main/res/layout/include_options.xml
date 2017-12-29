@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress ALL -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress ALL -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/option_fragment"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     android:gravity="bottom"
     android:orientation="vertical">
@@ -15,49 +14,32 @@
         android:foregroundTint="@color/colorBackground"
         android:gravity="center"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/linear_layout_expand_collapse_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
             android:background="@color/colorPrimary"
-            android:foreground="?attr/selectableItemBackground">
-
-            <FrameLayout
-                android:layout_width="match_parent"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_5">
+                android:text="Quarta, 25 ago 1993"
+                android:textColor="@color/colorTextTitle"
+                android:textSize="@dimen/text_size_18" />
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Quarta, 25 ago 1993"
-                        android:textColor="@color/colorTextTitle"
-                        android:textSize="@dimen/text_size_18" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right">
-
-                    <ImageButton
-                        android:id="@+id/image_button_expand_collapse_options"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter" />
-                </FrameLayout>
-            </FrameLayout>
+            <ImageButton
+                android:id="@+id/image_button_expand_collapse_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitCenter" />
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/linear_layout_options_content"
             android:layout_width="match_parent"
