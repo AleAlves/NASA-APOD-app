@@ -119,7 +119,7 @@ public class TopRatedRecyclerViewAdapter extends RecyclerView.Adapter<TopRatedRe
 
     private void loadImage(final String url, final TopRatedViewHolder holder, final ProgressBar progressBar) {
         progressBar.setVisibility(View.VISIBLE);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xF9F9F9F9, android.graphics.PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFF000022, android.graphics.PorterDuff.Mode.MULTIPLY);
         Glide.with(context)
                 .load(url)
                 .listener(new RequestListener<Drawable>() {

@@ -44,7 +44,6 @@ public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<Favorites
     private ArrayList<Apod> apodList = new ArrayList<>();
     private Context context;
     private static Activity activity;
-    private FavoritesViewHolder viewHolder1;
     private static FavoritesView mFavoritesView;
     private FavoritesPresenter favoritesPresenter;
 
@@ -103,7 +102,7 @@ public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<Favorites
         try {
             holder.textViewDate.setText(outFormat.format(inFormat.parse(apodList.get(position).getDate())));
         } catch (Exception e) {
-
+            Log.e("Error", e.getMessage());
         }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         holder.imageViewImage.setVisibility(View.VISIBLE);
@@ -165,7 +164,7 @@ public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<Favorites
 
     private void loadImage(final String url, final FavoritesViewHolder holder, final ProgressBar progressBar) {
         progressBar.setVisibility(View.VISIBLE);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xF9F9F9F9, android.graphics.PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFF000022, android.graphics.PorterDuff.Mode.MULTIPLY);
         Glide.with(context)
                 .load(url)
                 .listener(new RequestListener<Drawable>() {
