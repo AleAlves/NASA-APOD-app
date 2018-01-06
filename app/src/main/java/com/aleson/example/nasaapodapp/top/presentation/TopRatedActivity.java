@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
-import com.aleson.example.nasaapodapp.top.presentation.adapter.RecyclerViewAdapterTopRated;
+import com.aleson.example.nasaapodapp.top.presentation.adapter.TopRatedRecyclerViewAdapter;
 import com.aleson.example.nasaapodapp.top.presenter.TopRatedPresenter;
 import com.aleson.example.nasaapodapp.top.presenter.TopRatedPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.SettingsUtil;
@@ -54,7 +54,7 @@ public class TopRatedActivity extends AppCompatActivity  implements TopRatedView
         recyclerView = (RecyclerView) findViewById(R.id.top_rated_list);
         recylerViewLayoutManager = new LinearLayoutManager(mActivity);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapterTopRated(context, model, this);
+        recyclerViewAdapter = new TopRatedRecyclerViewAdapter(context, model, this);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 

@@ -8,12 +8,14 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
@@ -37,18 +39,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<FavoritesRecyclerViewAdapter.FavoritesViewHolder> {
 
-    ArrayList<Apod> apodList = new ArrayList<>();
-    Context context;
-    View view1;
-    static Activity activity;
-    ViewHolder viewHolder1;
-    static FavoritesView mFavoritesView;
-    FavoritesPresenter favoritesPresenter;
+    private ArrayList<Apod> apodList = new ArrayList<>();
+    private Context context;
+    private static Activity activity;
+    private FavoritesViewHolder viewHolder1;
+    private static FavoritesView mFavoritesView;
+    private FavoritesPresenter favoritesPresenter;
 
 
-    public RecyclerViewAdapter(Context context, List<Apod> apods, FavoritesActivity activity, FavoritesPresenter favoritesPresenter) {
+    public FavoritesRecyclerViewAdapter(Context context, List<Apod> apods, FavoritesActivity activity, FavoritesPresenter favoritesPresenter) {
         this.apodList.addAll(apods);
         this.context = context;
         this.activity = activity;
@@ -57,32 +58,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class FavoritesViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textViewDate;
-        public TextView textViewTitle;
-        public ImageView imageViewImage;
-        public ProgressBar progressBarLoadingFavImage;
-        public ImageButton buttonDeleteApod;
-        public ImageButton buttonWallpaperApod;
-        public ImageButton buttonSeeApod;
-        public ImageButton buttonStar1;
-        public ImageButton buttonStar2;
-        public ImageButton buttonStar3;
-        public ImageButton buttonStar4;
-        public ImageButton buttonStar5;
+        private TextView textViewDate;
+        private TextView textViewTitle;
+        private ImageView imageViewImage;
+        private ProgressBar progressBarLoadingFavImage;
+        private ImageButton buttonDeleteApod;
+        private ImageButton buttonWallpaperApod;
+        private ImageButton buttonSeeApod;
+        private RatingBar ratingBarStars;
 
-        public ViewHolder(View v) {
+        public FavoritesViewHolder(View v) {
 
             super(v);
 
-            buttonStar1 = (ImageButton) v.findViewById(R.id.image_button_start_1);
-            buttonStar2 = (ImageButton) v.findViewById(R.id.image_button_start_2);
-            buttonStar3 = (ImageButton) v.findViewById(R.id.image_button_start_3);
-            buttonStar4 = (ImageButton) v.findViewById(R.id.image_button_start_4);
-            buttonStar5 = (ImageButton) v.findViewById(R.id.image_button_start_5);
-
-
+            ratingBarStars = (RatingBar) v.findViewById(R.id.favorites_rating_stars);
             textViewDate = (TextView) v.findViewById(R.id.textview_apod_date);
             textViewTitle = (TextView) v.findViewById(R.id.textview_apod_title);
             imageViewImage = (ImageView) v.findViewById(R.id.imageview_apod_image);
@@ -100,17 +91,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        view1 = LayoutInflater.from(context).inflate(R.layout.image_favorite_card, parent, false);
-
-        viewHolder1 = new ViewHolder(view1);
-
-        return viewHolder1;
+    public FavoritesRecyclerViewAdapter.FavoritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new FavoritesViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.image_favorite_card, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final FavoritesViewHolder holder, final int position) {
 
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
@@ -122,7 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         holder.imageViewImage.setVisibility(View.VISIBLE);
         loadImage(apodList.get(position).getUrl(), holder, holder.progressBarLoadingFavImage);
-
+        holder.ratingBarStars.setRating((float) apodList.get(position).getRate());
         holder.buttonDeleteApod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,47 +120,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Intent mainIntent = new Intent(activity, MainActivity.class);
-                mainIntent.putExtra("Apod",apodList.get(position));
+                mainIntent.putExtra("Apod", apodList.get(position));
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(mainIntent);
                 activity.finish();
             }
         });
 
-        loadRate(apodList.get(position).getRate(), holder);
 
-        holder.buttonStar1.setOnClickListener(new View.OnClickListener() {
+        holder.ratingBarStars.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
-            public void onClick(View v) {
-                rateDialog(position,1, holder);
-            }
-        });
-
-        holder.buttonStar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rateDialog(position,2, holder);
-            }
-        });
-
-        holder.buttonStar3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rateDialog(position,3, holder);
-            }
-        });
-
-        holder.buttonStar4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rateDialog(position,4, holder);
-            }
-        });
-
-        holder.buttonStar5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rateDialog(position,5, holder);
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                saveRate(apodList.get(position), (int) v);
             }
         });
 
@@ -182,44 +139,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Intent mainIntent = new Intent(activity, MainActivity.class);
-                mainIntent.putExtra("Apod",apodList.get(position));
+                mainIntent.putExtra("Apod", apodList.get(position));
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(mainIntent);
                 activity.finish();
             }
         });
-    }
-
-    private void loadRate( int rate, ViewHolder holder){
-        switch (rate) {
-            case 0:
-                break;
-            case 1:
-                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
-                break;
-            case 2:
-                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
-                break;
-            case 3:
-                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar3.setImageResource(R.drawable.ic_star_black_24dp);
-                break;
-            case 4:
-                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar3.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar4.setImageResource(R.drawable.ic_star_black_24dp);
-                break;
-            case 5:
-                holder.buttonStar1.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar2.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar3.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar4.setImageResource(R.drawable.ic_star_black_24dp);
-                holder.buttonStar5.setImageResource(R.drawable.ic_star_black_24dp);
-                break;
-        }
     }
 
     private void saveRate(Apod model, int rate) {
@@ -238,7 +163,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    private void loadImage(final String url, final ViewHolder holder, final ProgressBar progressBar) {
+    private void loadImage(final String url, final FavoritesViewHolder holder, final ProgressBar progressBar) {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.getIndeterminateDrawable().setColorFilter(0xF9F9F9F9, android.graphics.PorterDuff.Mode.MULTIPLY);
         Glide.with(context)
@@ -260,8 +185,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.imageViewImage);
     }
 
-    private void deleteDialog(final int position){
-        if(apodList.get(position).getRate() > 0) {
+    private void deleteDialog(final int position) {
+        if (apodList.get(position).getRate() > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage("Do you want to remove this APOD?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -280,48 +205,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
             AlertDialog alert = builder.create();
             alert.show();
-        }
-        else{
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage("Help us, rate it before delete.");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                }
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-    }
-
-    private void rateDialog(final int position,final int rate, final ViewHolder holder){
-        if(NetworkingUtils.isOnline(activity)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setMessage("Do you want to send your rate?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    saveRate(apodList.get(position), rate);
-                    loadRate(apodList.get(position).getRate(), holder);
-                    mFavoritesView.reloadFavoritesList();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-        else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setMessage("Internet connection required");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
                 }

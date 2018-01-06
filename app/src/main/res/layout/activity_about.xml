@@ -35,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="APOD favorites service version: " />
+                    android:text="Service version: " />
 
                 <TextView
                     android:id="@+id/text_view_service_version"
@@ -52,7 +52,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="APOD app version:  " />
+                    android:text="App version:  " />
 
                 <TextView
                     android:id="@+id/text_view_app_version"

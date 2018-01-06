@@ -3,6 +3,7 @@ package com.aleson.example.nasaapodapp.apod.presentation;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
@@ -104,22 +105,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private LinearLayout linearLayoutPermission;
     private LinearLayout linearLayoutOptions;
     private LinearLayout linearLayoutOptionsContent;
-
     private boolean permissionsAllowed = false;
-
     private DatePickerDialog getDatePickerDialog;
-
     private RelativeLayout linearLayoutImageLoading;
-
     private ProgressBar progressBarLoadingImage;
-
     private SettingsUtil settingsUtil;
+    private Thread.UncaughtExceptionHandler onRuntimeErrorDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fabric.with(this, new Crashlytics());
+        initDefaultUncaughtExceptionHandler();
         mActivity = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -574,4 +572,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 break;
         }
     }
+
+    private void initDefaultUncaughtExceptionHandler() {
+        onRuntimeErrorDefault = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(onRuntimeError);
+    }
+
+    private Thread.UncaughtExceptionHandler onRuntimeError = new Thread.UncaughtExceptionHandler() {
+        @SuppressLint("LongLogTag")
+        public void uncaughtException(Thread thread, Throwable ex) {
+            Log.e("SessionControlledActivity", "UncaughtException", ex);
+        }
+    };
 }

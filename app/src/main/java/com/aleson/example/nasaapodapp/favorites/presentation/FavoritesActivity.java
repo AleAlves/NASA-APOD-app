@@ -18,13 +18,12 @@ import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.favorites.domain.Device;
-import com.aleson.example.nasaapodapp.favorites.presentation.adapter.RecyclerViewAdapter;
+import com.aleson.example.nasaapodapp.favorites.presentation.adapter.FavoritesRecyclerViewAdapter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.HashUtils;
@@ -106,7 +105,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         recyclerView = (RecyclerView) findViewById(R.id.favorites_list);
         recylerViewLayoutManager = new LinearLayoutManager(mActivity);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(context, model, this, favoritesPresenter);
+        recyclerViewAdapter = new FavoritesRecyclerViewAdapter(context, model, this, favoritesPresenter);
         recyclerView.setAdapter(recyclerViewAdapter);
         if (model.size() == 0) {
             textViewNofavorites.setVisibility(View.VISIBLE);
@@ -126,7 +125,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         LocalDataBase apodBD = new LocalDataBase(this);
         apodModelList = apodBD.finAll();
         adapter(apodModelList);
-        recyclerViewAdapter = new RecyclerViewAdapter(context, apodModelList, this, favoritesPresenter);
+        recyclerViewAdapter = new FavoritesRecyclerViewAdapter(context, apodModelList, this, favoritesPresenter);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 

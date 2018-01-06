@@ -1,192 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#00000000"
-    android:orientation="vertical"
-    android:paddingBottom="2dp"
-    android:paddingTop="1dp">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorCards"
-        android:orientation="horizontal"
-        android:foreground="?attr/selectableItemBackground">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <GridLayout android:layout_columnWeight="0">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ProgressBar
-                        android:id="@+id/progressbar_loading_image"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="45dp"
-                        android:foregroundGravity="center_vertical"
-                        android:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/imageview_apod_image"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginRight="5dp"
-                        android:padding="5dp"
-                        android:scaleType="fitXY"
-                        android:visibility="gone"
-                        android:foreground="?attr/selectableItemBackground"/>
-                </RelativeLayout>
-            </LinearLayout>
-        </GridLayout>
-
-        <GridLayout
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_columnWeight="90"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_1">
 
-            <LinearLayout
+            <ProgressBar
+                android:id="@+id/progressbar_loading_image"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:foregroundGravity="center_vertical"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/imageview_apod_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_star_black_24dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_5">
+
+            <TextView
+                android:id="@+id/textview_apod_title"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size_14"
+                android:text="Astronomic picture of the day " />
 
-                <TextView
-                    android:id="@+id/textview_apod_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|center"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:paddingTop="10dp"
-                    android:text="Astronomic picture of the day "
-                    android:textSize="12dp" />
+            <TextView
+                android:id="@+id/textview_apod_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingTop="5dp"
+                android:text="2017 August 22 "
+                android:textSize="@dimen/text_size_10" />
 
-                <TextView
-                    android:id="@+id/textview_apod_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:paddingTop="5dp"
-                    android:text="2017 August 22 "
-                    android:textSize="8dp" />
-            </LinearLayout>
+            <RatingBar
+                android:id="@+id/favorites_rating_stars"
+                style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="4"
+                android:stepSize="1.0"
+                android:theme="@style/RatingBar" />
+        </LinearLayout>
 
-            <GridLayout android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_10">
 
-                <LinearLayout
-                    android:id="@+id/linear_layout_stars"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="25dp">
+            <ImageButton
+                android:id="@+id/button_wallpaper_apod"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_image_black_24dp"
+                android:textColor="#000" />
 
-                    <ImageButton
-                        android:id="@+id/image_button_start_1"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_star_border_black_24dp" />
+            <ImageButton
+                android:id="@+id/button_see_apod"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_visibility_black_24dp"
+                android:textColor="#000"
+                android:visibility="invisible" />
 
-                    <ImageButton
-                        android:id="@+id/image_button_start_2"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_star_border_black_24dp" />
-
-                    <ImageButton
-                        android:id="@+id/image_button_start_3"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_star_border_black_24dp" />
-
-                    <ImageButton
-                        android:id="@+id/image_button_start_4"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_star_border_black_24dp" />
-
-                    <ImageButton
-                        android:id="@+id/image_button_start_5"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_star_border_black_24dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:paddingTop="25dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:id="@+id/button_wallpaper_apod"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_image_black_24dp"
-                        android:textColor="#000"
-                        android:layout_marginLeft="15dp"/>
-
-                    <ImageButton
-                        android:id="@+id/button_see_apod"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_visibility_black_24dp"
-                        android:textColor="#000"
-                        android:layout_marginLeft="15dp"/>
-
-                    <ImageButton
-                        android:id="@+id/button_delete_apod"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_delete_black_24dp"
-                        android:textColor="#000"
-                        android:layout_marginLeft="15dp"/>
-                </LinearLayout>
-            </GridLayout>
-        </GridLayout>
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/button_delete_apod"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_delete_black_24dp"
+                android:textColor="#000" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="@null" />
-    </GridLayout>
-</FrameLayout>
+            android:background="#000" />
+    </LinearLayout>
+
+</LinearLayout>

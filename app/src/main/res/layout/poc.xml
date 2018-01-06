@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#00000000">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="left"
+        android:gravity="center"
+        android:padding="@dimen/padding_10">
+
+        <ProgressBar
+            android:id="@+id/progressbar_loading_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="45dp"
+            android:foregroundGravity="center_vertical"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/imageview_apod_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="5dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="5dp"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:src="@drawable/ic_star_black_24dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="@dimen/padding_10">
+
+        <TextView
+            android:id="@+id/textview_apod_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingTop="10dp"
+            android:text="Astronomic picture of the day "
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textview_apod_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:paddingTop="5dp"
+            android:text="2017 August 22 "
+            android:textSize="8dp" />
+
+        <RatingBar
+            android:id="@+id/favorites_rating_stars"
+            style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="4"
+            android:stepSize="1"
+            android:theme="@style/RatingBar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        android:gravity="center"
+        android:padding="@dimen/padding_10">
+
+        <ImageButton
+            android:id="@+id/button_wallpaper_apod"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@null"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_image_black_24dp"
+            android:textColor="#000" />
+
+        <ImageButton
+            android:id="@+id/button_see_apod"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@null"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_visibility_black_24dp"
+            android:textColor="#000" />
+
+        <ImageButton
+            android:id="@+id/button_delete_apod"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:textColor="#000" />
+    </LinearLayout>
+
+</FrameLayout>
