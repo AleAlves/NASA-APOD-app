@@ -584,4 +584,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             Log.e("SessionControlledActivity", "UncaughtException", ex);
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

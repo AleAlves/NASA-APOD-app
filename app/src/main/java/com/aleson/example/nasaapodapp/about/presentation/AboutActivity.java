@@ -10,11 +10,13 @@ import android.widget.TextView;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.about.presenter.AboutPrensenterImpl;
 import com.aleson.example.nasaapodapp.about.presenter.AboutPresenter;
+import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 public class AboutActivity extends AppCompatActivity implements AboutView{
 
     private TextView textViewServiceVersion;
     private TextView getTextViewAppVersion;
+    private JustifiedTextView justifiedTextViewAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class AboutActivity extends AppCompatActivity implements AboutView{
     private void init(){
         getTextViewAppVersion = (TextView) findViewById(R.id.text_view_app_version);
         textViewServiceVersion = (TextView) findViewById(R.id.text_view_service_version);
+        justifiedTextViewAbout = (JustifiedTextView) findViewById(R.id.about);
+        justifiedTextViewAbout.setText("Astronomy Picture of the Day (APOD) is originated, written, coordinated, and edited since 1995 by Robert Nemiroff and Jerry Bonnell. Mobile Project developed by Aleson Alves as a form of study bringing together the passion for technology, science and astronomy. All rights reserved ©");
     }
 
     @Override

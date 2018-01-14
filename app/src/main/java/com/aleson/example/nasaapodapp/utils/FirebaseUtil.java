@@ -1,6 +1,5 @@
 package com.aleson.example.nasaapodapp.utils;
-
-import android.content.Context;
+import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -15,7 +14,7 @@ public class FirebaseUtil {
 
     public FirebaseUtil(SettingsUtil settingsUtil){
         this.settings = settingsUtil;
-        String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
+        Log.i("firebaseID:",FirebaseInstanceId.getInstance().getToken());
         updateSettings();
     }
 

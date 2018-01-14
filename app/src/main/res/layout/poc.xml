@@ -40,7 +40,8 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center"
-        android:padding="@dimen/padding_10">
+        android:padding="@dimen/padding_10"
+        android:layout_marginLeft="@dimen/padding_15">
 
         <TextView
             android:id="@+id/textview_apod_title"
