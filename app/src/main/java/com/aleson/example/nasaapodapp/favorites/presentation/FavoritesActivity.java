@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -76,9 +77,9 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             try {
                 deviceModel.setImei(HashUtils.makeSHA1Hash(imei));
             } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                Log.e("Error", e.toString());
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+			Log.e("Error", e.toString());
             }
             deviceModel.setManufactuer(android.os.Build.MANUFACTURER);
             deviceModel.setDeviceName(android.os.Build.MODEL);

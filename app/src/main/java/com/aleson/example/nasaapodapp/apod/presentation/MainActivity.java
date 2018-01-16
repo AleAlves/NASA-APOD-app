@@ -203,12 +203,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 if (url != null && !"".equals(url)) {
-                    if(apodPresenter.getMediaType() == Media.IMAGE) {
+                    if (apodPresenter.getMediaType() == Media.IMAGE) {
                         onLoading(true);
                         apodPresenter.chooseWallpaper(url);
-                    }
-                    else{
-                        Toast.makeText(mActivity,"Media type not allowed",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mActivity, "Media type not allowed", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -480,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             dateFormatInitial = new SimpleDateFormat(defaultTDateFormatPresentation).parse(sumDate());
             dateFormatFinal = new SimpleDateFormat(defaultTDateFormatPresentation).parse("16-06-1995");
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e("Error", e.toString());
         }
         if (dateFormatInitial != null)
             getDatePickerDialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
@@ -513,9 +512,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 0:
-                if(!settingsUtil.getSharedPreferences().getBoolean(getSharedPrefsSaveImages, false)){
-                    if(wallpaper != null){
-                        if(wallpaper.deleteLastFile()){
+                if (!settingsUtil.getSharedPreferences().getBoolean(getSharedPrefsSaveImages, false)) {
+                    if (wallpaper != null) {
+                        if (wallpaper.deleteLastFile()) {
                             this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(model.getFileLocation()))));
                         }
                     }

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
@@ -48,7 +49,7 @@ public class AboutActivity extends AppCompatActivity implements AboutView{
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             getTextViewAppVersion.setText(pInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+			Log.e("Error", e.toString());
         }
     }
 }

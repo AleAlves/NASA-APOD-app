@@ -5,6 +5,7 @@ package com.aleson.example.nasaapodapp.apod.repository.task;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.aleson.example.nasaapodapp.apod.repository.ApodRepository;
 
@@ -33,7 +34,7 @@ public class BitmapService extends AsyncTask<URL, Integer, Bitmap> {
             InputStream input = connection.getInputStream();
             return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Error", e.toString());
             return null;
         }
     }
