@@ -1,3 +1,5 @@
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
+
 package com.aleson.example.nasaapodapp.utils;
 
 import android.content.Context;

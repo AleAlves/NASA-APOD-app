@@ -1,0 +1,8 @@
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
+
+projectKey=NASAAPODSERVER
+serverUrl=http://localhost:9000
+serverVersion=6.7.1.35068
+dashboardUrl=http://localhost:9000/dashboard/index/NASAAPODSERVER
+ceTaskId=AWEAG0bK8Gb2QaGzmzEl
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWEAG0bK8Gb2QaGzmzEl
