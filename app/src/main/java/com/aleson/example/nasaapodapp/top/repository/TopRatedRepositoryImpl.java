@@ -10,7 +10,6 @@ import com.aleson.example.nasaapodapp.top.presenter.TopRatedPresenterImpl;
 import com.aleson.example.nasaapodapp.top.repository.task.TopRatedRequest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Response;

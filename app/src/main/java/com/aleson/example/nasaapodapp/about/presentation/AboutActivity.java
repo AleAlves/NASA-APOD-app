@@ -4,15 +4,14 @@ package com.aleson.example.nasaapodapp.about.presentation;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.about.presenter.AboutPrensenterImpl;
-import com.aleson.example.nasaapodapp.about.presenter.AboutPresenter;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 public class AboutActivity extends AppCompatActivity implements AboutView{
