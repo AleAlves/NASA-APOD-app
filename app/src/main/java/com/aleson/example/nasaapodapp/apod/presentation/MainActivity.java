@@ -1,3 +1,6 @@
+
+
+
 // Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
 
 package com.aleson.example.nasaapodapp.apod.presentation;
@@ -179,8 +182,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageButtonExpandCollapseIcon = (ImageButton) findViewById(R.id.image_button_expand_collapse_options);
         linearLayoutOptions = (LinearLayout) findViewById(R.id.linear_layout_expand_collapse_options);
         linearLayoutOptionsContent = (LinearLayout) findViewById(R.id.linear_layout_options_content);
-
-        montarDatePickerDialog();
         calendarAgendada = Calendar.getInstance();
         dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
         today = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
@@ -216,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDatePickerDialog.show();
+//                getDatePickerDialog.show();
+                newDatePicker();
             }
         });
 
@@ -455,41 +457,43 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         date.setText("");
     }
 
-    public void montarDatePickerDialog() {
-        getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (view.isShown()) {
-                    calendarAgendada = Calendar.getInstance();
-                    calendarAgendada.set(year, monthOfYear, dayOfMonth);
-                    dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
-                    date.setText(dataSelecionada);
-                    scrollView.setVisibility(View.GONE);
-                    onLoading(false);
-                    apodPresenter.getChosenApod(dataSelecionada);
-                }
-
-            }
-
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-
+    private void newDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(
+                mActivity,
+                dateListener(),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
         Date dateFormatInitial = null;
         Date dateFormatFinal = null;
         try {
             dateFormatInitial = new SimpleDateFormat(defaultTDateFormatPresentation).parse(sumDate());
-            dateFormatFinal = new SimpleDateFormat(defaultTDateFormatPresentation).parse("16-06-1995");
+            dateFormatFinal = new SimpleDateFormat(defaultTDateFormatPresentation).parse("16/06/1995");
         } catch (ParseException e) {
             Log.e("Error", e.toString());
         }
         if (dateFormatInitial != null)
-            getDatePickerDialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
-
+            dialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
         if (dateFormatFinal != null)
-            getDatePickerDialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
+            dialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
+        dialog.setTitle("data");
+        dialog.show();
+    }
 
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.DAY_OF_MONTH, 1);
-        getDatePickerDialog.setTitle("data");
+    private DatePickerDialog.OnDateSetListener dateListener() {
+        return new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                calendarAgendada.set(i, i1, i2);
+                dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
+                date.setText(dataSelecionada);
+                scrollView.setVisibility(View.GONE);
+                onLoading(false);
+                apodPresenter.getChosenApod(dataSelecionada);
+            }
+        };
     }
 
     public static String sumDate() {
