@@ -1,3 +1,4 @@
+
 // Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
 
 package com.aleson.example.nasaapodapp.favorites.repository.task;
@@ -5,6 +6,8 @@ package com.aleson.example.nasaapodapp.favorites.repository.task;
 import android.util.Log;
 
 import com.aleson.example.nasaapodapp.apod.domain.ApodModel;
+import com.aleson.example.nasaapodapp.favorites.domain.RateStatus;
+import com.aleson.example.nasaapodapp.favorites.repository.FavoritesRepository;
 import com.aleson.example.nasaapodapp.utils.EndPoint;
 
 import okhttp3.OkHttpClient;
@@ -16,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RateRequest {
 
-    public RateRequest(ApodModel model) {
+    public RateRequest(final FavoritesRepository favoritesRepository, ApodModel model) {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -26,16 +29,16 @@ public class RateRequest {
 
         RateClient client = retrofit.create(RateClient.class);
 
-        Call<String> call = client.rate(model);
-        call.enqueue(new Callback<String>() {
+        Call<RateStatus> call = client.rate(model);
+        call.enqueue(new Callback<RateStatus>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("E",call.request().url().toString());
+            public void onResponse(Call<RateStatus> call, Response<RateStatus> response) {
+                favoritesRepository.receiveRateStatus(response.body().getDone());
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.i("E","error");
+            public void onFailure(Call<RateStatus> call, Throwable t) {
+                Log.e("","");
             }
         });
     }

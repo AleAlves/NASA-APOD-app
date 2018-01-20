@@ -6,7 +6,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
@@ -131,7 +134,15 @@ public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<Favorites
         holder.ratingBarStars.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                saveRate(apodList.get(position), (int) v);
+                holder.ratingBarStars.setIsIndicator(true);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.ratingBarStars.setIsIndicator(false);
+                    }
+                }, 5000);
+                saveRate(apodList.get(position), (int) v, holder.ratingBarStars);
             }
         });
 
@@ -147,7 +158,7 @@ public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<Favorites
         });
     }
 
-    private void saveRate(Apod model, int rate) {
+    private void saveRate(Apod model, int rate, final RatingBar ratingBar) {
         LocalDataBase apodBD = new LocalDataBase(context);
         model.setRate(rate);
         Device deviceModel = apodBD.getDeviceInfo();

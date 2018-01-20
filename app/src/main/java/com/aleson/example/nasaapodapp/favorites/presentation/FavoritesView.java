@@ -10,4 +10,5 @@ public interface FavoritesView {
 
     void reloadFavoritesList();
     void openWallpaperManager();
+    void showRateStatus(boolean done);
 }

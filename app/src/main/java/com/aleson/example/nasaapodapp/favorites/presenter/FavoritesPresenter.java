@@ -12,4 +12,5 @@ import com.aleson.example.nasaapodapp.favorites.domain.Device;
 public interface FavoritesPresenter {
 
     void sendRate(Apod apodModel, Device deviceModel, int rate);
+    void sendRateStatus(boolean done);
 }

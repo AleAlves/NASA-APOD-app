@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.about.presentation.AboutActivity;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.apod.domain.ApodWallpaper;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private Apod model;
     private String today;
     private static String url = "";
+    private static long id;
     private static String defaultTDateFormat = "yyyy-MM-dd";
     private static String defaultTDateFormatPresentation = "dd/MM/yyyy";
     private static String sharedPrefsShowOptions = "showOptions";
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private ProgressBar progressBarLoadingImage;
     private SettingsUtil settingsUtil;
     private Thread.UncaughtExceptionHandler onRuntimeErrorDefault;
+    private ApodWallpaper apodWallpaper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,8 +208,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             public void onClick(View v) {
                 if (url != null && !"".equals(url)) {
                     if (apodPresenter.getMediaType() == Media.IMAGE) {
-                        onLoading(true);
-                        apodPresenter.chooseWallpaper(url);
+                        if (apodWallpaper != null && apodWallpaper.getId() == model.getId()) {
+                            setWallpaper(apodWallpaper.getBitmap());
+                        } else {
+                            onLoading(true);
+                            apodPresenter.chooseWallpaper(url);
+                        }
                     } else {
                         Toast.makeText(mActivity, "Media type not allowed", Toast.LENGTH_SHORT).show();
                     }
@@ -368,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     public void setContent(Apod model) {
         scrollView.setVisibility(View.VISIBLE);
         url = model.getUrl();
+        id = model.getId();
         if (url != null) {
             clear();
             imageButtonWallpaper.setEnabled(true);
@@ -441,6 +449,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     public void setWallpaper(Bitmap bitMapImg) {
         scrollView.setVisibility(View.VISIBLE);
         onLoading(true);
+        apodWallpaper = new ApodWallpaper();
+        apodWallpaper.setId(model.getId());
+        apodWallpaper.setBitmap(bitMapImg);
         wallpaper = new Wallpaper(mActivity);
         Display display = getWindowManager().getDefaultDisplay();
         if (wallpaper.setWallpaper(model, bitMapImg, url, dataSelecionadaTitulo, display)) {
@@ -483,7 +494,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     }
 
     private DatePickerDialog.OnDateSetListener dateListener() {
-        return new DatePickerDialog.OnDateSetListener(){
+        return new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 calendarAgendada.set(i, i1, i2);

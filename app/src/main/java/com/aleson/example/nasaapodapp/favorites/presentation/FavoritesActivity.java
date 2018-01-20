@@ -5,12 +5,14 @@ package com.aleson.example.nasaapodapp.favorites.presentation;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -136,5 +138,30 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     public void openWallpaperManager() {
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
         startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+    }
+
+    @Override
+    public void showRateStatus(boolean done) {
+        if(done) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setMessage("Thank you!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setMessage("Oops, something went wrong...");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 }
