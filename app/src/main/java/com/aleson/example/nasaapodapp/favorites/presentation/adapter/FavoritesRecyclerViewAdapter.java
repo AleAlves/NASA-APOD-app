@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
