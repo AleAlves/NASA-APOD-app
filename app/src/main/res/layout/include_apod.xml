@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress ALL -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress ALL -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -17,14 +16,14 @@
             android:id="@+id/page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foreground="?attr/selectableItemBackground"/>
+            android:foreground="?attr/selectableItemBackground" />
 
         <ImageView
             android:id="@+id/video"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:foreground="?attr/selectableItemBackground"/>
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -32,9 +31,9 @@
         android:id="@+id/loading_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:gravity="center|center_vertical|center_horizontal"
         android:padding="25dp"
-        android:background="@color/colorPrimary"
         android:visibility="gone">
 
         <ProgressBar
@@ -42,7 +41,7 @@
             android:layout_height="20dp" />
     </RelativeLayout>
 
-    <include layout="@layout/include_options"/>
+    <include layout="@layout/include_options" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -86,7 +85,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom">
+        android:layout_gravity="center|bottom"
+        android:paddingBottom="70dp">
 
         <com.uncopt.android.widget.text.justify.JustifiedTextView
             android:id="@+id/explanation"
@@ -99,4 +99,5 @@
             android:padding="6dp"
             android:textSize="14sp" />
     </LinearLayout>
+
 </LinearLayout>

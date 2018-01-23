@@ -24,6 +24,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private String today;
     private static String url = "";
     private static long id;
+    private static boolean options = true;
     private static String defaultTDateFormat = "yyyy-MM-dd";
     private static String defaultTDateFormatPresentation = "dd/MM/yyyy";
     private static String sharedPrefsShowOptions = "showOptions";
@@ -95,9 +97,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private String dataSelecionada;
     private String dataSelecionadaTitulo;
 
+    private ImageButton buttonOptions;
+
     private JustifiedTextView explanation;
 
-    private ImageButton imageButtonExpandCollapseIcon;
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private LinearLayout linearLayoutPermission;
     private LinearLayout linearLayoutOptions;
     private LinearLayout linearLayoutOptionsContent;
+    private LinearLayout linearLayoutOptionsHolder;
     private boolean permissionsAllowed = false;
     private DatePickerDialog getDatePickerDialog;
     private RelativeLayout linearLayoutImageLoading;
@@ -167,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageView = (ImageView) findViewById(R.id.page);
         scrollView = (ScrollView) findViewById(R.id.main);
         copyright = (TextView) findViewById(R.id.copyright);
+        buttonOptions = (ImageButton) findViewById(R.id.button_options);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         imageButtonRandom = (ImageButton) findViewById(R.id.image_button_random);
         linearLayoutLoading = (LinearLayout) findViewById(R.id.translucid_loading);
@@ -179,15 +184,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageButtonPermission = (ImageButton) findViewById(R.id.image_button_permisison_after_error);
         imageButtonRandomAfterError = (ImageButton) findViewById(R.id.image_button_random_after_error);
         linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
-        imageButtonExpandCollapseIcon = (ImageButton) findViewById(R.id.image_button_expand_collapse_options);
         linearLayoutOptions = (LinearLayout) findViewById(R.id.linear_layout_expand_collapse_options);
-        linearLayoutOptionsContent = (LinearLayout) findViewById(R.id.linear_layout_options_content);
+        linearLayoutOptionsHolder = (LinearLayout) findViewById(R.id.linearlayout_options_holder);
         calendarAgendada = Calendar.getInstance();
         dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
         today = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
         initListeners();
-        handleOptionMenu();
+        buttonOptions.setOnClickListener(this);
+        buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
     }
 
     private void initListeners() {
@@ -244,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         });
 
         linearLayoutOptions.setOnClickListener(this);
-        imageButtonExpandCollapseIcon.setOnClickListener(this);
     }
 
     @Override
@@ -537,49 +541,49 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         }
     }
 
-    private boolean handleOptionMenu() {
-        if (settingsUtil.getSharedPreferences().getBoolean(sharedPrefsShowOptions, true)) {
-            linearLayoutOptionsContent.animate()
-                    .alpha(1.0f)
-                    .setDuration(100)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            linearLayoutOptionsContent.setVisibility(View.VISIBLE);
-                        }
-                    });
-            linearLayoutOptionsContent.clearAnimation();
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_remove_black_24dp);
-            return true;
-        } else {
-            linearLayoutOptionsContent.animate()
-                    .alpha(0.0f)
-                    .setDuration(100)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            linearLayoutOptionsContent.setVisibility(View.GONE);
-                        }
-                    });
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_more_24dp);
-            return false;
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.image_button_expand_collapse_options:
+            case R.id.image_button_calendar:
             case R.id.linear_layout_expand_collapse_options:
+                newDatePicker();
+                break;
+            case R.id.button_options:
                 if (settingsUtil.getSharedPreferences().getBoolean(sharedPrefsShowOptions, true)) {
                     settingsUtil.getEditor().putBoolean(sharedPrefsShowOptions, false);
                 } else {
                     settingsUtil.getEditor().putBoolean(sharedPrefsShowOptions, true);
                 }
                 settingsUtil.getEditor().commit();
-                handleOptionMenu();
+                if (options) {
+                    linearLayoutOptionsHolder.animate()
+                            .alpha(0.0f)
+                            .setDuration(500)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    linearLayoutOptionsHolder.setVisibility(View.GONE);
+                                    buttonOptions.setImageResource(R.drawable.ic_chevron_left_24dp);
+                                }
+                            });
+                    linearLayoutOptionsHolder.clearAnimation();
+                    options = false;
+                } else {
+                    options = true;
+                    linearLayoutOptionsHolder.animate()
+                            .alpha(1.0f)
+                            .setDuration(100)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    linearLayoutOptionsHolder.setVisibility(View.VISIBLE);
+                                    buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
+                                }
+                            });
+                    linearLayoutOptionsHolder.clearAnimation();
+                }
                 break;
             default:
                 break;

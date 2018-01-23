@@ -18,11 +18,12 @@
         <LinearLayout
             android:id="@+id/linear_layout_expand_collapse_options"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
+            android:layout_height="50dp"
             android:background="@color/colorPrimary"
-            android:foreground="?attr/selectableItemBackgroundBorderless">
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
@@ -30,26 +31,6 @@
                 android:text="Quarta, 25 ago 1993"
                 android:textColor="@color/colorTextTitle"
                 android:textSize="@dimen/text_size_18" />
-
-            <ImageButton
-                android:id="@+id/image_button_expand_collapse_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:background="@null"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitCenter" />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linear_layout_options_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <include layout="@layout/include_options_content" />
-        </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>
