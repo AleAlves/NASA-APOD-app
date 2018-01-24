@@ -7,10 +7,6 @@ import com.aleson.example.nasaapodapp.about.presentation.AboutView;
 import com.aleson.example.nasaapodapp.about.repository.AboutRepository;
 import com.aleson.example.nasaapodapp.about.repository.AboutRepositoryImpl;
 
-/**
- * Created by Aleson on 23-Dec-17.
- */
-
 public class AboutPrensenterImpl implements AboutPresenter {
 
     private AboutRepository apodRepository;

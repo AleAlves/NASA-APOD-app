@@ -15,10 +15,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by Aleson on 23-Dec-17.
- */
-
 public class ServiceVersionRequest {
 
     private AboutRepository aboutRepository;

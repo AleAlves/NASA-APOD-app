@@ -9,10 +9,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-/**
- * Created by GAMER on 28/10/2017.
- */
-
 public interface RateClient {
 
     @POST("rate")

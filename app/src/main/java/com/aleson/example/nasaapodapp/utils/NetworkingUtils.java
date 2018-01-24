@@ -6,10 +6,6 @@ import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by Santander on 11/11/17.
- */
-
 public class NetworkingUtils {
 
     private NetworkingUtils(){}

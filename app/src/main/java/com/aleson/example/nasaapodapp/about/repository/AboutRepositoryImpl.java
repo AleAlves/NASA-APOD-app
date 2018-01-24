@@ -5,11 +5,6 @@ package com.aleson.example.nasaapodapp.about.repository;
 import com.aleson.example.nasaapodapp.about.presenter.AboutPresenter;
 import com.aleson.example.nasaapodapp.about.repository.task.ServiceVersionRequest;
 
-
-/**
- * Created by Aleson on 23-Dec-17.
- */
-
 public class AboutRepositoryImpl implements AboutRepository {
 
     private AboutPresenter aboutPresenter;

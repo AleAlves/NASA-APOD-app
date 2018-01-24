@@ -7,10 +7,6 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-/**
- * Created by Aleson on 23-Dec-17.
- */
-
 public class FirebaseUtil {
 
     SettingsUtil settings;

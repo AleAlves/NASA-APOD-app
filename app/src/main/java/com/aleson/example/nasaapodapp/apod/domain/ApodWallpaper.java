@@ -6,10 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by Aleson on 1/20/2018.
- */
-
 public class ApodWallpaper implements Serializable {
 
     @SerializedName("id")

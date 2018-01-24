@@ -5,10 +5,6 @@ package com.aleson.example.nasaapodapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by Aleson on 23-Dec-17.
- */
-
 public class SettingsUtil {
 
     private SharedPreferences.Editor editor;

@@ -86,19 +86,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private static String getSharedPrefsSaveImages = "saveImages";
 
     private ImageView imageView;
-
     private ScrollView scrollView;
-
     private Calendar calendarAgendada;
     private Wallpaper wallpaper;
-
     private ApodPresenter apodPresenter;
-
     private String dataSelecionada;
     private String dataSelecionadaTitulo;
-
     private ImageButton buttonOptions;
-
     private JustifiedTextView explanation;
 
     private ImageButton imageButtonCalendar;
@@ -556,6 +550,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 }
                 settingsUtil.getEditor().commit();
                 if (options) {
+                    buttonOptions.setImageResource(R.drawable.ic_chevron_left_24dp);
+                    buttonOptions.animate().alpha(0.4f).setDuration(500);
                     linearLayoutOptionsHolder.animate()
                             .alpha(0.0f)
                             .setDuration(500)
@@ -564,13 +560,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     linearLayoutOptionsHolder.setVisibility(View.GONE);
-                                    buttonOptions.setImageResource(R.drawable.ic_chevron_left_24dp);
+                                    buttonOptions.setAlpha(0.4f);
                                 }
                             });
                     linearLayoutOptionsHolder.clearAnimation();
                     options = false;
                 } else {
                     options = true;
+                    buttonOptions.animate().alpha(0.4f).setDuration(100);
                     linearLayoutOptionsHolder.animate()
                             .alpha(1.0f)
                             .setDuration(100)
@@ -580,6 +577,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                                     super.onAnimationEnd(animation);
                                     linearLayoutOptionsHolder.setVisibility(View.VISIBLE);
                                     buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
+                                    buttonOptions.setAlpha(1.0f);
                                 }
                             });
                     linearLayoutOptionsHolder.clearAnimation();
