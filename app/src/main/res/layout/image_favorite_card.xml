@@ -70,7 +70,7 @@
 
             <RatingBar
                 android:id="@+id/favorites_rating_stars"
-                style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+                style="@android:style/Widget.Material.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="false"

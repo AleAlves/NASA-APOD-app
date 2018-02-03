@@ -357,6 +357,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             progressBarLoadingImage.setVisibility(View.VISIBLE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
         }
+        imageButtonRandom.setEnabled(false);
+        imageButtonCalendar.setEnabled(false);
+        imageButtonWallpaper.setEnabled(false);
     }
 
     @Override
@@ -364,6 +367,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
         linearLayoutImageLoading.setVisibility(View.GONE);
+        imageButtonRandom.setEnabled(true);
+        imageButtonCalendar.setEnabled(true);
+        imageButtonWallpaper.setEnabled(true);
     }
 
     @Override
@@ -550,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 }
                 settingsUtil.getEditor().commit();
                 if (options) {
-                    buttonOptions.setImageResource(R.drawable.ic_chevron_left_24dp);
+                    buttonOptions.setImageResource(R.drawable.ic_menu_24dp);
                     buttonOptions.animate().alpha(0.4f).setDuration(500);
                     linearLayoutOptionsHolder.animate()
                             .alpha(0.0f)
