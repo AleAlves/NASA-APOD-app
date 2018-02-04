@@ -12,6 +12,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.about.presentation.AboutActivity;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.apod.domain.ApodResource;
 import com.aleson.example.nasaapodapp.apod.domain.ApodWallpaper;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
@@ -57,7 +59,9 @@ import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -85,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private static String sharedPrefsShowOptions = "showOptions";
     private static String getSharedPrefsSaveImages = "saveImages";
 
+
+    private ApodResource apodResource;
     private ImageView imageView;
     private ScrollView scrollView;
     private Calendar calendarAgendada;
@@ -92,9 +98,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private ApodPresenter apodPresenter;
     private String dataSelecionada;
     private String dataSelecionadaTitulo;
-    private ImageButton buttonOptions;
     private JustifiedTextView explanation;
 
+    private ImageButton buttonOptions;
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
@@ -186,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         date.setText(dataSelecionada);
         initListeners();
         buttonOptions.setOnClickListener(this);
+        imageView.setOnClickListener(this);
         buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
     }
 
@@ -251,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         switch (requestCode) {
             case Permissions.COMMON:
                 if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    buttonOptions.setEnabled(true);
                     start();
                 } else {
                     permissionsAllowed = false;
@@ -258,6 +266,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     textViewErrorMessage.setText("Permissions needed");
                     textViewErrorMessage.setVisibility(View.VISIBLE);
                     linearLayoutPermission.setVisibility(View.VISIBLE);
+                    linearLayoutLoading.setVisibility(View.VISIBLE);
+                    buttonOptions.setEnabled(false);
+                    hideOptions();
                 }
                 break;
             default:
@@ -440,6 +451,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        apodResource = new ApodResource();
+                        apodResource.setResourceApod(resource);
                         linearLayoutImageLoading.setVisibility(View.GONE);
                         return false;
                     }
@@ -562,6 +575,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     showOptions();
                 }
                 break;
+            case R.id.page:
+                if (apodResource != null) {
+                    Drawable drawable= imageView.getDrawable();
+                    Bitmap bitmap= ((BitmapDrawable)drawable).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] bmap = baos.toByteArray();
+                    Intent intentFullScreen = new Intent(this, FullScreenActivity.class);
+                    intentFullScreen.putExtra("pic", bmap);
+                    startActivity(intentFullScreen);
+                }
+                break;
             default:
                 break;
         }
@@ -615,6 +640,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         @SuppressLint("LongLogTag")
         public void uncaughtException(Thread thread, Throwable ex) {
             Log.e("SessionControlledActivity", "UncaughtException", ex);
+            finish();
         }
     };
 
