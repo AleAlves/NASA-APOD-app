@@ -317,6 +317,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         textViewErrorMessage.setText("Houston we have a problem...\n\n code (" + code + ")");
         textViewErrorMessage.setVisibility(View.VISIBLE);
         linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
+        imageButtonRandom.setEnabled(true);
+        imageButtonCalendar.setEnabled(true);
+        imageButtonWallpaper.setEnabled(true);
     }
 
     @Override

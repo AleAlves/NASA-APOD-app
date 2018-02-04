@@ -35,7 +35,7 @@ public class AboutActivity extends AppCompatActivity implements AboutView{
         getTextViewAppVersion = (TextView) findViewById(R.id.text_view_app_version);
         textViewServiceVersion = (TextView) findViewById(R.id.text_view_service_version);
         justifiedTextViewAbout = (JustifiedTextView) findViewById(R.id.about);
-        justifiedTextViewAbout.setText("Astronomy Picture of the Day (APOD) is originated, written, coordinated, and edited since 1995 by Robert Nemiroff and Jerry Bonnell. Mobile Project developed by Aleson Alves as a form of study bringing together the passion for technology, science and astronomy. All rights reserved ©");
+        justifiedTextViewAbout.setText("Travel through space/time learning with these astronomic pics and get wallpapers. Astronomy Picture of the Day (APOD) is originated, written, coordinated, and edited since 1995 by Robert Nemiroff and Jerry Bonnell. Mobile Project developed by Aleson Alves as a form of study bringing together the passion for technology, science and astronomy. All rights reserved ©");
     }
 
     @Override
