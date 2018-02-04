@@ -317,21 +317,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         textViewErrorMessage.setText("Houston we have a problem...\n\n code (" + code + ")");
         textViewErrorMessage.setVisibility(View.VISIBLE);
         linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
-        imageButtonRandom.setEnabled(true);
-        imageButtonCalendar.setEnabled(true);
-        imageButtonWallpaper.setEnabled(true);
+        showOptions();
     }
 
     @Override
     public void badRequest(String code) {
         progressBarLoadingImage.setVisibility(View.GONE);
         if (dataSelecionada.contains(today)) {
-            textViewErrorMessage.setText("We dont have an APOD in this day");
+            textViewErrorMessage.setText("We don't have an APOD in this day");
             linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
         } else {
-            textViewErrorMessage.setText("Houston we have a problem....\n\n code (" + code + ")");
+            textViewErrorMessage.setText("Houston we have a problem....\n\n (" + code + ")");
         }
         textViewErrorMessage.setVisibility(View.VISIBLE);
+        showOptions();
     }
 
     @Override
@@ -363,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageButtonRandom.setEnabled(false);
         imageButtonCalendar.setEnabled(false);
         imageButtonWallpaper.setEnabled(false);
+        hideOptions();
     }
 
     @Override
@@ -370,9 +370,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
         linearLayoutImageLoading.setVisibility(View.GONE);
-        imageButtonRandom.setEnabled(true);
-        imageButtonCalendar.setEnabled(true);
-        imageButtonWallpaper.setEnabled(true);
+        showOptions();
     }
 
     @Override
@@ -559,42 +557,53 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 }
                 settingsUtil.getEditor().commit();
                 if (options) {
-                    buttonOptions.setImageResource(R.drawable.ic_menu_24dp);
-                    buttonOptions.animate().alpha(0.4f).setDuration(500);
-                    linearLayoutOptionsHolder.animate()
-                            .alpha(0.0f)
-                            .setDuration(500)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    linearLayoutOptionsHolder.setVisibility(View.GONE);
-                                    buttonOptions.setAlpha(0.4f);
-                                }
-                            });
-                    linearLayoutOptionsHolder.clearAnimation();
-                    options = false;
+                    hideOptions();
                 } else {
-                    options = true;
-                    buttonOptions.animate().alpha(0.4f).setDuration(100);
-                    linearLayoutOptionsHolder.animate()
-                            .alpha(1.0f)
-                            .setDuration(100)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    linearLayoutOptionsHolder.setVisibility(View.VISIBLE);
-                                    buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
-                                    buttonOptions.setAlpha(1.0f);
-                                }
-                            });
-                    linearLayoutOptionsHolder.clearAnimation();
+                    showOptions();
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private void hideOptions() {
+        buttonOptions.setImageResource(R.drawable.ic_menu_24dp);
+        buttonOptions.animate().alpha(0.4f).setDuration(500);
+        linearLayoutOptionsHolder.animate()
+                .alpha(0.0f)
+                .setDuration(500)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        linearLayoutOptionsHolder.setVisibility(View.GONE);
+                        buttonOptions.setAlpha(0.4f);
+                    }
+                });
+        linearLayoutOptionsHolder.clearAnimation();
+        options = false;
+    }
+
+    private void showOptions() {
+        options = true;
+        imageButtonRandom.setEnabled(true);
+        imageButtonCalendar.setEnabled(true);
+        imageButtonWallpaper.setEnabled(true);
+        buttonOptions.animate().alpha(0.4f).setDuration(200);
+        linearLayoutOptionsHolder.animate()
+                .alpha(1.0f)
+                .setDuration(200)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        linearLayoutOptionsHolder.setVisibility(View.VISIBLE);
+                        buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
+                        buttonOptions.setAlpha(1.0f);
+                    }
+                });
+        linearLayoutOptionsHolder.clearAnimation();
     }
 
     private void initDefaultUncaughtExceptionHandler() {
