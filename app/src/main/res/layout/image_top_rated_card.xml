@@ -59,7 +59,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:paddingTop="@dimen/padding_10"
-                android:text="Astronomic picture of the day "
+                android:text="Astronomy picture of the day "
                 android:textSize="@dimen/text_size_14" />
 
             <TextView

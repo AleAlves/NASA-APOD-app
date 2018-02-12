@@ -16,7 +16,6 @@
         android:theme="@style/MenuBar"
         app:titleTextColor="@color/colorTextTitle" />
 
-
     <ScrollView
         android:id="@+id/main"
         android:layout_width="match_parent"

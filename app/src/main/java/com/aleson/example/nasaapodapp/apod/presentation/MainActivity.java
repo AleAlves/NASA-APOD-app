@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private static String getSharedPrefsSaveImages = "saveImages";
 
 
+    private Bitmap bitmapApod;
     private ApodResource apodResource;
     private ImageView imageView;
     private ScrollView scrollView;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fabric.with(this, new Crashlytics());
-        initDefaultUncaughtExceptionHandler();
+//        initDefaultUncaughtExceptionHandler();
         mActivity = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -214,8 +215,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         if (apodWallpaper != null && apodWallpaper.getId() == model.getId()) {
                             setWallpaper(apodWallpaper.getBitmap());
                         } else {
-                            onLoading(true);
-                            apodPresenter.chooseWallpaper(url);
+                            setWallpaper(bitmapApod);
                         }
                     } else {
                         Toast.makeText(mActivity, "Media type not allowed", Toast.LENGTH_SHORT).show();
@@ -440,39 +440,45 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private void loadImage(Apod model) {
         this.model = model;
         final Apod loadModel = model;
-        Glide.with(this)
-                .load(model.getHdurl())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        loadImage(loadModel);
-                        return false;
-                    }
+        try {
+            Glide.with(mActivity).asBitmap().load(loadModel.getHdurl()).listener(new RequestListener<Bitmap>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                    loadImage(loadModel);
+                    return false;
+                }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        apodResource = new ApodResource();
-                        apodResource.setResourceApod(resource);
-                        linearLayoutImageLoading.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(imageView);
+                @Override
+                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                    bitmapApod = resource;
+                    apodResource = new ApodResource();
+                    apodResource.setResourceApod(resource);
+                    linearLayoutImageLoading.setVisibility(View.GONE);
+                    return false;
+                }
+            }).into(imageView);
+        } catch (Exception e) {
+            Log.e("ERROR", e.toString());
+        }
     }
 
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
-        scrollView.setVisibility(View.VISIBLE);
-        onLoading(true);
-        apodWallpaper = new ApodWallpaper();
-        apodWallpaper.setId(model.getId());
-        apodWallpaper.setBitmap(bitMapImg);
-        wallpaper = new Wallpaper(mActivity);
-        Display display = getWindowManager().getDefaultDisplay();
-        if (wallpaper.setWallpaper(model, bitMapImg, url, dataSelecionadaTitulo, display)) {
-            openSystemWallpaperManager();
+        if (bitmapApod != null) {
+            scrollView.setVisibility(View.VISIBLE);
+            onLoading(true);
+            apodWallpaper = new ApodWallpaper();
+            apodWallpaper.setId(model.getId());
+            apodWallpaper.setBitmap(bitmapApod);
+            wallpaper = new Wallpaper(mActivity);
+            Display display = getWindowManager().getDefaultDisplay();
+            if (wallpaper.setWallpaper(model, bitmapApod, url, dataSelecionadaTitulo, display)) {
+                openSystemWallpaperManager();
+            } else {
+                Toast.makeText(mActivity, "Error", Toast.LENGTH_LONG);
+            }
         } else {
-            Toast.makeText(mActivity, "Error", Toast.LENGTH_LONG);
+            onLoading(false);
         }
     }
 
@@ -577,10 +583,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 break;
             case R.id.page:
                 if (apodResource != null) {
-                    Drawable drawable= imageView.getDrawable();
-                    Bitmap bitmap= ((BitmapDrawable)drawable).getBitmap();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    bitmapApod.compress(Bitmap.CompressFormat.PNG, 100, baos);
                     byte[] bmap = baos.toByteArray();
                     Intent intentFullScreen = new Intent(this, FullScreenActivity.class);
                     intentFullScreen.putExtra("pic", bmap);
@@ -640,6 +644,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         @SuppressLint("LongLogTag")
         public void uncaughtException(Thread thread, Throwable ex) {
             Log.e("SessionControlledActivity", "UncaughtException", ex);
+            Toast.makeText(mActivity, "Oops", Toast.LENGTH_SHORT).show();
             finish();
         }
     };

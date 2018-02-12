@@ -1,5 +1,6 @@
 package com.aleson.example.nasaapodapp.apod.domain;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
@@ -10,13 +11,13 @@ import java.io.Serializable;
 
 public class ApodResource  implements Serializable {
 
-    private Drawable resourceApod;
+    private Bitmap resourceApod;
 
-    public Drawable getResourceApod() {
+    public Bitmap getResourceApod() {
         return resourceApod;
     }
 
-    public void setResourceApod(Drawable resourceApod) {
+    public void setResourceApod(Bitmap resourceApod) {
         this.resourceApod = resourceApod;
     }
 }
