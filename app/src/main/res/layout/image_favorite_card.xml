@@ -96,7 +96,8 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_image_black_24dp"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:visibility="gone"/>
 
             <ImageButton
                 android:id="@+id/button_see_apod"
