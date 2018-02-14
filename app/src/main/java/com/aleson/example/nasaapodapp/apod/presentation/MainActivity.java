@@ -583,12 +583,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 break;
             case R.id.page:
                 if (apodResource != null) {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmapApod.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                    byte[] bmap = baos.toByteArray();
-                    Intent intentFullScreen = new Intent(this, FullScreenActivity.class);
-                    intentFullScreen.putExtra("pic", bmap);
-                    startActivity(intentFullScreen);
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    bitmapApod.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                    byte[] bmap = baos.toByteArray();
+//                    Intent intentFullScreen = new Intent(this, FullScreenActivity.class);
+//                    intentFullScreen.putExtra("pic", bmap);
+//                    startActivity(intentFullScreen);
                 }
                 break;
             default:

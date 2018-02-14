@@ -23,8 +23,8 @@ android {
         applicationId "com.aleson.example.nasaapodapp"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 200
+        versionName "2.0.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
