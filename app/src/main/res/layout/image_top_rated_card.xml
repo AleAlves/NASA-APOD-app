@@ -53,11 +53,11 @@
 
             <TextView
                 android:id="@+id/textview_top_rated_apod_title"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
+                android:maxWidth="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|center"
                 android:gravity="center"
-                android:maxLines="1"
                 android:paddingTop="@dimen/padding_10"
                 android:text="Astronomy picture of the day "
                 android:textSize="@dimen/text_size_14" />
