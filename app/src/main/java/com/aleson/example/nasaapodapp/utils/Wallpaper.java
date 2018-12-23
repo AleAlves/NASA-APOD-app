@@ -1,3 +1,5 @@
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
+
 package com.aleson.example.nasaapodapp.utils;
 
 import android.app.Activity;
@@ -10,6 +12,7 @@ import android.graphics.RectF;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
@@ -19,15 +22,16 @@ import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Wallpaper extends AppCompatActivity{
+public class Wallpaper extends AppCompatActivity {
 
     Activity activity;
+    private String lastFileSrc = "";
 
-    public Wallpaper(Activity activity){
+    public Wallpaper(Activity activity) {
         this.activity = activity;
     }
 
-    public boolean setWallpaper(Apod model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display){
+    public boolean setWallpaper(Apod model, Bitmap bitMapImg, String url, String dataSelecionadaTitulo, Display display) {
         Point size = new Point();
         display.getSize(size);
         int width = 0;
@@ -53,25 +57,32 @@ public class Wallpaper extends AppCompatActivity{
                 case "png":
                     bcf = Bitmap.CompressFormat.PNG;
                     break;
+                default:
+                    break;
             }
             String fname = dataSelecionadaTitulo + "." + format;
             File file = new File(mediaStorageDir, fname);
             if (file.exists()) {
-                file.delete();
+                delete(file);
             }
-            file.createNewFile();
-            Date currentTime = Calendar.getInstance().getTime();
-            file.setLastModified(currentTime.getTime());
-            FileOutputStream out = new FileOutputStream(file);
-            bitMapImg.compress(bcf, 100, out);
-            out.flush();
-            out.close();
-            model.setFileLocation(file.getAbsolutePath());
-            saveFavoriteApod(model);
-            addImageToGallery(file.toString(), activity);
-            return true;
+            if(file.createNewFile()){
+                Date currentTime = Calendar.getInstance().getTime();
+                file.setLastModified(currentTime.getTime());
+                FileOutputStream out = new FileOutputStream(file);
+                bitMapImg.compress(bcf, 100, out);
+                out.flush();
+                out.close();
+                model.setFileLocation(file.getAbsolutePath());
+                saveFavoriteApod(model);
+                lastFileSrc = model.getFileLocation();
+                addImageToGallery(file.toString(), activity);
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("WALLPAPER",e.getMessage());
             return false;
         }
     }
@@ -85,17 +96,32 @@ public class Wallpaper extends AppCompatActivity{
         context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-    private void saveFavoriteApod(Apod apodModel){
+    private void saveFavoriteApod(Apod apodModel) {
         LocalDataBase apodBD = new LocalDataBase(activity);
         apodBD.saveApod(apodModel);
     }
 
-    public boolean deleteFile(String fileLocation){
+    public boolean deleteFile(String fileLocation) {
         File file = new File(fileLocation);
         if (file.exists()) {
-            file.delete();
+            delete(file);
             return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    public boolean deleteLastFile() {
+        File file = new File(lastFileSrc);
+        if (file.exists()) {
+            delete(file);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean delete(File file){
+        return file.delete();
     }
 }

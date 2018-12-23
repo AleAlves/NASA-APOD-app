@@ -1,28 +1,34 @@
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
+
 package com.aleson.example.nasaapodapp.favorites.presentation;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aleson.example.nasaapodapp.R;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
 import com.aleson.example.nasaapodapp.favorites.domain.Device;
-import com.aleson.example.nasaapodapp.favorites.presentation.adapter.RecyclerViewAdapter;
+import com.aleson.example.nasaapodapp.favorites.presentation.adapter.FavoritesRecyclerViewAdapter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenter;
 import com.aleson.example.nasaapodapp.favorites.presenter.FavoritesPresenterImpl;
 import com.aleson.example.nasaapodapp.utils.HashUtils;
@@ -39,7 +45,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     private TextView textViewNofavorites;
     private ProgressBar progressBarLoading;
     private FavoritesPresenter favoritesPresenter;
-    private RelativeLayout relativeLayoutLoading;
+    private LinearLayout relativeLayoutLoading;
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recylerViewLayoutManager;
@@ -50,11 +56,11 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         mActivity = this;
         context = this;
         setContentView(R.layout.activity_favorites);
-        textViewNofavorites = (TextView) findViewById(R.id.textview_no_service);
+        textViewNofavorites = (TextView) findViewById(R.id.textview_no_favorites);
         progressBarLoading = (ProgressBar) findViewById(R.id.progressbar_loading_image);
-        relativeLayoutLoading = (RelativeLayout) findViewById(R.id.loading_image);
+        relativeLayoutLoading = (LinearLayout) findViewById(R.id.loading_image);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("Favorites");
+        myToolbar.setTitle("Wallpapers");
         setSupportActionBar(myToolbar);
         ArrayList<Apod> apodModelList;
         LocalDataBase apodBD = new LocalDataBase(this);
@@ -73,9 +79,9 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             try {
                 deviceModel.setImei(HashUtils.makeSHA1Hash(imei));
             } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                Log.e("Error", e.toString());
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+			Log.e("Error", e.toString());
             }
             deviceModel.setManufactuer(android.os.Build.MANUFACTURER);
             deviceModel.setDeviceName(android.os.Build.MODEL);
@@ -90,22 +96,29 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
 
     private String getDeviceImei() {
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        String deviceid = mTelephonyManager.getDeviceId();
-        return deviceid;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            String deviceid = mTelephonyManager.getDeviceId();
+            return deviceid;
+        }
+        else{
+            String deviceid = mTelephonyManager.getDeviceId();
+            return deviceid;
+        }
     }
 
     private void adapter(ArrayList<Apod> model) {
         recyclerView = (RecyclerView) findViewById(R.id.favorites_list);
         recylerViewLayoutManager = new LinearLayoutManager(mActivity);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(context, model, this, favoritesPresenter);
+        recyclerViewAdapter = new FavoritesRecyclerViewAdapter(context, model, this, favoritesPresenter);
         recyclerView.setAdapter(recyclerViewAdapter);
         if (model.size() == 0) {
             textViewNofavorites.setVisibility(View.VISIBLE);
             textViewNofavorites.setText("Nothing here yet");
             progressBarLoading.setVisibility(View.GONE);
+            relativeLayoutLoading.setVisibility(View.VISIBLE);
         } else {
-            relativeLayoutLoading.setGravity(View.GONE);
+            relativeLayoutLoading.setVisibility(View.GONE);
             textViewNofavorites.setVisibility(View.GONE);
             progressBarLoading.setVisibility(View.GONE);
         }
@@ -117,7 +130,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         LocalDataBase apodBD = new LocalDataBase(this);
         apodModelList = apodBD.finAll();
         adapter(apodModelList);
-        recyclerViewAdapter = new RecyclerViewAdapter(context, apodModelList, this, favoritesPresenter);
+        recyclerViewAdapter = new FavoritesRecyclerViewAdapter(context, apodModelList, this, favoritesPresenter);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 
@@ -125,5 +138,30 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     public void openWallpaperManager() {
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
         startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+    }
+
+    @Override
+    public void showRateStatus(boolean done) {
+        if(done) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setMessage("Thank you!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setMessage("Oops, something went wrong...");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 }
