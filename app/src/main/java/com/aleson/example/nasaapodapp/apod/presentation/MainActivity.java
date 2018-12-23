@@ -1,13 +1,18 @@
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
+
 package com.aleson.example.nasaapodapp.apod.presentation;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +25,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,15 +37,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aleson.example.nasaapodapp.R;
+import com.aleson.example.nasaapodapp.about.presentation.AboutActivity;
 import com.aleson.example.nasaapodapp.apod.domain.Apod;
+import com.aleson.example.nasaapodapp.apod.domain.ApodResource;
+import com.aleson.example.nasaapodapp.apod.domain.ApodWallpaper;
 import com.aleson.example.nasaapodapp.apod.domain.Media;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenter;
 import com.aleson.example.nasaapodapp.apod.presenter.ApodPresenterImpl;
 import com.aleson.example.nasaapodapp.favorites.presentation.FavoritesActivity;
 import com.aleson.example.nasaapodapp.settings.SettingsActivity;
-import com.aleson.example.nasaapodapp.topRated.presentation.TopRatedActivity;
+import com.aleson.example.nasaapodapp.top.presentation.TopRatedActivity;
 import com.aleson.example.nasaapodapp.utils.Permissions;
 import com.aleson.example.nasaapodapp.utils.RandomDate;
+import com.aleson.example.nasaapodapp.utils.SettingsUtil;
 import com.aleson.example.nasaapodapp.utils.Wallpaper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -47,10 +57,11 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -71,21 +82,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private Apod model;
     private String today;
     private static String url = "";
+    private static long id;
+    private static boolean options = true;
+    private static String defaultTDateFormat = "yyyy-MM-dd";
+    private static String defaultTDateFormatPresentation = "dd/MM/yyyy";
+    private static String sharedPrefsShowOptions = "showOptions";
+    private static String getSharedPrefsSaveImages = "saveImages";
 
+
+    private Bitmap bitmapApod;
+    private ApodResource apodResource;
     private ImageView imageView;
-
     private ScrollView scrollView;
-
     private Calendar calendarAgendada;
-
+    private Wallpaper wallpaper;
     private ApodPresenter apodPresenter;
-
     private String dataSelecionada;
     private String dataSelecionadaTitulo;
-
     private JustifiedTextView explanation;
 
-    private ImageButton imageButtonExpandCollapseIcon;
+    private ImageButton buttonOptions;
     private ImageButton imageButtonCalendar;
     private ImageButton imageButtonRandom;
     private ImageButton imageButtonWallpaper;
@@ -97,29 +113,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private LinearLayout linearLayoutPermission;
     private LinearLayout linearLayoutOptions;
     private LinearLayout linearLayoutOptionsContent;
-
+    private LinearLayout linearLayoutOptionsHolder;
     private boolean permissionsAllowed = false;
-
     private DatePickerDialog getDatePickerDialog;
-
     private RelativeLayout linearLayoutImageLoading;
-
     private ProgressBar progressBarLoadingImage;
-
-    private android.support.v4.app.FragmentManager fragmentManager;
+    private SettingsUtil settingsUtil;
+    private Thread.UncaughtExceptionHandler onRuntimeErrorDefault;
+    private ApodWallpaper apodWallpaper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fabric.with(this, new Crashlytics());
+//        initDefaultUncaughtExceptionHandler();
         mActivity = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        settingsUtil = new SettingsUtil(this, "settings");
+        settingsUtil.updateSettings();
         init();
         checkPermission();
-        FirebaseMessaging.getInstance().subscribeToTopic("apod");
-        String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
     }
 
     private void start() {
@@ -157,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageView = (ImageView) findViewById(R.id.page);
         scrollView = (ScrollView) findViewById(R.id.main);
         copyright = (TextView) findViewById(R.id.copyright);
+        buttonOptions = (ImageButton) findViewById(R.id.button_options);
         explanation = (JustifiedTextView) findViewById(R.id.explanation);
         imageButtonRandom = (ImageButton) findViewById(R.id.image_button_random);
         linearLayoutLoading = (LinearLayout) findViewById(R.id.translucid_loading);
@@ -169,17 +185,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageButtonPermission = (ImageButton) findViewById(R.id.image_button_permisison_after_error);
         imageButtonRandomAfterError = (ImageButton) findViewById(R.id.image_button_random_after_error);
         linearlayoutRandomAfterError = (LinearLayout) findViewById(R.id.linearlayout_random_after_error);
-        imageButtonExpandCollapseIcon = (ImageButton) findViewById(R.id.image_button_expand_collapse_options);
         linearLayoutOptions = (LinearLayout) findViewById(R.id.linear_layout_expand_collapse_options);
-        linearLayoutOptionsContent = (LinearLayout) findViewById(R.id.linear_layout_options_content);
-
-        montarDatePickerDialog();
+        linearLayoutOptionsHolder = (LinearLayout) findViewById(R.id.linearlayout_options_holder);
         calendarAgendada = Calendar.getInstance();
-        dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
-        today = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
+        dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
+        today = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
         date.setText(dataSelecionada);
         initListeners();
-        handleOptionMenu();
+        buttonOptions.setOnClickListener(this);
+        imageView.setOnClickListener(this);
+        buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
     }
 
     private void initListeners() {
@@ -187,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 onLoading(false);
-                RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
+                RandomDate randomDate = new RandomDate(new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
         });
@@ -196,8 +211,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 if (url != null && !"".equals(url)) {
-                    onLoading(true);
-                    apodPresenter.chooseWallpaper(url);
+                    if (apodPresenter.getMediaType() == Media.IMAGE) {
+                        if (apodWallpaper != null && apodWallpaper.getId() == model.getId()) {
+                            setWallpaper(apodWallpaper.getBitmap());
+                        } else {
+                            setWallpaper(bitmapApod);
+                        }
+                    } else {
+                        Toast.makeText(mActivity, "Media type not allowed", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -205,7 +227,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDatePickerDialog.show();
+//                getDatePickerDialog.show();
+                newDatePicker();
             }
         });
 
@@ -213,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void onClick(View v) {
                 onLoading(false);
-                RandomDate randomDate = new RandomDate(new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime()));
+                RandomDate randomDate = new RandomDate(new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime()));
                 apodPresenter.getRandomApod(randomDate.getRandomDate());
             }
         });
@@ -227,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         });
 
         linearLayoutOptions.setOnClickListener(this);
-        imageButtonExpandCollapseIcon.setOnClickListener(this);
     }
 
     @Override
@@ -236,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         switch (requestCode) {
             case Permissions.COMMON:
                 if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    buttonOptions.setEnabled(true);
                     start();
                 } else {
                     permissionsAllowed = false;
@@ -243,7 +266,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     textViewErrorMessage.setText("Permissions needed");
                     textViewErrorMessage.setVisibility(View.VISIBLE);
                     linearLayoutPermission.setVisibility(View.VISIBLE);
+                    linearLayoutLoading.setVisibility(View.VISIBLE);
+                    buttonOptions.setEnabled(false);
+                    hideOptions();
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -268,6 +296,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     startActivity(intentFavorites);
                     break;
                 case R.id.action_about:
+                    Intent intentAbout = new Intent(this, AboutActivity.class);
+                    startActivity(intentAbout);
                     break;
                 case R.id.action_rate:
                     Uri uri = Uri.parse("market://details?id=" + getPackageName());
@@ -286,6 +316,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     Intent intentSettings = new Intent(this, SettingsActivity.class);
                     startActivity(intentSettings);
                     break;
+                default:
+                    break;
             }
         return super.onOptionsItemSelected(item);
     }
@@ -296,18 +328,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         textViewErrorMessage.setText("Houston we have a problem...\n\n code (" + code + ")");
         textViewErrorMessage.setVisibility(View.VISIBLE);
         linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
+        showOptions();
     }
 
     @Override
     public void badRequest(String code) {
         progressBarLoadingImage.setVisibility(View.GONE);
         if (dataSelecionada.contains(today)) {
-            textViewErrorMessage.setText("We dont have an APOD in this day");
+            textViewErrorMessage.setText("We don't have an APOD in this day");
             linearlayoutRandomAfterError.setVisibility(View.VISIBLE);
         } else {
-            textViewErrorMessage.setText("Houston we have a problem....\n\n code (" + code + ")");
+            textViewErrorMessage.setText("Houston we have a problem....\n\n (" + code + ")");
         }
         textViewErrorMessage.setVisibility(View.VISIBLE);
+        showOptions();
     }
 
     @Override
@@ -336,6 +370,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             progressBarLoadingImage.setVisibility(View.VISIBLE);
             linearLayoutLoading.setVisibility(View.VISIBLE);
         }
+        imageButtonRandom.setEnabled(false);
+        imageButtonCalendar.setEnabled(false);
+        imageButtonWallpaper.setEnabled(false);
+        hideOptions();
     }
 
     @Override
@@ -343,12 +381,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         scrollView.setVisibility(View.VISIBLE);
         linearLayoutLoading.setVisibility(View.GONE);
         linearLayoutImageLoading.setVisibility(View.GONE);
+        showOptions();
     }
 
     @Override
     public void setContent(Apod model) {
         scrollView.setVisibility(View.VISIBLE);
         url = model.getUrl();
+        id = model.getId();
         if (url != null) {
             clear();
             imageButtonWallpaper.setEnabled(true);
@@ -373,6 +413,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         }
                     });
                     break;
+                default:
+                    break;
             }
             if (model.getTitle() != null)
                 title.setText(model.getTitle());
@@ -383,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             if (model.getDate() != null) {
                 dataSelecionadaTitulo = model.getDate();
                 try {
-                    SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat inFormat = new SimpleDateFormat(defaultTDateFormat);
                     SimpleDateFormat outFormat = new SimpleDateFormat("EEEE , dd MMM yyyy");
                     date.setText(outFormat.format(inFormat.parse(model.getDate())));
                 } catch (Exception e) {
@@ -398,33 +440,45 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private void loadImage(Apod model) {
         this.model = model;
         final Apod loadModel = model;
-        Glide.with(this)
-                .load(model.getHdurl())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        loadImage(loadModel);
-                        return false;
-                    }
+        try {
+            Glide.with(mActivity).asBitmap().load(loadModel.getHdurl()).listener(new RequestListener<Bitmap>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                    loadImage(loadModel);
+                    return false;
+                }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        linearLayoutImageLoading.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(imageView);
+                @Override
+                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                    bitmapApod = resource;
+                    apodResource = new ApodResource();
+                    apodResource.setResourceApod(resource);
+                    linearLayoutImageLoading.setVisibility(View.GONE);
+                    return false;
+                }
+            }).into(imageView);
+        } catch (Exception e) {
+            Log.e("ERROR", e.toString());
+        }
     }
 
     @Override
     public void setWallpaper(Bitmap bitMapImg) {
-        scrollView.setVisibility(View.VISIBLE);
-        Wallpaper wallpaper = new Wallpaper(mActivity);
-        Display display = getWindowManager().getDefaultDisplay();
-        if (wallpaper.setWallpaper(model, bitMapImg, url, dataSelecionadaTitulo, display)) {
-            openSystemWallpaperManager();
+        if (bitmapApod != null) {
+            scrollView.setVisibility(View.VISIBLE);
+            onLoading(true);
+            apodWallpaper = new ApodWallpaper();
+            apodWallpaper.setId(model.getId());
+            apodWallpaper.setBitmap(bitmapApod);
+            wallpaper = new Wallpaper(mActivity);
+            Display display = getWindowManager().getDefaultDisplay();
+            if (wallpaper.setWallpaper(model, bitmapApod, url, dataSelecionadaTitulo, display)) {
+                openSystemWallpaperManager();
+            } else {
+                Toast.makeText(mActivity, "Error", Toast.LENGTH_LONG);
+            }
         } else {
-            Toast.makeText(mActivity, "Error", Toast.LENGTH_LONG);
+            onLoading(false);
         }
     }
 
@@ -435,41 +489,43 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         date.setText("");
     }
 
-    public void montarDatePickerDialog() {
-        getDatePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (view.isShown()) {
-                    calendarAgendada = Calendar.getInstance();
-                    calendarAgendada.set(year, monthOfYear, dayOfMonth);
-                    dataSelecionada = new SimpleDateFormat("yyyy-MM-dd").format(calendarAgendada.getTime());
-                    date.setText(dataSelecionada);
-                    scrollView.setVisibility(View.GONE);
-                    onLoading(false);
-                    apodPresenter.getChosenApod(dataSelecionada);
-                }
-
-            }
-
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-
+    private void newDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(
+                mActivity,
+                dateListener(),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
         Date dateFormatInitial = null;
         Date dateFormatFinal = null;
         try {
-            dateFormatInitial = new SimpleDateFormat("dd/MM/yyyy").parse(sumDate());
-            dateFormatFinal = new SimpleDateFormat("dd/MM/yyyy").parse("16-06-1995");
+            dateFormatInitial = new SimpleDateFormat(defaultTDateFormatPresentation).parse(sumDate());
+            dateFormatFinal = new SimpleDateFormat(defaultTDateFormatPresentation).parse("16/06/1995");
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e("Error", e.toString());
         }
         if (dateFormatInitial != null)
-            getDatePickerDialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
-
+            dialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
         if (dateFormatFinal != null)
-            getDatePickerDialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
+            dialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
+        dialog.setTitle("data");
+        dialog.show();
+    }
 
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.DAY_OF_MONTH, 1);
-        getDatePickerDialog.setTitle("data");
+    private DatePickerDialog.OnDateSetListener dateListener() {
+        return new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                calendarAgendada.set(i, i1, i2);
+                dataSelecionada = new SimpleDateFormat(defaultTDateFormat).format(calendarAgendada.getTime());
+                date.setText(dataSelecionada);
+                scrollView.setVisibility(View.GONE);
+                onLoading(false);
+                apodPresenter.getChosenApod(dataSelecionada);
+            }
+        };
     }
 
     public static String sumDate() {
@@ -482,40 +538,119 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     }
 
     public void openSystemWallpaperManager() {
-        linearLayoutLoading.setVisibility(View.GONE);
         Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
-        startActivity(Intent.createChooser(intent, "Select Wallpaper"));
+        startActivityForResult(Intent.createChooser(intent, "Select Wallpaper"), 0);
+        onFinishLoad();
     }
 
-    private boolean handleOptionMenu() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("collapseOptions", 0);
-        if (sharedPreferences.getBoolean("showOptions",true)) {
-            linearLayoutOptionsContent.setVisibility(View.VISIBLE);
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_less_24dp);
-            return true;
-        } else {
-            linearLayoutOptionsContent.setVisibility(View.GONE);
-            imageButtonExpandCollapseIcon.setBackgroundResource(R.drawable.ic_expand_more_24dp);
-            return false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 0:
+                if (!settingsUtil.getSharedPreferences().getBoolean(getSharedPrefsSaveImages, false)) {
+                    if (wallpaper != null) {
+                        if (wallpaper.deleteLastFile()) {
+                            this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(model.getFileLocation()))));
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.image_button_expand_collapse_options:
+            case R.id.image_button_calendar:
             case R.id.linear_layout_expand_collapse_options:
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("collapseOptions", 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if(sharedPreferences.getBoolean("showOptions",true)){
-                    editor.putBoolean("showOptions", false);
+                newDatePicker();
+                break;
+            case R.id.button_options:
+                if (settingsUtil.getSharedPreferences().getBoolean(sharedPrefsShowOptions, true)) {
+                    settingsUtil.getEditor().putBoolean(sharedPrefsShowOptions, false);
+                } else {
+                    settingsUtil.getEditor().putBoolean(sharedPrefsShowOptions, true);
                 }
-                else{
-                    editor.putBoolean("showOptions", true);
+                settingsUtil.getEditor().commit();
+                if (options) {
+                    hideOptions();
+                } else {
+                    showOptions();
                 }
-                editor.commit();
-                handleOptionMenu();
+                break;
+            case R.id.page:
+                if (apodResource != null) {
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    bitmapApod.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                    byte[] bmap = baos.toByteArray();
+//                    Intent intentFullScreen = new Intent(this, FullScreenActivity.class);
+//                    intentFullScreen.putExtra("pic", bmap);
+//                    startActivity(intentFullScreen);
+                }
+                break;
+            default:
                 break;
         }
+    }
+
+    private void hideOptions() {
+        buttonOptions.setImageResource(R.drawable.ic_menu_24dp);
+        buttonOptions.animate().alpha(0.4f).setDuration(500);
+        linearLayoutOptionsHolder.animate()
+                .alpha(0.0f)
+                .setDuration(500)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        linearLayoutOptionsHolder.setVisibility(View.GONE);
+                        buttonOptions.setAlpha(0.4f);
+                    }
+                });
+        linearLayoutOptionsHolder.clearAnimation();
+        options = false;
+    }
+
+    private void showOptions() {
+        options = true;
+        imageButtonRandom.setEnabled(true);
+        imageButtonCalendar.setEnabled(true);
+        imageButtonWallpaper.setEnabled(true);
+        buttonOptions.animate().alpha(0.4f).setDuration(200);
+        linearLayoutOptionsHolder.animate()
+                .alpha(1.0f)
+                .setDuration(200)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        linearLayoutOptionsHolder.setVisibility(View.VISIBLE);
+                        buttonOptions.setImageResource(R.drawable.ic_remove_24dp);
+                        buttonOptions.setAlpha(1.0f);
+                    }
+                });
+        linearLayoutOptionsHolder.clearAnimation();
+    }
+
+    private void initDefaultUncaughtExceptionHandler() {
+        onRuntimeErrorDefault = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(onRuntimeError);
+    }
+
+    private Thread.UncaughtExceptionHandler onRuntimeError = new Thread.UncaughtExceptionHandler() {
+        @SuppressLint("LongLogTag")
+        public void uncaughtException(Thread thread, Throwable ex) {
+            Log.e("SessionControlledActivity", "UncaughtException", ex);
+            Toast.makeText(mActivity, "Oops", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

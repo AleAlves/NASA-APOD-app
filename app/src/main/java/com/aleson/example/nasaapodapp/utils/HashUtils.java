@@ -1,11 +1,14 @@
-package com.aleson.example.nasaapodapp.utils;
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
 
+package com.aleson.example.nasaapodapp.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashUtils {
+
+    private HashUtils(){}
 
     public static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {

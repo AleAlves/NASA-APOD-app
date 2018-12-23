@@ -1,3 +1,5 @@
+// Copyright (c) 2018 aleson.a.s@gmail.com, All Rights Reserved.
+
 package com.aleson.example.nasaapodapp.utils;
 
 import java.util.Random;
@@ -5,14 +7,14 @@ import java.util.Random;
 public class RandomDate {
 
     public String getRandomDate() {
-        return randomDate;
+        return randomDateValue;
     }
 
     public void setRandomDate(String randomDate) {
-        this.randomDate = randomDate;
+        this.randomDateValue = randomDate;
     }
 
-    private String randomDate;
+    private String randomDateValue;
     private int[] monthRange = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private int todayDay;
     private int todayMonth;
@@ -61,10 +63,6 @@ public class RandomDate {
     }
 
     private boolean validateMonth(int monthR, int dayR) {
-        if (dayR <= monthRange[--monthR]) {
-            return true;
-        } else {
-            return false;
-        }
+        return dayR <= monthRange[--monthR];
     }
 }
