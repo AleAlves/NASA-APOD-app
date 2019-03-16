@@ -1,6 +1,0 @@
-projectKey=NASAAPODAPP
-serverUrl=http://localhost:9000
-serverVersion=6.7.1.35068
-dashboardUrl=http://localhost:9000/dashboard/index/NASAAPODAPP
-ceTaskId=AWEFHSFHdjqxWtl5tiHG
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWEFHSFHdjqxWtl5tiHG
