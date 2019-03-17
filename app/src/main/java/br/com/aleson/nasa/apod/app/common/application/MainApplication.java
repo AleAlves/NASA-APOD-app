@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.common;
+package br.com.aleson.nasa.apod.app.common.application;
 
 import android.app.Application;
 import android.content.ComponentCallbacks;
@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 
 import com.github.android.aleson.slogger.SLogger;
 import com.google.firebase.FirebaseApp;
+
+import br.com.connector.aleson.android.connector.Connector;
 
 public class MainApplication extends Application {
 
@@ -18,6 +20,7 @@ public class MainApplication extends Application {
         super.onCreate();
         FirebaseApp.initializeApp(this);
         SLogger.init(true);
+        Connector.init("http://192.168.0.22:8083");
     }
 
 

@@ -7,6 +7,11 @@ import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.session.SessionImpl;
 import br.com.aleson.nasa.apod.app.home.APODsActivity;
+import br.com.connector.aleson.android.connector.Connector;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +50,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onStart() {
         super.onStart();
+
+        Connector.request().create(GetPublicKey.class).getPublicKey().enqueue(new Callback<PublicKeyResponse>() {
+            @Override
+            public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
+                SLogger.d(response);
+            }
+
+            @Override
+            public void onFailure(Call<PublicKeyResponse> call, Throwable t) {
+                SLogger.d(t);
+            }
+        });
 
         verifyCurrentUser();
     }
