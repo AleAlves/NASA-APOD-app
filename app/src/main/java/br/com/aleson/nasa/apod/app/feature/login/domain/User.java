@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.login.domain;
+package br.com.aleson.nasa.apod.app.feature.login.domain;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,31 +1,17 @@
-package br.com.aleson.nasa.apod.app.login.presentation;
+package br.com.aleson.nasa.apod.app.feature.login.presentation;
 
 import androidx.annotation.NonNull;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.home.APODsActivity;
-import br.com.aleson.nasa.apod.app.login.interactor.LoginInteractor;
-import br.com.aleson.nasa.apod.app.login.interactor.LoginInteractorImpl;
-import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenterImpl;
-import br.com.aleson.nasa.apod.app.login.repository.LoginRepositoryImpl;
-import br.com.aleson.nasa.apod.app.login.repository.api.PublicKeyMethod;
-import br.com.aleson.nasa.apod.app.login.repository.api.TicketMethod;
-import br.com.aleson.nasa.apod.app.login.repository.api.LoginMethod;
-import br.com.aleson.nasa.apod.app.login.repository.response.PublicKeyResponse;
-import br.com.aleson.nasa.apod.app.login.domain.AESData;
-import br.com.aleson.nasa.apod.app.login.repository.response.TicketResponse;
-import br.com.aleson.nasa.apod.app.login.repository.response.TokenResponse;
-import br.com.aleson.nasa.apod.app.login.domain.User;
-import br.com.connector.aleson.android.connector.Connector;
-import br.com.connector.aleson.android.connector.cryptography.domain.Safe;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import br.com.aleson.nasa.apod.app.feature.home.APODsActivity;
+import br.com.aleson.nasa.apod.app.feature.login.interactor.LoginInteractor;
+import br.com.aleson.nasa.apod.app.feature.login.interactor.LoginInteractorImpl;
+import br.com.aleson.nasa.apod.app.feature.login.presenter.LoginPresenterImpl;
+import br.com.aleson.nasa.apod.app.feature.login.repository.LoginRepositoryImpl;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
@@ -102,86 +88,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         Session.getInstance().setGoogleSignInClient(googleSignInClient);
         Session.getInstance().setFirebaseUser(firebaseAuth.getCurrentUser());
     }
-
-    private void getPublicKey() {
-        Connector.request().create(PublicKeyMethod.class).getPublicKey().enqueue(new Callback<PublicKeyResponse>() {
-            @Override
-            public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
-                SLogger.d(response);
-
-                Session.getInstance().setPublicKey(response.body().getPublicKey());
-
-                AESData AESData = new AESData();
-                AESData.setIv(Base64.encodeToString(Connector.crypto().getAes().getIv(), 0).replace("\n", ""));
-                AESData.setKey(Connector.crypto().getAes().getSecret());
-                AESData.setSalt(Connector.crypto().getAes().getSalt());
-
-                getTicket(AESData);
-            }
-
-            @Override
-            public void onFailure(Call<PublicKeyResponse> call, Throwable t) {
-                SLogger.d(t);
-            }
-        });
-    }
-
-    private void getTicket(AESData AESData) {
-
-        Safe safe = new Safe();
-        safe.setContent(AESData, Session.getInstance().getPublickKey());
-
-        Connector.request().create(TicketMethod.class).token(safe).enqueue(new Callback<TicketResponse>() {
-            @Override
-            public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
-                SLogger.d(response);
-
-                resgisterLogin(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<TicketResponse> call, Throwable t) {
-                SLogger.d(t);
-
-            }
-        });
-    }
-
-    private void resgisterLogin(TicketResponse ticketResponse) {
-
-        final User user = new User();
-        user.setUid(firebaseAuth.getCurrentUser().getUid());
-        user.setEmail(firebaseAuth.getCurrentUser().getEmail());
-        user.setName(firebaseAuth.getCurrentUser().getDisplayName());
-        user.setPic(firebaseAuth.getCurrentUser().getPhotoUrl().toString());
-        Safe safe = new Safe();
-        safe.setContent(user);
-
-        Connector.request().create(LoginMethod.class).login(ticketResponse.getTicket(), safe).enqueue(new Callback<TokenResponse>() {
-            @Override
-            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-                SLogger.d(response);
-
-                registerValidToken(response.body(), user);
-            }
-
-            @Override
-            public void onFailure(Call<TokenResponse> call, Throwable t) {
-                SLogger.d(t);
-
-            }
-        });
-    }
-
-    private void registerValidToken(TokenResponse response, User user) {
-        Session.getInstance().setToken(response.getToken());
-        registerUser(user);
-    }
-
-    private void registerUser(User user) {
-        Session.getInstance().setUser(user);
-    }
-
 
     private void signIn() {
 

@@ -1,13 +1,13 @@
-package br.com.aleson.nasa.apod.app.login.interactor;
+package br.com.aleson.nasa.apod.app.feature.login.interactor;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.login.domain.AESData;
-import br.com.aleson.nasa.apod.app.login.domain.User;
-import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenter;
-import br.com.aleson.nasa.apod.app.login.repository.LoginRepository;
-import br.com.aleson.nasa.apod.app.login.repository.response.TicketResponse;
-import br.com.aleson.nasa.apod.app.login.repository.response.TokenResponse;
+import br.com.aleson.nasa.apod.app.feature.login.domain.AESData;
+import br.com.aleson.nasa.apod.app.feature.login.domain.User;
+import br.com.aleson.nasa.apod.app.feature.login.presenter.LoginPresenter;
+import br.com.aleson.nasa.apod.app.feature.login.repository.LoginRepository;
+import br.com.aleson.nasa.apod.app.feature.login.repository.response.TicketResponse;
+import br.com.aleson.nasa.apod.app.feature.login.repository.response.TokenResponse;
 
 public class LoginInteractorImpl implements LoginInteractor {
 
@@ -31,6 +31,7 @@ public class LoginInteractorImpl implements LoginInteractor {
             @Override
             public void onFailure(Object response) {
                 presenter.hideLoading();
+                presenter.showDialog(null);
             }
 
         });
@@ -47,6 +48,7 @@ public class LoginInteractorImpl implements LoginInteractor {
             @Override
             public void onFailure(Object response) {
                 presenter.hideLoading();
+                presenter.showDialog(null);
             }
         });
     }
@@ -75,6 +77,7 @@ public class LoginInteractorImpl implements LoginInteractor {
             @Override
             public void onFailure(Object response) {
                 presenter.hideLoading();
+                presenter.showDialog(null);
             }
 
         });

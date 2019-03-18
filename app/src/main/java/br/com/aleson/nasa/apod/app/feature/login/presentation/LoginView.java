@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.login.presentation;
+package br.com.aleson.nasa.apod.app.feature.login.presentation;
 
 import br.com.aleson.nasa.apod.app.common.view.BaseView;
 

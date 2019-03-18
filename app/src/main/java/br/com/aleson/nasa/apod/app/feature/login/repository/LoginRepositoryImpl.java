@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.login.repository;
+package br.com.aleson.nasa.apod.app.feature.login.repository;
 
 import android.util.Base64;
 
@@ -6,14 +6,14 @@ import com.github.android.aleson.slogger.SLogger;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.login.domain.AESData;
-import br.com.aleson.nasa.apod.app.login.domain.User;
-import br.com.aleson.nasa.apod.app.login.repository.api.LoginMethod;
-import br.com.aleson.nasa.apod.app.login.repository.api.PublicKeyMethod;
-import br.com.aleson.nasa.apod.app.login.repository.api.TicketMethod;
-import br.com.aleson.nasa.apod.app.login.repository.response.PublicKeyResponse;
-import br.com.aleson.nasa.apod.app.login.repository.response.TicketResponse;
-import br.com.aleson.nasa.apod.app.login.repository.response.TokenResponse;
+import br.com.aleson.nasa.apod.app.feature.login.domain.AESData;
+import br.com.aleson.nasa.apod.app.feature.login.domain.User;
+import br.com.aleson.nasa.apod.app.feature.login.repository.api.LoginMethod;
+import br.com.aleson.nasa.apod.app.feature.login.repository.api.PublicKeyMethod;
+import br.com.aleson.nasa.apod.app.feature.login.repository.api.TicketMethod;
+import br.com.aleson.nasa.apod.app.feature.login.repository.response.PublicKeyResponse;
+import br.com.aleson.nasa.apod.app.feature.login.repository.response.TicketResponse;
+import br.com.aleson.nasa.apod.app.feature.login.repository.response.TokenResponse;
 import br.com.connector.aleson.android.connector.Connector;
 import br.com.connector.aleson.android.connector.cryptography.domain.Safe;
 import retrofit2.Call;

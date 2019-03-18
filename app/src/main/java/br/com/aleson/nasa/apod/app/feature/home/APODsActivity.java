@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.home;
+package br.com.aleson.nasa.apod.app.feature.home;
 
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
