@@ -1,20 +1,33 @@
-package br.com.aleson.nasa.apod.app.login;
+package br.com.aleson.nasa.apod.app.login.presentation;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import br.com.aleson.nasa.apod.app.BaseActivity;
+import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.common.session.SessionImpl;
 import br.com.aleson.nasa.apod.app.home.APODsActivity;
+import br.com.aleson.nasa.apod.app.login.interactor.LoginInteractor;
+import br.com.aleson.nasa.apod.app.login.interactor.LoginInteractorImpl;
+import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenter;
+import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenterImpl;
+import br.com.aleson.nasa.apod.app.login.repository.LoginRepository;
+import br.com.aleson.nasa.apod.app.login.repository.LoginRepositoryImpl;
+import br.com.aleson.nasa.apod.app.login.repository.api.PublicKeyMethod;
+import br.com.aleson.nasa.apod.app.login.repository.api.TicketMethod;
+import br.com.aleson.nasa.apod.app.login.repository.api.LoginMethod;
+import br.com.aleson.nasa.apod.app.login.repository.response.PublicKeyResponse;
+import br.com.aleson.nasa.apod.app.login.domain.AESData;
+import br.com.aleson.nasa.apod.app.login.repository.response.TicketResponse;
+import br.com.aleson.nasa.apod.app.login.repository.response.TokenResponse;
+import br.com.aleson.nasa.apod.app.login.domain.User;
 import br.com.connector.aleson.android.connector.Connector;
+import br.com.connector.aleson.android.connector.cryptography.domain.Safe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,18 +39,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements LoginView {
 
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth firebaseAuth;
     private GoogleSignInClient googleSignInClient;
+
+    private LoginInteractor interactor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +59,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         findViewById(R.id.act_login_buttton_google_login).setOnClickListener(this);
         findViewById(R.id.act_login_button_skip).setOnClickListener(this);
+
+        interactor = new LoginInteractorImpl(new LoginPresenterImpl(this), new LoginRepositoryImpl());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        Connector.request().create(GetPublicKey.class).getPublicKey().enqueue(new Callback<PublicKeyResponse>() {
-            @Override
-            public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
-                SLogger.d(response);
-            }
-
-            @Override
-            public void onFailure(Call<PublicKeyResponse> call, Throwable t) {
-                SLogger.d(t);
-            }
-        });
-
         verifyCurrentUser();
     }
 
@@ -73,7 +76,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (firebaseAuth.getCurrentUser() == null) {
             offerSignIn();
         } else {
-            startHome();
+            startLogin();
         }
     }
 
@@ -87,19 +90,100 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    private void startHome() {
+    private void startLogin() {
 
         initSession();
 
-        startActivity(new Intent(this, APODsActivity.class));
+        this.interactor.login();
     }
+
 
     private void initSession() {
 
-        SessionImpl.getInstance().setFirebaseAuth(firebaseAuth);
-        SessionImpl.getInstance().setGoogleSignInClient(googleSignInClient);
-        SessionImpl.getInstance().setFirebaseUser(firebaseAuth.getCurrentUser());
+        Session.getInstance().setFirebaseAuth(firebaseAuth);
+        Session.getInstance().setGoogleSignInClient(googleSignInClient);
+        Session.getInstance().setFirebaseUser(firebaseAuth.getCurrentUser());
     }
+
+    private void getPublicKey() {
+        Connector.request().create(PublicKeyMethod.class).getPublicKey().enqueue(new Callback<PublicKeyResponse>() {
+            @Override
+            public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
+                SLogger.d(response);
+
+                Session.getInstance().setPublicKey(response.body().getPublicKey());
+
+                AESData AESData = new AESData();
+                AESData.setIv(Base64.encodeToString(Connector.crypto().getAes().getIv(), 0).replace("\n", ""));
+                AESData.setKey(Connector.crypto().getAes().getSecret());
+                AESData.setSalt(Connector.crypto().getAes().getSalt());
+
+                getTicket(AESData);
+            }
+
+            @Override
+            public void onFailure(Call<PublicKeyResponse> call, Throwable t) {
+                SLogger.d(t);
+            }
+        });
+    }
+
+    private void getTicket(AESData AESData) {
+
+        Safe safe = new Safe();
+        safe.setContent(AESData, Session.getInstance().getPublickKey());
+
+        Connector.request().create(TicketMethod.class).token(safe).enqueue(new Callback<TicketResponse>() {
+            @Override
+            public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
+                SLogger.d(response);
+
+                resgisterLogin(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TicketResponse> call, Throwable t) {
+                SLogger.d(t);
+
+            }
+        });
+    }
+
+    private void resgisterLogin(TicketResponse ticketResponse) {
+
+        final User user = new User();
+        user.setUid(firebaseAuth.getCurrentUser().getUid());
+        user.setEmail(firebaseAuth.getCurrentUser().getEmail());
+        user.setName(firebaseAuth.getCurrentUser().getDisplayName());
+        user.setPic(firebaseAuth.getCurrentUser().getPhotoUrl().toString());
+        Safe safe = new Safe();
+        safe.setContent(user);
+
+        Connector.request().create(LoginMethod.class).login(ticketResponse.getTicket(), safe).enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                SLogger.d(response);
+
+                registerValidToken(response.body(), user);
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                SLogger.d(t);
+
+            }
+        });
+    }
+
+    private void registerValidToken(TokenResponse response, User user) {
+        Session.getInstance().setToken(response.getToken());
+        registerUser(user);
+    }
+
+    private void registerUser(User user) {
+        Session.getInstance().setUser(user);
+    }
+
 
     private void signIn() {
 
@@ -158,7 +242,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                             Toast.makeText(getBaseContext(), "Authentication sucessed." + user.getDisplayName(), Toast.LENGTH_LONG).show();
 
-                            startHome();
+                            startLogin();
                         } else {
                             // If sign in fails, display a message to the user.
                             SLogger.w("signInWithCredential:failure", task.getException());
@@ -178,7 +262,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 signIn();
                 break;
             case R.id.act_login_button_skip:
+                startHome();
                 break;
         }
+    }
+
+    @Override
+    public void startHome() {
+        startActivity(new Intent(this, APODsActivity.class));
     }
 }

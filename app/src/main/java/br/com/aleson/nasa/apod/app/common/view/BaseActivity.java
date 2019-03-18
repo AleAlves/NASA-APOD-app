@@ -1,13 +1,14 @@
-package br.com.aleson.nasa.apod.app;
+package br.com.aleson.nasa.apod.app.common.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import br.com.aleson.nasa.apod.app.R;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.github.android.aleson.slogger.SLogger;
 
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public class BaseActivity extends AppCompatActivity implements BaseView {
 
 
     @Override
@@ -19,5 +20,20 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         SLogger.d(v.getId());
+    }
+
+    @Override
+    public void onShowLoading() {
+
+    }
+
+    @Override
+    public void onHideLoading() {
+
+    }
+
+    @Override
+    public void onShowDialog() {
+
     }
 }

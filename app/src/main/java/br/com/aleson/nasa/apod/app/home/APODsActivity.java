@@ -1,6 +1,6 @@
 package br.com.aleson.nasa.apod.app.home;
 
-import br.com.aleson.nasa.apod.app.BaseActivity;
+import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 
 import android.os.Bundle;

@@ -25,7 +25,7 @@
         </service>
 
         <activity android:name=".home.APODsActivity" />
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".login.presentation.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

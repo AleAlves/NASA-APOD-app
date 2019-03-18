@@ -1,9 +1,9 @@
-package br.com.aleson.nasa.apod.app.login;
+package br.com.aleson.nasa.apod.app.login.repository.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import br.com.aleson.nasa.apod.app.common.BaseResponse;
+import br.com.aleson.nasa.apod.app.common.response.BaseResponse;
 
 public class PublicKeyResponse extends BaseResponse {
 

@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.common;
+package br.com.aleson.nasa.apod.app.common.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
