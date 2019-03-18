@@ -1,8 +1,13 @@
 package br.com.aleson.nasa.apod.app.login.interactor;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
+import br.com.aleson.nasa.apod.app.common.session.Session;
+import br.com.aleson.nasa.apod.app.login.domain.AESData;
+import br.com.aleson.nasa.apod.app.login.domain.User;
 import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenter;
 import br.com.aleson.nasa.apod.app.login.repository.LoginRepository;
+import br.com.aleson.nasa.apod.app.login.repository.response.TicketResponse;
+import br.com.aleson.nasa.apod.app.login.repository.response.TokenResponse;
 
 public class LoginInteractorImpl implements LoginInteractor {
 
@@ -16,62 +21,71 @@ public class LoginInteractorImpl implements LoginInteractor {
 
     @Override
     public void login() {
-        presenter.showDialog();
+        presenter.showLoading();
         repository.getPublicKey(new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
-                ticket();
+                ticket((AESData) response);
             }
 
             @Override
             public void onFailure(Object response) {
+                presenter.hideLoading();
+            }
 
+        });
+    }
+
+    @Override
+    public void ticket(AESData aesData) {
+        repository.getTicket(aesData, new ResponseCallback() {
+            @Override
+            public void onResponse(Object response) {
+                token((TicketResponse) response);
             }
 
             @Override
-            public void onFinish() {
+            public void onFailure(Object response) {
                 presenter.hideLoading();
             }
         });
     }
 
     @Override
-    public void ticket() {
-        repository.getTicket(new ResponseCallback() {
+    public void token(TicketResponse ticketResponse) {
+
+        final User user = new User();
+
+        user.setUid(Session.getInstance().firebaseAuth().getCurrentUser().getUid());
+        user.setEmail(Session.getInstance().firebaseAuth().getCurrentUser().getEmail());
+        user.setName(Session.getInstance().firebaseAuth().getCurrentUser().getDisplayName());
+        user.setPic(Session.getInstance().firebaseAuth().getCurrentUser().getPhotoUrl().toString());
+
+
+        repository.registerLogin(user, ticketResponse, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
-                token();
+                registerValidToken((TokenResponse) response);
+                registerUser(user);
+                presenter.startHome();
+                presenter.hideLoading();
+
             }
 
             @Override
             public void onFailure(Object response) {
-
+                presenter.hideLoading();
             }
 
-            @Override
-            public void onFinish() {
-
-            }
         });
     }
 
-    @Override
-    public void token() {
-        repository.registerLogin(new ResponseCallback() {
-            @Override
-            public void onResponse(Object response) {
 
-            }
+    private void registerValidToken(TokenResponse response) {
+        Session.getInstance().setToken(response.getToken());
+    }
 
-            @Override
-            public void onFailure(Object response) {
-
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
+    private void registerUser(User user) {
+        Session.getInstance().setUser(user);
     }
 }

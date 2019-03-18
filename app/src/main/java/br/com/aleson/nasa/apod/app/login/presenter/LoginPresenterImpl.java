@@ -12,12 +12,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void showLoading() {
-
+        this.view.onShowLoading();
     }
 
     @Override
     public void hideLoading() {
-
+        this.view.onHideLoading();
     }
 
     @Override
@@ -27,6 +27,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void startHome() {
+//        this.view.onShowLoading();
         this.view.startHome();
     }
 }

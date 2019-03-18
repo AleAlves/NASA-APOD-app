@@ -7,9 +7,7 @@ import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.home.APODsActivity;
 import br.com.aleson.nasa.apod.app.login.interactor.LoginInteractor;
 import br.com.aleson.nasa.apod.app.login.interactor.LoginInteractorImpl;
-import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenter;
 import br.com.aleson.nasa.apod.app.login.presenter.LoginPresenterImpl;
-import br.com.aleson.nasa.apod.app.login.repository.LoginRepository;
 import br.com.aleson.nasa.apod.app.login.repository.LoginRepositoryImpl;
 import br.com.aleson.nasa.apod.app.login.repository.api.PublicKeyMethod;
 import br.com.aleson.nasa.apod.app.login.repository.api.TicketMethod;
@@ -73,14 +71,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if (firebaseAuth.getCurrentUser() == null) {
-            offerSignIn();
-        } else {
+        startGoogleSignin();
+
+        if (firebaseAuth.getCurrentUser() != null) {
             startLogin();
         }
     }
 
-    private void offerSignIn() {
+    private void startGoogleSignin() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com")
