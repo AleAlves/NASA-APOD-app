@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.feature.home.APODsActivity;
+import br.com.aleson.nasa.apod.app.feature.home.presentation.APODsActivity;
 import br.com.aleson.nasa.apod.app.feature.login.interactor.LoginInteractor;
 import br.com.aleson.nasa.apod.app.feature.login.interactor.LoginInteractorImpl;
 import br.com.aleson.nasa.apod.app.feature.login.presenter.LoginPresenterImpl;

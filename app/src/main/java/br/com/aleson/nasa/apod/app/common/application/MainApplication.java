@@ -21,7 +21,8 @@ public class MainApplication extends Application {
         FirebaseApp.initializeApp(this);
         SLogger.init(true);
 //        Connector.init("http://192.168.0.22:8083");
-        Connector.init("http://10.20.56.164:8083");
+//        Connector.init("http://10.20.56.164:8083");
+        Connector.init("http://192.168.0.11:8083");
     }
 
 
