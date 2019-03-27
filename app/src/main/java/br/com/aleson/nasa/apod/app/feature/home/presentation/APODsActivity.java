@@ -1,27 +1,42 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation;
 
-import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
+import android.os.Bundle;
+
+import androidx.viewpager.widget.ViewPager;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractorImpl;
+import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODSwippeAdapter;
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
 
-import android.os.Bundle;
+public class APODsActivity extends BaseActivity implements APODView, ViewPager.OnPageChangeListener {
 
-public class APODsActivity extends BaseActivity implements APODView {
+    private static final int APOD_DAY_1_INDEX = 0;
+    private static final int APOD_DAY_2_INDEX = 1;
 
     private APODInteractor interactor;
+
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apods);
 
+        bind();
+
         init();
 
 
+    }
+
+    private void bind() {
+        this.viewPager = findViewById(R.id.viewpager);
+        this.viewPager.setAdapter(new APODSwippeAdapter(getSupportFragmentManager()));
+        this.viewPager.addOnPageChangeListener(this);
     }
 
     private void init() {
@@ -36,6 +51,21 @@ public class APODsActivity extends BaseActivity implements APODView {
 
     @Override
     public void loadAPOD(APOD apod) {
+
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        this.viewPager.setCurrentItem(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 }
