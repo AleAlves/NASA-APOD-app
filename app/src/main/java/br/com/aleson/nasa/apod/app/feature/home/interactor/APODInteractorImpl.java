@@ -37,7 +37,6 @@ public class APODInteractorImpl implements APODInteractor {
             @Override
             public void onFailure(Object response) {
                 presenter.hideLoading();
-                presenter.showDialog((DialogMessage) response);
             }
         });
     }
