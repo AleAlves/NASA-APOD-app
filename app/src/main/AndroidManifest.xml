@@ -19,7 +19,7 @@
             android:enabled="true"
             android:exported="true"></service>
 
-        <activity android:name=".feature.home.presentation.APODsActivity" />
+        <activity android:name=".feature.home.presentation.APODsActivity"/>
         <activity android:name=".feature.login.presentation.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

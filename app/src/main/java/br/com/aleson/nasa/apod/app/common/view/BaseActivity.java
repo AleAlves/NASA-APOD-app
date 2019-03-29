@@ -183,6 +183,7 @@ public class BaseActivity extends AppCompatActivity implements BaseView {
         dialog.setOwnerActivity(activity);
         dialog.setContentView(R.layout.default_loading);
         dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         return dialog;
     }
 }

@@ -5,27 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/apod_card_titlle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="384dp"
-        android:text="Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="338dp"
-        android:layout_height="254dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="224dp"
-        android:layout_marginEnd="47dp"
-        android:layout_marginBottom="253dp"
+        android:id="@+id/apod_adapter_apod_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlack"
+        android:minWidth="150dp"
+        android:minHeight="300dp"
         android:src="@drawable/ic_wb_sunny_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/apod_adapter_apod_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="Title"
+        android:textSize="26dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_image" />
+
+    <TextView
+        android:id="@+id/apod_adapter_apod_copyright"
+        android:layout_width="410dp"
+        android:layout_height="wrap_content"
+        android:text="copyright"
+        android:textAlignment="textEnd"
+        android:layout_margin="0dp"
+        android:textSize="14dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_image" />
+
+    <TextView
+        android:id="@+id/apod_adapter_apod_explanation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="14dp"
+        android:padding="10dp"
+        android:text="ipsi lospi ipsulum lopis lopis popips xablau"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

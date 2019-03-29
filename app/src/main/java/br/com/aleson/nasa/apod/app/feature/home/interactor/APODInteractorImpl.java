@@ -25,9 +25,8 @@ public class APODInteractorImpl implements APODInteractor {
 
         APODRequest request = new APODRequest();
         request.setDate(date);
-        Safe safe = new Safe();
 
-        this.repository.getAPOD(safe, new ResponseCallback() {
+        this.repository.getAPOD(request, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
                 presenter.hideLoading();

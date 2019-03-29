@@ -15,12 +15,12 @@ public class APODPresenterImpl implements APODPresenter {
 
     @Override
     public void showLoading() {
-
+        this.view.onShowLoading();
     }
 
     @Override
     public void hideLoading() {
-
+        this.view.onHideLoading();
     }
 
     @Override
