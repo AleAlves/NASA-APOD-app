@@ -5,13 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/apod_imageview_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPlaceholder"
+        android:elevation="1dp"/>
 
     <ImageView
         android:id="@+id/apod_adapter_apod_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBlack"
-        android:minWidth="150dp"
+        android:minWidth="450dp"
         android:minHeight="300dp"
         android:src="@drawable/ic_wb_sunny_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,33 +27,62 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/apod_adapter_apod_title"
-        android:layout_width="0dp"
+    <ProgressBar
+        android:id="@+id/apod_adapter_apod_image_loading"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:gravity="center"
-        android:text="Title"
-        android:textSize="26dp"
-        android:padding="10dp"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="124dp"
+        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/apod_adapter_apod_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_image" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/apod_adapter_textview_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="10dp"
+        android:text="01/01/10001"
+        app:layout_constraintEnd_toStartOf="@+id/apod_adapter_apod_copyright"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/apod_adapter_apod_image" />
 
     <TextView
         android:id="@+id/apod_adapter_apod_copyright"
-        android:layout_width="410dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:maxLines="2"
+        android:padding="10dp"
         android:text="copyright"
         android:textAlignment="textEnd"
-        android:layout_margin="0dp"
         android:textSize="14dp"
-        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_image" />
+
+
+    <TextView
+        android:id="@+id/apod_adapter_apod_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Title"
+        android:textSize="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_textview_date" />
 
     <TextView
         android:id="@+id/apod_adapter_apod_explanation"

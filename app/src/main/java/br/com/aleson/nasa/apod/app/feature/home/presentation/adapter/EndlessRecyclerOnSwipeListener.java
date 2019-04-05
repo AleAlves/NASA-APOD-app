@@ -1,10 +1,16 @@
-package br.com.aleson.nasa.apod.app.feature.home.presentation;
+package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
 
+import android.view.MotionEvent;
+import android.view.View;
+
+import com.github.android.aleson.slogger.SLogger;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import br.com.aleson.nasa.apod.app.common.Constants;
 
-public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
-//    public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
+public abstract class EndlessRecyclerOnSwipeListener extends RecyclerView.OnScrollListener {
 
     /**
      * The total number of items in the dataset after the last load
@@ -13,7 +19,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     /**
      * True if we are still waiting for the last set of data to load.
      */
-    private boolean mLoading = true;
+    private static boolean DRAGING;
+    private boolean mLoading;
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -29,16 +36,30 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 mPreviousTotal = totalItemCount;
             }
         }
-        int visibleThreshold = 5;
+        int visibleThreshold = 0;
         if (!mLoading && (totalItemCount - visibleItemCount)
                 <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached
 
-            onLoadMore();
+            onGetApod(verifySwipeDirection(dx));
 
             mLoading = true;
         }
+
+
     }
 
-    public abstract void onLoadMore();
+    private int verifySwipeDirection(int axisX) {
+        if (axisX > 0) {
+            return Constants.Swipeirection.RIGHT;
+        } else if (axisX <= 0) {
+            return Constants.Swipeirection.LEFT;
+        } else {
+            return 0;
+        }
+    }
+
+
+    public abstract void onGetApod(int XAxis);
+
 }

@@ -29,6 +29,16 @@ public class APOD {
     @SerializedName("url")
     private String url;
 
+    private boolean empty;
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
+
     public String getType() {
         return type;
     }
