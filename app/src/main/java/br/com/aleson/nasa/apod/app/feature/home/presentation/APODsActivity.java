@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+import androidx.viewpager.widget.ViewPager;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.Constants;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractorImpl;
+import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODCarousel;
 import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecyclerViewAdapter;
 import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.EndlessRecyclerOnSwipeListener;
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
@@ -34,12 +36,13 @@ public class APODsActivity extends BaseActivity implements APODView {
 
     private Context context;
     private APODInteractor interactor;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<APOD> apodList = new ArrayList<>();
     private String apodDate;
     private String apodMaxDate;
     private List<String> apodDatelist = new ArrayList<>();
+    private APODCarousel apodCarousel;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,22 +74,22 @@ public class APODsActivity extends BaseActivity implements APODView {
     }
 
     private void initRecyclerView() {
-        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
-        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
-        recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new APODRecyclerViewAdapter(this, apodList);
-        recyclerView.setAdapter(mAdapter);
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
-        recyclerView.setOnScrollListener(new EndlessRecyclerOnSwipeListener() {
-
-            @Override
-            public void onGetApod(int XAxis) {
-                updateDate(XAxis);
-                searchAPOD();
-            }
-        });
+//        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
+//        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
+//        recyclerView.setLayoutManager(layoutManager);
+//        mAdapter = new APODRecyclerViewAdapter(this, apodList);
+//        recyclerView.setAdapter(mAdapter);
+//        SnapHelper snapHelper = new PagerSnapHelper();
+//        snapHelper.attachToRecyclerView(recyclerView);
+//        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
+//        recyclerView.setOnScrollListener(new EndlessRecyclerOnSwipeListener() {
+//
+//            @Override
+//            public void onGetApod(int XAxis) {
+//                updateDate(XAxis);
+//                searchAPOD();
+//            }
+//        });
     }
 
     private boolean verifyValidRanges() {
@@ -113,6 +116,12 @@ public class APODsActivity extends BaseActivity implements APODView {
         tomorrow.setEmpty(true);
 
         this.apodList.add(tomorrow);
+
+        viewPager = findViewById(R.id.pager);
+        apodCarousel = new APODCarousel(context, apodList);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+        viewPager.setAdapter(apodCarousel);
     }
 
     @Override
@@ -122,7 +131,7 @@ public class APODsActivity extends BaseActivity implements APODView {
 
     @Override
     public void loadAPOD(APOD apod) {
-        apodList.add(apodList.size() -1, apod);
-        mAdapter.notifyDataSetChanged();
+        apodList.add(apod);
+        apodCarousel.notifyDataSetChanged();
     }
 }
