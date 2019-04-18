@@ -1,6 +1,7 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
+import br.com.aleson.nasa.apod.app.feature.home.presentation.APODFullscreenActivity;
 
 public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerViewAdapter.APODViewHolder> {
 
@@ -36,12 +38,14 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
     @NonNull
     @Override
     public APODViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         return new APODRecyclerViewAdapter.APODViewHolder(LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.view_apod_apdater_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull APODViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull APODViewHolder holder, final int position) {
+
         if (apodList.get(position).isEmpty()) {
             holder.placeHolderView.setVisibility(View.VISIBLE);
         } else {
@@ -75,6 +79,14 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                     }
                 })
                 .into(holder.imageViewAPOD);
+        holder.imageViewAPOD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, APODFullscreenActivity.class);
+                intent.putExtra("url", apodList.get(position).getUrl());
+                context.startActivity(intent);
+            }
+        });
     }
 
 
@@ -85,7 +97,6 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
     public class APODViewHolder extends RecyclerView.ViewHolder {
 
-
         private TextView textViewDate;
         private TextView textViewTitle;
         private TextView textViewCopyrigth;
@@ -95,6 +106,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         private View placeHolderView;
 
         public APODViewHolder(@NonNull View itemView) {
+
             super(itemView);
             this.textViewTitle = itemView.findViewById(R.id.apod_adapter_apod_title);
             this.imageViewAPOD = itemView.findViewById(R.id.apod_adapter_apod_image);

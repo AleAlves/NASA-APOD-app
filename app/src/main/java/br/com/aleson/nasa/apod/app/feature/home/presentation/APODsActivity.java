@@ -4,16 +4,19 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.github.android.aleson.slogger.SLogger;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -30,24 +33,25 @@ import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecycle
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
 
-public class APODsActivity extends BaseActivity implements APODView {
+public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
-    private RecyclerView recyclerView;
-    private int direction = 0;
     private Context context;
-    private APODInteractor interactor;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<APOD> apodList = new ArrayList<>();
     private String apodDate;
     private String apodMaxDate;
-    private List<String> apodDatelist = new ArrayList<>();
+    private APODInteractor interactor;
+    private RecyclerView recyclerView;
     private APODRecyclerViewAdapter mAdapter;
     private GestureDetector mGestureDetector;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<APOD> apodList = new ArrayList<>();
+    private List<String> apodDatelist = new ArrayList<>();
+    private BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_apods);
@@ -58,6 +62,7 @@ public class APODsActivity extends BaseActivity implements APODView {
     }
 
     private void updateDate(int axisX) {
+
         try {
             Calendar c = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
@@ -85,6 +90,7 @@ public class APODsActivity extends BaseActivity implements APODView {
     }
 
     private void initRecyclerView() {
+
         recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
         layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
         recyclerView.setLayoutManager(layoutManager);
@@ -98,14 +104,12 @@ public class APODsActivity extends BaseActivity implements APODView {
             @Override
             public boolean onSwipeRight() {
                 updateDate(-1);
-                Log.d("SWIPE", "-1 RIGHT");
                 return false;
             }
 
             @Override
             public boolean onSwipeLeft() {
                 updateDate(1);
-                Log.d("SWIPE", "1 LEFT");
                 return false;
             }
 
@@ -124,6 +128,7 @@ public class APODsActivity extends BaseActivity implements APODView {
     }
 
     private boolean isValidRange() {
+
         Calendar requestDate = Calendar.getInstance();
         Calendar todayDate = Calendar.getInstance();
         Calendar minimumDate = Calendar.getInstance();
@@ -143,6 +148,7 @@ public class APODsActivity extends BaseActivity implements APODView {
     }
 
     private void searchAPOD() {
+
         if (apodDatelist.contains(apodDate)) {
             SLogger.d(apodDate + " Already searched");
         } else {
@@ -152,16 +158,22 @@ public class APODsActivity extends BaseActivity implements APODView {
     }
 
     private void init() {
+
+        navigationView = findViewById(R.id.bottom_navigation_apod_menu);
+        navigationView.setOnNavigationItemSelectedListener(this);
+
         this.interactor = new APODInteractorImpl(new APODPresenterImpl(this), new APODRepositoryImpl());
     }
 
     @Override
     protected void onStart() {
+
         super.onStart();
     }
 
     @Override
     public void loadAPOD(APOD apod) {
+
         apodList.add(apod);
         mAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(apodList.size() - 1);
@@ -170,5 +182,27 @@ public class APODsActivity extends BaseActivity implements APODView {
     @Override
     public void onError() {
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.apod_fav: {
+                break;
+            }
+            case R.id.apod_download: {
+                break;
+            }
+            case R.id.apod_random: {
+                break;
+            }
+            case R.id.apod_date_range: {
+                break;
+            }
+            case R.id.apod_fav_list: {
+                break;
+            }
+        }
+        return true;
     }
 }
