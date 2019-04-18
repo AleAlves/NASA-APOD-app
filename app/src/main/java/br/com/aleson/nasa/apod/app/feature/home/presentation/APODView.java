@@ -7,4 +7,5 @@ public interface APODView extends BaseView {
 
     void loadAPOD(APOD apod);
 
+    void onError();
 }

@@ -2,6 +2,10 @@ package br.com.aleson.nasa.apod.app.feature.home.presentation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.github.android.aleson.slogger.SLogger;
 
@@ -15,16 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-import androidx.viewpager.widget.ViewPager;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.Constants;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractorImpl;
-import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODCarousel;
+import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODGestureListener;
 import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecyclerViewAdapter;
-import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.EndlessRecyclerOnSwipeListener;
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
 
@@ -33,7 +35,7 @@ public class APODsActivity extends BaseActivity implements APODView {
     private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
     private RecyclerView recyclerView;
-
+    private int direction = 0;
     private Context context;
     private APODInteractor interactor;
     private RecyclerView.LayoutManager layoutManager;
@@ -41,8 +43,8 @@ public class APODsActivity extends BaseActivity implements APODView {
     private String apodDate;
     private String apodMaxDate;
     private List<String> apodDatelist = new ArrayList<>();
-    private APODCarousel apodCarousel;
-    private ViewPager viewPager;
+    private APODRecyclerViewAdapter mAdapter;
+    private GestureDetector mGestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,8 @@ public class APODsActivity extends BaseActivity implements APODView {
         context = this;
         setContentView(R.layout.activity_apods);
         getSupportActionBar().hide();
-        updateDate(0);
         init();
+        updateDate(0);
         initRecyclerView();
     }
 
@@ -67,33 +69,74 @@ public class APODsActivity extends BaseActivity implements APODView {
                 c.setTime(simpleDateFormat.parse(apodDate));
                 c.add(Calendar.DATE, direction);
             }
+
             apodDate = simpleDateFormat.format(c.getTime());
+
+            if (isValidRange()) {
+                Log.d("SWIPE", apodDate + " " + apodList.size());
+                searchAPOD();
+            } else {
+                apodDate = apodMaxDate;
+            }
+
         } catch (Exception e) {
             SLogger.d(e);
         }
     }
 
     private void initRecyclerView() {
-//        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
-//        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
-//        recyclerView.setLayoutManager(layoutManager);
-//        mAdapter = new APODRecyclerViewAdapter(this, apodList);
-//        recyclerView.setAdapter(mAdapter);
-//        SnapHelper snapHelper = new PagerSnapHelper();
-//        snapHelper.attachToRecyclerView(recyclerView);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
-//        recyclerView.setOnScrollListener(new EndlessRecyclerOnSwipeListener() {
-//
-//            @Override
-//            public void onGetApod(int XAxis) {
-//                updateDate(XAxis);
-//                searchAPOD();
-//            }
-//        });
+        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
+        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter = new APODRecyclerViewAdapter(this, apodList);
+        recyclerView.setAdapter(mAdapter);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
+        mGestureDetector = new GestureDetector(this, new APODGestureListener(recyclerView) {
+            @Override
+            public boolean onSwipeRight() {
+                updateDate(-1);
+                Log.d("SWIPE", "-1 RIGHT");
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeLeft() {
+                updateDate(1);
+                Log.d("SWIPE", "1 LEFT");
+                return false;
+            }
+
+            @Override
+            public boolean onTouch() {
+                return false;
+            }
+        });
+
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mGestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
-    private boolean verifyValidRanges() {
-        if (!apodDate.equalsIgnoreCase(apodMaxDate) && !Constants.APOD.FIRST_APOD.equalsIgnoreCase(apodDate)) {
+    private boolean isValidRange() {
+        Calendar requestDate = Calendar.getInstance();
+        Calendar todayDate = Calendar.getInstance();
+        Calendar minimumDate = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+        try {
+            requestDate.setTime(simpleDateFormat.parse(apodDate));
+            todayDate.setTime(minimumDate.getTime());
+            minimumDate.setTime(simpleDateFormat.parse(Constants.APOD.FIRST_APOD));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (!requestDate.before(minimumDate) && !requestDate.after(todayDate)) {
             return true;
         }
         return false;
@@ -110,18 +153,6 @@ public class APODsActivity extends BaseActivity implements APODView {
 
     private void init() {
         this.interactor = new APODInteractorImpl(new APODPresenterImpl(this), new APODRepositoryImpl());
-        this.interactor.getAPOD(apodDate);
-
-        APOD tomorrow = new APOD();
-        tomorrow.setEmpty(true);
-
-        this.apodList.add(tomorrow);
-
-        viewPager = findViewById(R.id.pager);
-        apodCarousel = new APODCarousel(context, apodList);
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
-        viewPager.setAdapter(apodCarousel);
     }
 
     @Override
@@ -132,6 +163,12 @@ public class APODsActivity extends BaseActivity implements APODView {
     @Override
     public void loadAPOD(APOD apod) {
         apodList.add(apod);
-        apodCarousel.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(apodList.size() - 1);
+    }
+
+    @Override
+    public void onError() {
+
     }
 }

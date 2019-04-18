@@ -7,4 +7,5 @@ public interface APODPresenter extends BasePresenterView {
 
     void loadAPOD(APOD apod);
 
+    void onError();
 }

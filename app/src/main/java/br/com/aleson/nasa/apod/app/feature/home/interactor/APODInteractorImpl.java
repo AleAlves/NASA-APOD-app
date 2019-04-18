@@ -29,12 +29,13 @@ public class APODInteractorImpl implements APODInteractor {
         this.repository.getAPOD(request, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
-                presenter.hideLoading();
                 presenter.loadAPOD(((APODResponse) response).getApod());
+                presenter.hideLoading();
             }
 
             @Override
             public void onFailure(Object response) {
+                presenter.onError();
                 presenter.hideLoading();
             }
         });

@@ -42,20 +42,18 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull APODViewHolder holder, int position) {
-        if(apodList.get(position).isEmpty()){
-            holder.apodViewPlaceholder.setVisibility(View.VISIBLE);
-        }
-        else{
-            holder.apodViewPlaceholder.setVisibility(View.GONE);
+        if (apodList.get(position).isEmpty()) {
+            holder.placeHolderView.setVisibility(View.VISIBLE);
+        } else {
+            holder.placeHolderView.setVisibility(View.GONE);
         }
         holder.textViewTitle.setText(apodList.get(position).getTitle());
 
-        if(apodList.get(position).getCopyright() == null){
+        if (apodList.get(position).getCopyright() == null) {
             holder.textViewCopyrigth.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             holder.textViewCopyrigth.setVisibility(View.VISIBLE);
-            holder.textViewCopyrigth.setText(apodList.get(position).getCopyright()+"©");
+            holder.textViewCopyrigth.setText(apodList.get(position).getCopyright() + "©");
         }
         holder.textViewExplanation.setText(apodList.get(position).getExplanation());
         holder.textViewDate.setText(apodList.get(position).getDate());
@@ -94,7 +92,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         private TextView textViewExplanation;
         private ImageView imageViewAPOD;
         private ProgressBar progressBarImageLoading;
-        private View apodViewPlaceholder;
+        private View placeHolderView;
 
         public APODViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,7 +102,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
             this.textViewCopyrigth = itemView.findViewById(R.id.apod_adapter_apod_copyright);
             this.textViewExplanation = itemView.findViewById(R.id.apod_adapter_apod_explanation);
             this.progressBarImageLoading = itemView.findViewById(R.id.apod_adapter_apod_image_loading);
-            this.apodViewPlaceholder = itemView.findViewById(R.id.apod_imageview_placeholder);
+            this.placeHolderView = itemView.findViewById(R.id.apod_imasgeview_placeholder);
         }
     }
 }

@@ -32,4 +32,9 @@ public class APODPresenterImpl implements APODPresenter {
     public void loadAPOD(APOD apod) {
         this.view.loadAPOD(apod);
     }
+
+    @Override
+    public void onError() {
+        this.view.onError();
+    }
 }
