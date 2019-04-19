@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_apod_menu">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -23,10 +23,7 @@
         android:id="@+id/bottom_navigation_apod_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:itemBackground="@color/colorBlack"
+        android:background="@color/colorBlack"
         app:itemIconTint="@color/colorPrimaryDark"
         app:itemTextColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"

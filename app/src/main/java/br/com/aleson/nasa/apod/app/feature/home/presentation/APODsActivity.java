@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.Constants;
+import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
@@ -32,6 +33,7 @@ import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODGesture
 import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecyclerViewAdapter;
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
+import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
 
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -57,17 +59,16 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         setContentView(R.layout.activity_apods);
         getSupportActionBar().hide();
         init();
-        updateDate(0);
         initRecyclerView();
+        updateDate(0);
     }
 
-    private void updateDate(int axisX) {
+    private void updateDate(int direction) {
 
         try {
             Calendar c = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             apodMaxDate = simpleDateFormat.format(c.getTime());
-            int direction = axisX;
             if (apodDate == null) {
                 c.add(Calendar.DATE, direction);
             } else {
@@ -94,7 +95,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
         layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new APODRecyclerViewAdapter(this, apodList);
+        mAdapter = new APODRecyclerViewAdapter(this, apodList, this);
         recyclerView.setAdapter(mAdapter);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
@@ -185,12 +186,19 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     @Override
+    public void rate(String date, String pic) {
+
+    }
+
+    @Override
+    public void rate(APODRateRequest request, FavoriteCallback favoriteCallback) {
+        interactor.favorite(request, favoriteCallback);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.apod_fav: {
-                break;
-            }
-            case R.id.apod_download: {
+            case R.id.apod_account: {
                 break;
             }
             case R.id.apod_random: {

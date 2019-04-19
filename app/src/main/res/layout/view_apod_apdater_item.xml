@@ -4,20 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/apod_imasgeview_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPlaceholder"
-        android:elevation="1dp"
-        android:visibility="gone" />
-
     <ImageView
         android:id="@+id/apod_adapter_apod_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:background="@color/colorBlack"
-        android:minHeight="280dp"
+        android:elevation="1dp"
+        android:minHeight="300dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_wb_sunny_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,10 +24,48 @@
         android:id="@+id/apod_adapter_apod_image_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/apod_adapter_apod_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/button_apod_share"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="10dp"
+        android:background="@null"
+        android:elevation="1dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="20dp"
+        android:src="@drawable/ic_favorite_border_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/apod_adapter_apod_image" />
+
+    <ImageButton
+        android:id="@+id/button_apod_like"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:elevation="1dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="20dp"
+        android:src="@drawable/ic_share_24dp"
+        app:layout_constraintStart_toEndOf="@+id/button_apod_share"
+        app:layout_constraintTop_toTopOf="@+id/button_apod_share" />
+
+    <ImageButton
+        android:id="@+id/button_apod_download"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:elevation="1dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="20dp"
+        android:src="@drawable/ic_file_download_24dp"
+        app:layout_constraintStart_toEndOf="@+id/button_apod_like"
+        app:layout_constraintTop_toTopOf="@+id/button_apod_like" />
 
     <TextView
         android:id="@+id/apod_adapter_textview_date"
@@ -43,27 +74,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:padding="10dp"
-        android:text="01/01/10001"
-        app:layout_constraintEnd_toStartOf="@+id/apod_adapter_apod_copyright"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/apod_adapter_apod_image" />
-
-    <TextView
-        android:id="@+id/apod_adapter_apod_copyright"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:maxLines="2"
-        android:padding="10dp"
-        android:text="copyright"
-        android:textAlignment="textEnd"
-        android:textSize="14dp"
+        android:text="01/01/1001"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_image" />
-
 
     <TextView
         android:id="@+id/apod_adapter_apod_title"
@@ -72,25 +85,39 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Title"
-        android:textSize="26dp"
+        android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apod_adapter_textview_date" />
 
     <TextView
+        android:id="@+id/apod_adapter_apod_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:maxLines="2"
+        android:padding="10dp"
+        android:text="copyright"
+        android:textAlignment="textEnd"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_title" />
+
+    <TextView
         android:id="@+id/apod_adapter_apod_explanation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginStart="13dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="14dp"
         android:padding="10dp"
-        android:layout_gravity="end"
         android:text="ipsi lospi ipsulum lopis lopis popips xablau"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_title" />
+        app:layout_constraintTop_toBottomOf="@+id/apod_adapter_apod_copyright" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

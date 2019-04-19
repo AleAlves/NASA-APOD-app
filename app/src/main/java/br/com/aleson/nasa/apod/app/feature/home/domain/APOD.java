@@ -29,14 +29,14 @@ public class APOD {
     @SerializedName("url")
     private String url;
 
-    private boolean empty;
+    private boolean like;
 
-    public boolean isEmpty() {
-        return empty;
+    public boolean isFavorite() {
+        return like;
     }
 
-    public void setEmpty(boolean empty) {
-        this.empty = empty;
+    public void setFavorite(boolean empty) {
+        this.like = empty;
     }
 
     public String getType() {

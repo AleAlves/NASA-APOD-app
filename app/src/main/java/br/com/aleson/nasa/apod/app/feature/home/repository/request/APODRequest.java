@@ -4,7 +4,6 @@ public class APODRequest {
 
     private String date;
 
-
     public String getDate() {
         return date;
     }
