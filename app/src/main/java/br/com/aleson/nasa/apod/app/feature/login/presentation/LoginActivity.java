@@ -45,11 +45,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         findViewById(R.id.act_login_button_skip).setOnClickListener(this);
 
         interactor = new LoginInteractorImpl(new LoginPresenterImpl(this), new LoginRepositoryImpl());
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         verifyCurrentUser();
     }
 

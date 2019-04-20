@@ -105,6 +105,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                 APODRateRequest rateRequest = new APODRateRequest();
                 rateRequest.setDate(apodList.get(position).getDate());
                 rateRequest.setPic(apodList.get(position).getHdurl());
+                rateRequest.setTitle(apodList.get(position).getTitle());
 
                 apodView.rate(rateRequest, new FavoriteCallback() {
                     @Override

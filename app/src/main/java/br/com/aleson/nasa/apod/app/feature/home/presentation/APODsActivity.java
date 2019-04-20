@@ -2,6 +2,7 @@ package br.com.aleson.nasa.apod.app.feature.home.presentation;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -34,6 +35,7 @@ import br.com.aleson.nasa.apod.app.common.RandomDate;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
+import br.com.aleson.nasa.apod.app.feature.favorite.presentation.FavoriteActivity;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractorImpl;
@@ -236,6 +238,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
                 break;
             }
             case R.id.apod_fav_list: {
+                startActivity(new Intent(context, FavoriteActivity.class));
                 break;
             }
         }
