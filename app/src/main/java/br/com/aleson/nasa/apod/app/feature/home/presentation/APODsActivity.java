@@ -1,5 +1,6 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,13 +8,18 @@ import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.DatePicker;
 
 import com.github.android.aleson.slogger.SLogger;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.Constants;
+import br.com.aleson.nasa.apod.app.common.RandomDate;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
+import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
@@ -38,10 +46,15 @@ import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateReque
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    private static int LEFT = 1;
+    private static int RIGHT = -1;
+    private static int MIDDLE = 0;
+    private static int currentAction;
 
     private Context context;
     private String apodDate;
     private String apodMaxDate;
+    private DateUtil dateUtil;
     private APODInteractor interactor;
     private RecyclerView recyclerView;
     private APODRecyclerViewAdapter mAdapter;
@@ -60,10 +73,13 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         getSupportActionBar().hide();
         init();
         initRecyclerView();
-        updateDate(0);
+        updateDate(MIDDLE);
+        dateUtil = new DateUtil(apodDate);
     }
 
     private void updateDate(int direction) {
+
+        currentAction = direction;
 
         try {
             Calendar c = Calendar.getInstance();
@@ -104,13 +120,13 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         mGestureDetector = new GestureDetector(this, new APODGestureListener(recyclerView) {
             @Override
             public boolean onSwipeRight() {
-                updateDate(-1);
+                updateDate(RIGHT);
                 return false;
             }
 
             @Override
             public boolean onSwipeLeft() {
-                updateDate(1);
+                updateDate(LEFT);
                 return false;
             }
 
@@ -159,7 +175,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     private void init() {
-
         navigationView = findViewById(R.id.bottom_navigation_apod_menu);
         navigationView.setOnNavigationItemSelectedListener(this);
 
@@ -174,10 +189,19 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     @Override
     public void loadAPOD(APOD apod) {
-
         apodList.add(apod);
+        Collections.sort(apodList, new Comparator<APOD>() {
+            @Override
+            public int compare(APOD apod1, APOD apod2) {
+                return apod2.getDate().compareTo(apod1.getDate());
+            }
+        });
         mAdapter.notifyDataSetChanged();
-        recyclerView.scrollToPosition(apodList.size() - 1);
+        if (currentAction > 0)
+            recyclerView.scrollToPosition(apodList.size());
+        else if (currentAction < 0)
+            recyclerView.scrollToPosition(apodList.size() - 1);
+
     }
 
     @Override
@@ -202,9 +226,13 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
                 break;
             }
             case R.id.apod_random: {
+                clearDataLists();
+                apodDate = dateUtil.getRandomDate();
+                updateDate(MIDDLE);
                 break;
             }
             case R.id.apod_date_range: {
+                datePicker();
                 break;
             }
             case R.id.apod_fav_list: {
@@ -212,5 +240,46 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             }
         }
         return true;
+    }
+
+    private void datePicker() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(
+                context,
+                dateListener(),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        Date dateFormatInitial = null;
+        Date dateFormatFinal = null;
+        try {
+            dateFormatInitial = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(apodMaxDate);
+            dateFormatFinal = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse("16/06/1995");
+        } catch (ParseException e) {
+            Log.e("Error", e.toString());
+        }
+        if (dateFormatInitial != null)
+            dialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
+        if (dateFormatFinal != null)
+            dialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
+        dialog.setTitle("data");
+        dialog.show();
+    }
+
+    private DatePickerDialog.OnDateSetListener dateListener() {
+        return new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                apodDate = dateUtil.getRequestFormatedDate(year, month, dayOfMonth);
+                clearDataLists();
+                updateDate(MIDDLE);
+            }
+        };
+    }
+
+    private void clearDataLists() {
+        apodList.clear();
+        apodDatelist.clear();
     }
 }

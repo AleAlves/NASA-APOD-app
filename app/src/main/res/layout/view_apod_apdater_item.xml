@@ -7,10 +7,10 @@
     <ImageView
         android:id="@+id/apod_adapter_apod_image"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorBlack"
         android:elevation="1dp"
-        android:minHeight="300dp"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="fitXY"
         android:src="@drawable/ic_wb_sunny_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
