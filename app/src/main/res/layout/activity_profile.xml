@@ -6,4 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".feature.profile.ProfileActivity">
 
+    <include layout="@layout/apod_default_toolbar" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

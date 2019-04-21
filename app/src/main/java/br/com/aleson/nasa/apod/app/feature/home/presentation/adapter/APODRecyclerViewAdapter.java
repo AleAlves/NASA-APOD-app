@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.session.Session;
+import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.home.presentation.APODFullscreenActivity;
 import br.com.aleson.nasa.apod.app.feature.home.presentation.APODView;
@@ -68,7 +69,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
         holder.textViewTitle.setText(apodList.get(position).getTitle());
         holder.textViewExplanation.setText(apodList.get(position).getExplanation());
-        holder.textViewDate.setText(apodList.get(position).getDate());
+        holder.textViewDate.setText(DateUtil.parseDateToView(apodList.get(position).getDate()));
         holder.progressBarImageLoading.setVisibility(View.VISIBLE);
         final ProgressBar progressBar = holder.progressBarImageLoading;
 

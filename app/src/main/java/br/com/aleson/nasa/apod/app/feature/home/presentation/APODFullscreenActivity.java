@@ -23,8 +23,6 @@ public class APODFullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apodfullscreen);
 
-        getSupportActionBar().hide();
-
         Bundle data = getIntent().getExtras();
         String url = data.getString("url");
 

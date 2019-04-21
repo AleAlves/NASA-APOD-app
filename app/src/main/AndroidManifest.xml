@@ -13,8 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".feature.favorite.presentation.FavoriteActivity"></activity>
-        <activity android:name=".feature.profile.ProfileActivity" />
+        <activity
+            android:name=".feature.favorite.presentation.FavoriteActivity"
+            android:label="Favorites" />
+        <activity
+            android:name=".feature.profile.ProfileActivity"
+            android:label="Profile" />
         <activity android:name=".feature.home.presentation.APODFullscreenActivity" />
 
         <service
@@ -23,7 +27,8 @@
             android:exported="true" />
 
         <activity android:name=".feature.home.presentation.APODsActivity" />
-        <activity android:name=".feature.login.presentation.LoginActivity">
+        <activity android:name=".feature.login.presentation.LoginActivity"
+            android:label="NASA APOD App" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

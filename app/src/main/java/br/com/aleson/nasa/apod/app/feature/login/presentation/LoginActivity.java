@@ -40,7 +40,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        super.setContentView(R.layout.activity_login);
         findViewById(R.id.act_login_buttton_google_login).setOnClickListener(this);
         findViewById(R.id.act_login_button_skip).setOnClickListener(this);
 

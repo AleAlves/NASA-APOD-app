@@ -9,6 +9,7 @@ import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.github.android.aleson.slogger.SLogger;
@@ -31,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.Constants;
-import br.com.aleson.nasa.apod.app.common.RandomDate;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
@@ -72,11 +72,17 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_apods);
-        getSupportActionBar().hide();
+        handleExtras(getIntent());
         init();
         initRecyclerView();
         updateDate(MIDDLE);
         dateUtil = new DateUtil(apodDate);
+    }
+
+    private void handleExtras(Intent intent) {
+        if (intent != null) {
+            apodDate = intent.getStringExtra("date");
+        }
     }
 
     private void updateDate(int direction) {
@@ -284,5 +290,10 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private void clearDataLists() {
         apodList.clear();
         apodDatelist.clear();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

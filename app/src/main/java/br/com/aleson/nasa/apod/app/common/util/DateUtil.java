@@ -1,5 +1,12 @@
 package br.com.aleson.nasa.apod.app.common.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class DateUtil {
@@ -73,5 +80,18 @@ public class DateUtil {
 
     private String castDay(int day) {
         return String.valueOf(day).length() == 1 ? "0" + String.valueOf(day) : String.valueOf(day);
+    }
+
+    public static String parseDateToView(String date) {
+        SimpleDateFormat viewFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat apiFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formatedDate = "";
+        try {
+
+            formatedDate = viewFormat.format(apiFormat.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatedDate;
     }
 }

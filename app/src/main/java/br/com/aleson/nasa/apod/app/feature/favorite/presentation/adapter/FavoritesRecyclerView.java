@@ -1,6 +1,7 @@
 package br.com.aleson.nasa.apod.app.feature.favorite.presentation.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,12 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.FavoriteResponse;
+import br.com.aleson.nasa.apod.app.feature.home.presentation.APODsActivity;
 
 public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecyclerView.FavoritesViewHolder> {
 
@@ -40,9 +44,10 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FavoritesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavoritesViewHolder holder, final int position) {
 
-        holder.textViewFavApodDate.setText(favorites.get(position).getDate());
+        holder.textViewFavApodDate.setText(DateUtil.parseDateToView(favorites.get(position).getDate()));
+        holder.textViewFavApodTitle.setText(favorites.get(position).getTitle());
 
         Glide.with(context)
                 .load(favorites.get(position).getPic())
@@ -58,6 +63,23 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
                     }
                 })
                 .into(holder.imageViewFavApodPic);
+
+        holder.constraintLayoutFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAPODActivity(favorites.get(position).getDate());
+            }
+        });
+    }
+
+    private void startAPODActivity(String date) {
+        Intent intent = new Intent(context, APODsActivity.class);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        intent.putExtra("date", date);
+
+        context.startActivity(intent);
     }
 
     @Override
@@ -69,11 +91,15 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
 
         private ImageView imageViewFavApodPic;
         private TextView textViewFavApodDate;
+        private TextView textViewFavApodTitle;
+        private ConstraintLayout constraintLayoutFavorite;
 
         public FavoritesViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageViewFavApodPic = itemView.findViewById(R.id.apod_adapter_apod_image);
-            textViewFavApodDate = itemView.findViewById(R.id.favorite_apod_date);
+            this.imageViewFavApodPic = itemView.findViewById(R.id.apod_adapter_apod_image);
+            this.textViewFavApodDate = itemView.findViewById(R.id.favorite_apod_date);
+            this.textViewFavApodTitle = itemView.findViewById(R.id.favorite_apod_title);
+            this.constraintLayoutFavorite = itemView.findViewById(R.id.constraint_favorite);
         }
     }
 }

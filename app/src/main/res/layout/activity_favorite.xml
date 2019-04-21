@@ -6,15 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".feature.favorite.presentation.FavoriteActivity">
 
+    <include layout="@layout/apod_default_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favorites_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"/>
     </ScrollView>
 
 
