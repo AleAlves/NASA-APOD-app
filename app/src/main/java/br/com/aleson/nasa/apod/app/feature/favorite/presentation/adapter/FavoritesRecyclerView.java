@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -44,7 +45,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FavoritesViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final FavoritesViewHolder holder, final int position) {
 
         holder.textViewFavApodDate.setText(DateUtil.parseDateToView(favorites.get(position).getDate()));
         holder.textViewFavApodTitle.setText(favorites.get(position).getTitle());
@@ -54,11 +55,13 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        holder.progressBarLoading.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.progressBarLoading.setVisibility(View.GONE);
                         return false;
                     }
                 })
@@ -92,6 +95,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
         private ImageView imageViewFavApodPic;
         private TextView textViewFavApodDate;
         private TextView textViewFavApodTitle;
+        private ProgressBar progressBarLoading;
         private ConstraintLayout constraintLayoutFavorite;
 
         public FavoritesViewHolder(@NonNull View itemView) {
@@ -100,6 +104,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
             this.textViewFavApodDate = itemView.findViewById(R.id.favorite_apod_date);
             this.textViewFavApodTitle = itemView.findViewById(R.id.favorite_apod_title);
             this.constraintLayoutFavorite = itemView.findViewById(R.id.constraint_favorite);
+            this.progressBarLoading = itemView.findViewById(R.id.favorite_adapter_apod_image_loading);
         }
     }
 }

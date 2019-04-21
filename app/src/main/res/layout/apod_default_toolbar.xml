@@ -3,7 +3,8 @@
     android:id="@+id/apod_default_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:elevation="10dp">
 
     <TextView
         android:id="@+id/apod_toolbar_title"

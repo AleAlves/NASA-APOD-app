@@ -4,6 +4,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.github.android.aleson.slogger.SLogger;
+
 public abstract class APODGestureListener extends GestureDetector.SimpleOnGestureListener {
 
     private final View mView;
@@ -26,12 +28,16 @@ public abstract class APODGestureListener extends GestureDetector.SimpleOnGestur
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (e1.getX() < e2.getX()) {
-            return onSwipeRight();
-        }
+        try {
+            if (e1.getX() < e2.getX()) {
+                return onSwipeRight();
+            }
 
-        if (e1.getX() > e2.getX()) {
-            return onSwipeLeft();
+            if (e1.getX() > e2.getX()) {
+                return onSwipeLeft();
+            }
+        }catch (Exception e){
+            SLogger.e(e);
         }
         return false;
     }
