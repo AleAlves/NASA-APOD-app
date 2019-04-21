@@ -3,7 +3,7 @@
     android:id="@+id/apod_default_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBlack"
     android:elevation="10dp">
 
     <TextView
@@ -14,7 +14,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Toolbar"
-        android:textColor="@color/colorBlackDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold" />
 

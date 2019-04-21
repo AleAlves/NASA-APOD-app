@@ -59,7 +59,7 @@ public class BaseActivity extends AppCompatActivity implements BaseView {
                         .getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
                 String toolbarTitleText = activityInfo.loadLabel(getPackageManager()).toString();
                 toolbarTitle = findViewById(R.id.apod_toolbar_title);
-                toolbarTitle.setText(toolbarTitleText);
+                toolbarTitle.setText(toolbarTitleText.toUpperCase());
                 toolbarTitle.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
 
                 setSupportActionBar(toolbar);

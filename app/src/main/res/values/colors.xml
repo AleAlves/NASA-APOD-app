@@ -6,5 +6,6 @@
     <color name="colorTranslucid">#4DF1F1F1</color>
     <color name="colorPlaceholder">#FFF1F1F1</color>
     <color name="colorBlack">#4D000000</color>
+    <color name="colorBlackLight">#484848</color>
     <color name="colorBlackDark">#FF000000</color>
 </resources>

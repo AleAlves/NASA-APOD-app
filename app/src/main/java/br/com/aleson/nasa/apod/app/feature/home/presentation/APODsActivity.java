@@ -44,6 +44,7 @@ import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecycle
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.profile.ProfileActivity;
 
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -231,6 +232,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.apod_account: {
+                startActivity(new Intent(context, ProfileActivity.class));
                 break;
             }
             case R.id.apod_random: {
