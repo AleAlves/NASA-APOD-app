@@ -14,7 +14,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Toolbar"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         android:textStyle="bold" />
 
