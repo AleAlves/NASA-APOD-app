@@ -16,20 +16,20 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void showLoading() {
-        this.view.onShowLoading();
+        this.view.showDialog();
     }
 
     @Override
     public void hideLoading() {
-        this.view.onHideLoading();
+        this.view.hideLoading();
     }
 
     @Override
     public void showDialog(DialogMessage dialogMessage) {
         if (dialogMessage == null) {
-            this.view.onShowDialog();
+            this.view.showDialog();
         } else {
-            this.view.onShowDialog(dialogMessage, false);
+            this.view.showDialog(dialogMessage, false);
         }
     }
 

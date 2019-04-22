@@ -7,14 +7,14 @@ import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 
 public interface BaseView extends View.OnClickListener{
 
-    void onShowLoading();
+    void showLoading();
 
-    void onHideLoading();
+    void hideLoading();
 
-    void onShowDialog();
+    void showDialog();
 
-    void onShowDialog(DialogMessage dialogMessage, boolean cancelable);
+    void showDialog(DialogMessage dialogMessage, boolean cancelable);
 
-    void onShowDialog(DialogMessage dialogMessage, boolean cancelable, DialogCallback callback);
+    void showDialog(DialogMessage dialogMessage, boolean cancelable, DialogCallback callback);
 
 }

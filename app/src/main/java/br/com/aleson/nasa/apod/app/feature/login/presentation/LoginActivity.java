@@ -41,6 +41,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_login);
+        
         findViewById(R.id.act_login_buttton_google_login).setOnClickListener(this);
         findViewById(R.id.act_login_button_skip).setOnClickListener(this);
 
