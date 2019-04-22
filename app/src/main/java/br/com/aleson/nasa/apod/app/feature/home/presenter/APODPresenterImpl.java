@@ -9,21 +9,25 @@ public class APODPresenterImpl implements APODPresenter {
     private APODView view;
 
     public APODPresenterImpl(APODView view) {
+
         this.view = view;
     }
 
     @Override
     public void showLoading() {
+
         this.view.showLoading();
     }
 
     @Override
     public void hideLoading() {
+
         this.view.hideLoading();
     }
 
     @Override
     public void showDialog(DialogMessage message) {
+
         if (message == null) {
             this.view.showDialog();
         } else {
@@ -33,11 +37,13 @@ public class APODPresenterImpl implements APODPresenter {
 
     @Override
     public void loadAPOD(APOD apod) {
+
         this.view.loadAPOD(apod);
     }
 
     @Override
     public void onError() {
+
         this.view.onError();
     }
 }

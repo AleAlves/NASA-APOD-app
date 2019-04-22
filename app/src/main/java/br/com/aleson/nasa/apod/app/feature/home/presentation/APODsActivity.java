@@ -48,6 +48,7 @@ import br.com.aleson.nasa.apod.app.feature.profile.ProfileActivity;
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    private static String FIRST_APOD_DATE = "16/06/1995";
     private static int LEFT = 1;
     private static int RIGHT = -1;
     private static int MIDDLE = 0;
@@ -197,6 +198,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     @Override
     public void loadAPOD(APOD apod) {
+
         apodList.add(apod);
         Collections.sort(apodList, new Comparator<APOD>() {
             @Override
@@ -205,10 +207,11 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             }
         });
         mAdapter.notifyDataSetChanged();
-        if (currentAction > 0)
+        if (currentAction > 0) {
             recyclerView.scrollToPosition(apodList.size());
-        else if (currentAction < 0)
+        } else if (currentAction < 0) {
             recyclerView.scrollToPosition(apodList.size() - 1);
+        }
 
     }
 
@@ -218,33 +221,34 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     @Override
-    public void rate(String date, String pic) {
-
-    }
-
-    @Override
     public void rate(APODRateRequest request, FavoriteCallback favoriteCallback) {
+
         interactor.favorite(request, favoriteCallback);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
         switch (menuItem.getItemId()) {
             case R.id.apod_account: {
+
                 startActivity(new Intent(context, ProfileActivity.class));
                 break;
             }
             case R.id.apod_random: {
+
                 clearDataLists();
                 apodDate = dateUtil.getRandomDate();
                 updateDate(MIDDLE);
                 break;
             }
             case R.id.apod_date_range: {
+
                 datePicker();
                 break;
             }
             case R.id.apod_fav_list: {
+
                 startActivity(new Intent(context, FavoriteActivity.class));
                 break;
             }
@@ -253,6 +257,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     private void datePicker() {
+
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog dialog = new DatePickerDialog(
                 context,
@@ -265,7 +270,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         Date dateFormatFinal = null;
         try {
             dateFormatInitial = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(apodMaxDate);
-            dateFormatFinal = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse("16/06/1995");
+            dateFormatFinal = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(FIRST_APOD_DATE);
         } catch (ParseException e) {
             Log.e("Error", e.toString());
         }
@@ -278,9 +283,11 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     private DatePickerDialog.OnDateSetListener dateListener() {
+
         return new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
                 apodDate = dateUtil.getRequestFormatedDate(year, month, dayOfMonth);
                 clearDataLists();
                 updateDate(MIDDLE);
@@ -289,6 +296,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     private void clearDataLists() {
+
         apodList.clear();
         apodDatelist.clear();
     }
