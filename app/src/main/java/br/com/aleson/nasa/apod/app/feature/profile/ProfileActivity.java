@@ -7,10 +7,9 @@ import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.login.domain.User;
 
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;

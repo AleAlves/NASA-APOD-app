@@ -21,6 +21,8 @@ public class Session implements SessionDescription {
 
     private String token;
 
+    private boolean logged;
+
     private String publicKey;
 
 
@@ -61,6 +63,11 @@ public class Session implements SessionDescription {
         return user;
     }
 
+    @Override
+    public boolean isLogged() {
+        return logged;
+    }
+
 
     @Override
     public void setFirebaseAuth(FirebaseAuth firebaseAuth) {
@@ -90,6 +97,11 @@ public class Session implements SessionDescription {
     @Override
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public void setLogged(boolean logged) {
+        this.logged = logged;
     }
 
 }

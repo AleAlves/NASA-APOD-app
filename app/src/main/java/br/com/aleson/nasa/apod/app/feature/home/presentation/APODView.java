@@ -12,4 +12,6 @@ public interface APODView extends BaseView {
     void onError();
 
     void rate(APODRateRequest request, FavoriteCallback favoriteCallback);
+
+    void exit();
 }

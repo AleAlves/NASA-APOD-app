@@ -20,6 +20,8 @@ public interface SessionDescription {
 
     User getUser();
 
+    boolean isLogged();
+
     void setFirebaseAuth(FirebaseAuth firebaseAuth);
 
     void setGoogleSignInClient(GoogleSignInClient googleSignInClient);
@@ -31,5 +33,7 @@ public interface SessionDescription {
     void setToken(String  token);
 
     void setUser(User user);
+
+    void setLogged(boolean logged);
 
 }

@@ -61,6 +61,7 @@ public class DialogActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
+
         builder.show();
     }
 
@@ -78,6 +79,7 @@ public class DialogActivity extends AppCompatActivity {
                         ((DialogCallback.Buttons) callback).onPositiveAction();
                     }
                 });
+
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -137,7 +139,7 @@ public class DialogActivity extends AppCompatActivity {
         });
 
         if (dialogMessage.getNegativeButton() != null) {
-            builder.setNegativeButton(dialogMessage.getPositiveButton(), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(dialogMessage.getNegativeButton(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.cancel();

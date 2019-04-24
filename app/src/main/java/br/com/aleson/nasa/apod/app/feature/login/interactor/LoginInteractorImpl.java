@@ -15,21 +15,25 @@ public class LoginInteractorImpl implements LoginInteractor {
     private LoginRepository repository;
 
     public LoginInteractorImpl(LoginPresenter presenter, LoginRepository repository) {
+
         this.presenter = presenter;
         this.repository = repository;
     }
 
     @Override
     public void login() {
+
         presenter.showLoading();
         repository.getPublicKey(new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
+
                 ticket((AESData) response);
             }
 
             @Override
             public void onFailure(Object response) {
+
                 presenter.hideLoading();
                 presenter.showDialog(null);
             }
@@ -39,6 +43,7 @@ public class LoginInteractorImpl implements LoginInteractor {
 
     @Override
     public void ticket(AESData aesData) {
+
         repository.getTicket(aesData, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
@@ -67,6 +72,7 @@ public class LoginInteractorImpl implements LoginInteractor {
         repository.registerLogin(user, ticketResponse, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
+
                 registerValidToken((TokenResponse) response);
                 registerUser(user);
                 presenter.startHome();
@@ -76,8 +82,9 @@ public class LoginInteractorImpl implements LoginInteractor {
 
             @Override
             public void onFailure(Object response) {
-                presenter.hideLoading();
+
                 presenter.showDialog(null);
+                presenter.hideLoading();
             }
 
         });
@@ -85,10 +92,13 @@ public class LoginInteractorImpl implements LoginInteractor {
 
 
     private void registerValidToken(TokenResponse response) {
+
         Session.getInstance().setToken(response.getToken());
     }
 
     private void registerUser(User user) {
+
         Session.getInstance().setUser(user);
+        Session.getInstance().setLogged(true);
     }
 }

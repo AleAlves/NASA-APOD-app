@@ -108,27 +108,21 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                SLogger.w("Google sign in failed", e);
-                // [START_EXCLUDE]
                 Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_LONG).show();
-                // [END_EXCLUDE]
             }
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        SLogger.d("firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
@@ -136,15 +130,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+
                             SLogger.d("signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 
                             Toast.makeText(getBaseContext(), "Authentication sucessed." + user.getDisplayName(), Toast.LENGTH_LONG).show();
 
                             startLogin();
+
                         } else {
-                            // If sign in fails, display a message to the user.
+
                             SLogger.w("signInWithCredential:failure", task.getException());
                             Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_LONG).show();
                         }

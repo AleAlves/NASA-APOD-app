@@ -31,7 +31,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.Constants;
+import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
+import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
+import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.favorite.presentation.FavoriteActivity;
@@ -227,19 +230,23 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     @Override
+    public void exit() {
+
+        this.finish();
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
             case R.id.apod_account: {
 
-                startActivity(new Intent(context, ProfileActivity.class));
+                gotToActivity(new Intent(context, ProfileActivity.class));
                 break;
             }
             case R.id.apod_random: {
 
-                clearDataLists();
-                apodDate = dateUtil.getRandomDate();
-                updateDate(MIDDLE);
+                getRandomAPOD();
                 break;
             }
             case R.id.apod_date_range: {
@@ -249,7 +256,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             }
             case R.id.apod_fav_list: {
 
-                startActivity(new Intent(context, FavoriteActivity.class));
+                gotToActivity(new Intent(context, FavoriteActivity.class));
                 break;
             }
         }
@@ -278,7 +285,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             dialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
         if (dateFormatFinal != null)
             dialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
-        dialog.setTitle("data");
+        dialog.setTitle("date");
         dialog.show();
     }
 
@@ -295,14 +302,57 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         };
     }
 
+    private void getRandomAPOD() {
+
+        clearDataLists();
+        apodDate = dateUtil.getRandomDate();
+        updateDate(MIDDLE);
+    }
+
     private void clearDataLists() {
 
         apodList.clear();
         apodDatelist.clear();
     }
 
+    private void gotToActivity(Intent intent) {
+        if (verifyLogged()) {
+            startActivity(intent);
+        } else {
+            loggInWarn();
+        }
+    }
+
+    private void loggInWarn() {
+
+        DialogMessage message = new DialogMessage();
+        message.setMessage("Please  you need to login first");
+        message.setPositiveButton("Login");
+        message.setNegativeButton("Not now");
+        showDialog(message, false, new DialogCallback.Buttons() {
+            @Override
+            public void onPositiveAction() {
+                finish();
+            }
+
+            @Override
+            public void onNegativeAction() {
+                //do nothing
+            }
+
+            @Override
+            public void onDismiss() {
+                //do nothing
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private boolean verifyLogged() {
+        return Session.getInstance().isLogged();
     }
 }

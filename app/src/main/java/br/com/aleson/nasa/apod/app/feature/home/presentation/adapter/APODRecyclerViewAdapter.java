@@ -23,7 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
+import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
@@ -103,17 +105,45 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
             @Override
             public void onClick(View v) {
 
-                APODRateRequest rateRequest = new APODRateRequest();
-                rateRequest.setDate(apodList.get(position).getDate());
-                rateRequest.setPic(apodList.get(position).getHdurl());
-                rateRequest.setTitle(apodList.get(position).getTitle());
+                if (Session.getInstance().isLogged()) {
 
-                apodView.rate(rateRequest, new FavoriteCallback() {
-                    @Override
-                    public void status(boolean favorite) {
-                        updateFavoriteButton(holder, favorite);
-                    }
-                });
+                    APODRateRequest rateRequest = new APODRateRequest();
+                    rateRequest.setDate(apodList.get(position).getDate());
+                    rateRequest.setPic(apodList.get(position).getHdurl());
+                    rateRequest.setTitle(apodList.get(position).getTitle());
+
+                    apodView.rate(rateRequest, new FavoriteCallback() {
+                        @Override
+                        public void status(boolean favorite) {
+                            updateFavoriteButton(holder, favorite);
+                        }
+                    });
+
+                } else {
+
+                    DialogMessage message = new DialogMessage();
+                    message.setMessage("Please  you need to login first");
+                    message.setPositiveButton("Login");
+                    message.setNegativeButton("Not now");
+
+                    apodView.showDialog(message, false, new DialogCallback.Buttons() {
+                        @Override
+                        public void onPositiveAction() {
+
+                            apodView.exit();
+                        }
+
+                        @Override
+                        public void onNegativeAction() {
+                            //do nothing
+                        }
+
+                        @Override
+                        public void onDismiss() {
+                            //do nothing
+                        }
+                    });
+                }
             }
         });
     }
