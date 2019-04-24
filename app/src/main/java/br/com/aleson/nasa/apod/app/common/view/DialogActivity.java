@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -89,13 +92,22 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     public void showDialog(DialogMessage dialogMessage, boolean cancelable) {
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialoglayout = inflater.inflate(R.layout.view_deafult_dialog, null);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
+        ((TextView) dialoglayout.findViewById(R.id.dialog_textview_message)).
+                setText(dialogMessage.getMessage());
+
+        builder.setView(dialoglayout);
 
         if (dialogMessage.getTitle() != null) {
             builder.setTitle(dialogMessage.getTitle());
         }
-
-        builder.setMessage(dialogMessage.getMessage());
 
         builder.setCancelable(cancelable);
 
