@@ -5,6 +5,8 @@
 
     <dist:module dist:instant="true" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".common.application.MainApplication"
         android:allowBackup="true"
@@ -27,8 +29,9 @@
             android:exported="true" />
 
         <activity android:name=".feature.home.presentation.APODsActivity" />
-        <activity android:name=".feature.login.presentation.LoginActivity"
-            android:label="NASA APOD App" >
+        <activity
+            android:name=".feature.login.presentation.LoginActivity"
+            android:label="NASA APOD App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

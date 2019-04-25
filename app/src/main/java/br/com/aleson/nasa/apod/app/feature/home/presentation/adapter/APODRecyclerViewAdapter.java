@@ -1,7 +1,9 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
@@ -21,16 +23,20 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.security.Permissions;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.FileUtil;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
+import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
@@ -153,7 +159,19 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                 }
             }
         });
+
+        holder.imageButtonDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PermissionManager.verfyStoragePermission(context)) {
+                    FileUtil.saveAPOD(context, apodList.get(position), holder.imageViewAPOD);
+                } else {
+                    PermissionManager.askPermissionToStorage(context);
+                }
+            }
+        });
     }
+
 
     private void updateFavoriteButton(APODViewHolder holder, boolean favorite) {
         if (favorite) {
@@ -177,6 +195,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         private ImageView imageViewAPOD;
         private ProgressBar progressBarImageLoading;
         private ImageButton imageButtonFavorite;
+        private ImageButton imageButtonDownload;
 
         public APODViewHolder(@NonNull View itemView) {
 
@@ -185,6 +204,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
             this.textViewTitle = itemView.findViewById(R.id.apod_adapter_apod_title);
             this.imageViewAPOD = itemView.findViewById(R.id.apod_adapter_apod_image);
             this.textViewDate = itemView.findViewById(R.id.apod_adapter_textview_date);
+            this.imageButtonDownload = itemView.findViewById(R.id.button_apod_download);
             this.textViewCopyrigth = itemView.findViewById(R.id.apod_adapter_apod_copyright);
             this.textViewExplanation = itemView.findViewById(R.id.apod_adapter_apod_explanation);
             this.progressBarImageLoading = itemView.findViewById(R.id.apod_adapter_apod_image_loading);

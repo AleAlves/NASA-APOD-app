@@ -1,4 +1,4 @@
-    package br.com.aleson.nasa.apod.app.common;
+package br.com.aleson.nasa.apod.app.common;
 
 public class Constants {
 
@@ -8,7 +8,7 @@ public class Constants {
         public static final int RIGHT = 1;
     }
 
-    public static final class APOD{
+    public static final class BUSINESS {
         public static final String FIRST_APOD = "1995-06-16";
     }
 

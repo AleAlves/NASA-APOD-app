@@ -74,16 +74,24 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         context = this;
+
         setContentView(R.layout.activity_apods);
+
         handleExtras(getIntent());
+
         init();
+
         initRecyclerView();
+
         updateDate(MIDDLE);
+
         dateUtil = new DateUtil(apodDate);
     }
 
     private void handleExtras(Intent intent) {
+
         if (intent != null) {
             apodDate = intent.getStringExtra("date");
         }
@@ -169,7 +177,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         try {
             requestDate.setTime(simpleDateFormat.parse(apodDate));
             todayDate.setTime(minimumDate.getTime());
-            minimumDate.setTime(simpleDateFormat.parse(Constants.APOD.FIRST_APOD));
+            minimumDate.setTime(simpleDateFormat.parse(Constants.BUSINESS.FIRST_APOD));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -323,6 +331,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     private void gotToActivity(Intent intent) {
+
         if (verifyLogged()) {
             startActivity(intent);
         } else {
