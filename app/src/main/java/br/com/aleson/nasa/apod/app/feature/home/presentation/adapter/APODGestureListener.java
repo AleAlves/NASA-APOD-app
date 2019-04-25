@@ -1,5 +1,6 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
 
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,13 +31,15 @@ public abstract class APODGestureListener extends GestureDetector.SimpleOnGestur
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         try {
             if (e1.getX() < e2.getX()) {
+
                 return onSwipeRight();
             }
 
             if (e1.getX() > e2.getX()) {
+
                 return onSwipeLeft();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             SLogger.e(e);
         }
         return false;

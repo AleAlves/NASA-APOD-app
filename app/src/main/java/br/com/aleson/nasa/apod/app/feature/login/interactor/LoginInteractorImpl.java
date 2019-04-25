@@ -24,6 +24,7 @@ public class LoginInteractorImpl implements LoginInteractor {
     public void login() {
 
         presenter.showLoading();
+
         repository.getPublicKey(new ResponseCallback() {
             @Override
             public void onResponse(Object response) {

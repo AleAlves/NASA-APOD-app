@@ -54,11 +54,11 @@ public class DialogActivity extends AppCompatActivity {
     public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Title");
+        builder.setTitle("Oops");
 
-        builder.setMessage("Something went wrong")
+        builder.setMessage("Houston, we have a problem...")
                 .setCancelable(false)
-                .setPositiveButton("Positive", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -71,11 +71,11 @@ public class DialogActivity extends AppCompatActivity {
     public void showDialog(final DialogCallback callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Title");
+        builder.setTitle("Oops");
 
-        builder.setMessage("Something went wrong")
+        builder.setMessage("Houston, we have a problem...")
                 .setCancelable(false)
-                .setPositiveButton("Positive", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

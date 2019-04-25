@@ -16,7 +16,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void showLoading() {
-        this.view.showDialog();
+        this.view.showLoading();
     }
 
     @Override

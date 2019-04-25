@@ -13,6 +13,7 @@ import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.Favorite
 import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.FavoritesResponse;
 
 import android.os.Bundle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
     private void init() {
 
         recyclerView = findViewById(R.id.favorites_recyclerview);
-        layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, true);
+        layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new FavoritesRecyclerView(this, favoritesList);
         recyclerView.setAdapter(adapter);
@@ -47,6 +48,6 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
     public void loadFavorite(FavoritesResponse favoritesResponse) {
         favoritesList.addAll(favoritesResponse.getFavorites());
         adapter.notifyDataSetChanged();
-        recyclerView.scrollToPosition(0);
+
     }
 }

@@ -107,9 +107,10 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             apodDate = simpleDateFormat.format(c.getTime());
 
             if (isValidRange()) {
-                Log.d("SWIPE", apodDate + " " + apodList.size());
+
                 searchAPOD();
             } else {
+
                 apodDate = apodMaxDate;
             }
 
@@ -127,18 +128,21 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         recyclerView.setAdapter(mAdapter);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
-
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
         mGestureDetector = new GestureDetector(this, new APODGestureListener(recyclerView) {
             @Override
             public boolean onSwipeRight() {
+
                 updateDate(RIGHT);
+
                 return false;
             }
 
             @Override
             public boolean onSwipeLeft() {
+
                 updateDate(LEFT);
+
                 return false;
             }
 
@@ -179,8 +183,9 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private void searchAPOD() {
 
         if (apodDatelist.contains(apodDate)) {
-            SLogger.d(apodDate + " Already searched");
+
         } else {
+
             apodDatelist.add(apodDate);
             interactor.getAPOD(apodDate);
         }
@@ -203,19 +208,21 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     public void loadAPOD(APOD apod) {
 
         apodList.add(apod);
+
         Collections.sort(apodList, new Comparator<APOD>() {
             @Override
             public int compare(APOD apod1, APOD apod2) {
                 return apod2.getDate().compareTo(apod1.getDate());
             }
         });
+
         mAdapter.notifyDataSetChanged();
+
         if (currentAction > 0) {
             recyclerView.scrollToPosition(apodList.size());
         } else if (currentAction < 0) {
             recyclerView.scrollToPosition(apodList.size() - 1);
         }
-
     }
 
     @Override

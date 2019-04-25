@@ -56,6 +56,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
         startGoogleSignin();
 
         if (firebaseAuth.getCurrentUser() != null) {
+
+            showLoading();
+
             startLogin();
         }
     }
@@ -72,9 +75,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private void startLogin() {
 
-        initSession();
-
         this.interactor.login();
+
+        initSession();
     }
 
 
