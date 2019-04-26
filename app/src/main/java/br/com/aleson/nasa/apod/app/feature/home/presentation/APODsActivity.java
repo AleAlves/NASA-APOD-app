@@ -1,5 +1,7 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,16 +26,19 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
-import br.com.aleson.nasa.apod.app.common.Constants;
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
+import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
@@ -52,9 +57,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     private static String FIRST_APOD_DATE = "16/06/1995";
-    private static int LEFT = 1;
-    private static int RIGHT = -1;
-    private static int MIDDLE = 0;
     private static int currentAction;
 
     private Context context;
@@ -85,7 +87,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         initRecyclerView();
 
-        updateDate(MIDDLE);
+        updateDate(Constants.SWIPE.IDLE);
 
         dateUtil = new DateUtil(apodDate);
     }
@@ -141,7 +143,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             @Override
             public boolean onSwipeRight() {
 
-                updateDate(RIGHT);
+                updateDate(Constants.SWIPE.RIGHT);
 
                 return false;
             }
@@ -149,7 +151,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             @Override
             public boolean onSwipeLeft() {
 
-                updateDate(LEFT);
+                updateDate(Constants.SWIPE.LEFT);
 
                 return false;
             }
@@ -251,6 +253,11 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     @Override
+    public void askStoragePermission() {
+        PermissionManager.askPermissionToStorage(APODsActivity.this);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
@@ -312,7 +319,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
                 apodDate = dateUtil.getRequestFormatedDate(year, month, dayOfMonth);
                 clearDataLists();
-                updateDate(MIDDLE);
+                updateDate(Constants.SWIPE.IDLE);
             }
         };
     }
@@ -321,7 +328,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         clearDataLists();
         apodDate = dateUtil.getRandomDate();
-        updateDate(MIDDLE);
+        updateDate(Constants.SWIPE.IDLE);
     }
 
     private void clearDataLists() {

@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat;
 
 public class PermissionManager {
 
-    public static final int STORAGE = 1;
+    public static final int STORAGE = 100;
 
     public static boolean verfyStoragePermission(Context context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

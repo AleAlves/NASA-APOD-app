@@ -1,21 +1,24 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
 
-import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
-import android.view.DragEvent;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -23,16 +26,21 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import java.security.Permissions;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
-import br.com.aleson.nasa.apod.app.common.FileUtil;
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
+import br.com.aleson.nasa.apod.app.common.file.FileOperationCallback;
+import br.com.aleson.nasa.apod.app.common.file.FileUtil;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
@@ -46,12 +54,12 @@ import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateReque
 
 public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerViewAdapter.APODViewHolder> {
 
-    private Context context;
+    private Activity activity;
     private APODView apodView;
     private List<APOD> apodList;
 
-    public APODRecyclerViewAdapter(Context context, List<APOD> apodList, APODView apodView) {
-        this.context = context;
+    public APODRecyclerViewAdapter(Activity activity, List<APOD> apodList, APODView apodView) {
+        this.activity = activity;
         this.apodList = apodList;
         this.apodView = apodView;
     }
@@ -64,14 +72,8 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                 inflate(R.layout.view_apod_apdater_item, parent, false));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull final APODViewHolder holder, final int position) {
-
-
-        if (Session.getInstance().getToken() == null) {
-            holder.imageButtonFavorite.setVisibility(View.GONE);
-        }
 
         updateFavoriteButton(holder, apodList.get(position).isFavorite());
 
@@ -83,12 +85,25 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         }
 
         holder.textViewTitle.setText(apodList.get(position).getTitle());
+
         holder.textViewExplanation.setText(apodList.get(position).getExplanation());
+
         holder.textViewDate.setText(DateUtil.parseDateToView(apodList.get(position).getDate()));
+
         holder.progressBarImageLoading.setVisibility(View.VISIBLE);
+
+        holder.imageButtonDelete.setVisibility(View.GONE);
+        holder.imageButtonDownload.setVisibility(View.VISIBLE);
+
+        if (FileUtil.savedImageExists(apodList.get(position).getDate())) {
+
+            holder.imageButtonDownload.setVisibility(View.GONE);
+            holder.imageButtonDelete.setVisibility(View.VISIBLE);
+        }
+
         final ProgressBar progressBar = holder.progressBarImageLoading;
 
-        Glide.with(context)
+        Glide.with(activity)
                 .load(apodList.get(position).getUrl())
                 .listener(new RequestListener<Drawable>() {
                     @Override
@@ -99,6 +114,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+
                         progressBar.setVisibility(View.GONE);
                         return false;
                     }
@@ -108,9 +124,9 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         holder.imageViewAPOD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, APODFullscreenActivity.class);
+                Intent intent = new Intent(activity, APODFullscreenActivity.class);
                 intent.putExtra("url", apodList.get(position).getUrl());
-                context.startActivity(intent);
+                activity.startActivity(intent);
             }
         });
 
@@ -163,11 +179,49 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         holder.imageButtonDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PermissionManager.verfyStoragePermission(context)) {
-                    FileUtil.saveAPOD(context, apodList.get(position), holder.imageViewAPOD);
+
+                if (PermissionManager.verfyStoragePermission(activity)) {
+                    FileUtil.saveAPOD(activity, apodList.get(position), holder.imageViewAPOD, new FileOperationCallback() {
+                        @Override
+                        public void onFinish(String message) {
+
+                            holder.imageButtonDelete.setVisibility(View.VISIBLE);
+                            holder.imageButtonDownload.setVisibility(View.GONE);
+
+                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    PermissionManager.askPermissionToStorage(context);
+
+                    apodView.askStoragePermission();
                 }
+            }
+        });
+
+        holder.imageButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileUtil.delete(apodList.get(position).getDate(), new FileOperationCallback() {
+                    @Override
+                    public void onFinish(String message) {
+
+                        holder.imageButtonDelete.setVisibility(View.GONE);
+                        holder.imageButtonDownload.setVisibility(View.VISIBLE);
+
+                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        holder.imageButtonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FileUtil.sharing(activity,
+                        holder.imageViewAPOD,
+                        apodList.get(position).getTitle(),
+                        apodList.get(position).getExplanation());
             }
         });
     }
@@ -175,9 +229,9 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
     private void updateFavoriteButton(APODViewHolder holder, boolean favorite) {
         if (favorite) {
-            holder.imageButtonFavorite.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_24dp));
+            holder.imageButtonFavorite.setImageDrawable(activity.getDrawable(R.drawable.ic_favorite_24dp));
         } else {
-            holder.imageButtonFavorite.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_border_24dp));
+            holder.imageButtonFavorite.setImageDrawable(activity.getDrawable(R.drawable.ic_favorite_border_24dp));
         }
     }
 
@@ -195,16 +249,20 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         private ImageView imageViewAPOD;
         private ProgressBar progressBarImageLoading;
         private ImageButton imageButtonFavorite;
+        private ImageButton imageButtonShare;
         private ImageButton imageButtonDownload;
+        private ImageButton imageButtonDelete;
 
         public APODViewHolder(@NonNull View itemView) {
 
             super(itemView);
-            this.imageButtonFavorite = itemView.findViewById(R.id.button_apod_share);
+            this.imageButtonDelete = itemView.findViewById(R.id.button_apod_delete);
+            this.imageButtonShare = itemView.findViewById(R.id.button_apod_share);
             this.textViewTitle = itemView.findViewById(R.id.apod_adapter_apod_title);
             this.imageViewAPOD = itemView.findViewById(R.id.apod_adapter_apod_image);
             this.textViewDate = itemView.findViewById(R.id.apod_adapter_textview_date);
             this.imageButtonDownload = itemView.findViewById(R.id.button_apod_download);
+            this.imageButtonFavorite = itemView.findViewById(R.id.button_apod_favorite);
             this.textViewCopyrigth = itemView.findViewById(R.id.apod_adapter_apod_copyright);
             this.textViewExplanation = itemView.findViewById(R.id.apod_adapter_apod_explanation);
             this.progressBarImageLoading = itemView.findViewById(R.id.apod_adapter_apod_image_loading);

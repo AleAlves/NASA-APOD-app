@@ -23,6 +23,7 @@
         android:layout_height="48dp"
         android:background="@android:color/transparent"
         android:text="SKIP"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

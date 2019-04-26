@@ -14,4 +14,6 @@ public interface APODView extends BaseView {
     void rate(APODRateRequest request, FavoriteCallback favoriteCallback);
 
     void exit();
+
+    void askStoragePermission();
 }
