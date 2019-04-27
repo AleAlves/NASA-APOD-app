@@ -46,14 +46,17 @@ public class LoginActivity extends BaseActivity implements LoginView {
         findViewById(R.id.act_login_button_skip).setOnClickListener(this);
 
         interactor = new LoginInteractorImpl(new LoginPresenterImpl(this), new LoginRepositoryImpl());
-        verifyCurrentUser();
-    }
-
-    private void verifyCurrentUser() {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         startGoogleSignin();
+
+        if (!Session.getInstance().isLogged()) {
+            verifyCurrentUser();
+        }
+    }
+
+    private void verifyCurrentUser() {
 
         if (firebaseAuth.getCurrentUser() != null) {
 

@@ -17,4 +17,5 @@ public interface BaseView extends View.OnClickListener{
 
     void showDialog(DialogMessage dialogMessage, boolean cancelable, DialogCallback callback);
 
+    void showToast(String press_again_to_leave);
 }

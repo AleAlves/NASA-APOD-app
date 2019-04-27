@@ -144,6 +144,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                     apodView.rate(rateRequest, new FavoriteCallback() {
                         @Override
                         public void status(boolean favorite) {
+
                             updateFavoriteButton(holder, favorite);
                         }
                     });
@@ -188,7 +189,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                             holder.imageButtonDelete.setVisibility(View.VISIBLE);
                             holder.imageButtonDownload.setVisibility(View.GONE);
 
-                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                            apodView.showToast(message);
                         }
                     });
                 } else {
@@ -208,7 +209,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                         holder.imageButtonDelete.setVisibility(View.GONE);
                         holder.imageButtonDownload.setVisibility(View.VISIBLE);
 
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                        apodView.showToast(message);
                     }
                 });
             }

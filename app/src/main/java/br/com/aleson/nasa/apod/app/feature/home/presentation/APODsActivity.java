@@ -1,11 +1,10 @@
 package br.com.aleson.nasa.apod.app.feature.home.presentation;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MenuItem;
@@ -26,8 +25,6 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -51,13 +48,14 @@ import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecycle
 import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
 import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.login.presentation.LoginActivity;
 import br.com.aleson.nasa.apod.app.feature.profile.ProfileActivity;
 
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
-    private static String FIRST_APOD_DATE = "16/06/1995";
     private static int currentAction;
+    private static int onBackPressedCount;
 
     private Context context;
     private String apodDate;
@@ -299,7 +297,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         Date dateFormatFinal = null;
         try {
             dateFormatInitial = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(apodMaxDate);
-            dateFormatFinal = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(FIRST_APOD_DATE);
+            dateFormatFinal = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(Constants.BUSINESS.FIRST_APOD);
         } catch (ParseException e) {
             Log.e("Error", e.toString());
         }
@@ -372,10 +370,35 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        onBackPressedCount++;
+
+        if (Session.getInstance().isLogged()) {
+            if (onBackPressedCount == 1) {
+
+                showToast("Press again to leave");
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBackPressedCount = 0;
+                    }
+                }, 2000);
+
+            } else if (onBackPressedCount == 2) {
+
+                onBackPressedCount = 0;
+
+                startActivity(new Intent(context, LoginActivity.class));
+            }
+        } else {
+            super.onBackPressed();
+        }
     }
 
+
     private boolean verifyLogged() {
+
         return Session.getInstance().isLogged();
     }
 }

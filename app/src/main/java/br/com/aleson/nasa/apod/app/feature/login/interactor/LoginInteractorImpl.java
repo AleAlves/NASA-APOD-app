@@ -77,8 +77,6 @@ public class LoginInteractorImpl implements LoginInteractor {
                 registerValidToken((TokenResponse) response);
                 registerUser(user);
                 presenter.startHome();
-                presenter.hideLoading();
-
             }
 
             @Override

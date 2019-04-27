@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.github.android.aleson.slogger.SLogger;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -31,13 +35,17 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     private void handleLoading(boolean loading) {
-        if (dialog == null) {
-            create(this);
-        }
-        if (loading && dialog != null) {
-            dialog.show();
-        } else {
-            dialog.hide();
+        try {
+            if (dialog == null) {
+                create(this);
+            }
+            if (loading && dialog != null) {
+                dialog.show();
+            } else {
+                dialog.hide();
+            }
+        } catch (Exception e) {
+            SLogger.e(e);
         }
     }
 
@@ -168,6 +176,20 @@ public class DialogActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    public void showToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.view_default_toast, null);
+
+        TextView text = layout.findViewById(R.id.textview_toast_message);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.BOTTOM, 0, 200);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 
 }

@@ -12,6 +12,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     public LoginPresenterImpl(LoginView view) {
         this.view = view;
+        this.view.hideLoading();
     }
 
     @Override
