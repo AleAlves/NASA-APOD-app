@@ -60,6 +60,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private Context context;
     private String apodDate;
     private String apodMaxDate;
+    private String lasSuccededDate;
     private DateUtil dateUtil;
     private APODInteractor interactor;
     private RecyclerView recyclerView;
@@ -215,6 +216,8 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     @Override
     public void loadAPOD(APOD apod) {
 
+        lasSuccededDate = apodDate;
+
         apodList.add(apod);
 
         Collections.sort(apodList, new Comparator<APOD>() {
@@ -235,7 +238,24 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     @Override
     public void onError() {
+        showDialog();
+        apodDate = lasSuccededDate;
+        updateDate(Constants.SWIPE.IDLE);
+    }
 
+    @Override
+    public void onError(String message) {
+
+        DialogMessage dialogMessage = new DialogMessage();
+        dialogMessage.setMessage(message);
+        dialogMessage.setPositiveButton("Ok");
+        showDialog(dialogMessage, true, new DialogCallback() {
+            @Override
+            public void onDismiss() {
+
+                updateDate(Constants.SWIPE.IDLE);
+            }
+        });
     }
 
     @Override
@@ -389,10 +409,12 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
                 onBackPressedCount = 0;
 
-                startActivity(new Intent(context, LoginActivity.class));
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
             }
         } else {
-            super.onBackPressed();
+            startActivity(new Intent(context, LoginActivity.class));
         }
     }
 

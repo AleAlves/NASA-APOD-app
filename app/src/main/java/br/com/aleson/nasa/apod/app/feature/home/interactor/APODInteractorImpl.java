@@ -13,6 +13,9 @@ import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODRateResp
 import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODResponse;
 import br.com.connector.aleson.android.connector.cryptography.domain.Safe;
 
+import static br.com.aleson.nasa.apod.app.common.constants.Constants.HTTP_CODE.SUCCESS;
+import static br.com.aleson.nasa.apod.app.common.constants.Constants.HTTP_CODE.UNAVAILABLE_APOD;
+
 public class APODInteractorImpl implements APODInteractor {
 
     private APODPresenter presenter;
@@ -34,13 +37,28 @@ public class APODInteractorImpl implements APODInteractor {
             @Override
             public void onResponse(Object response) {
 
-                if (Session.getInstance().getToken() == null) {
+                APODResponse apod = ((APODResponse) response);
 
-                    presenter.loadAPOD(((APODResponse) response).getApod());
-                    presenter.hideLoading();
+                if (SUCCESS == apod.getHttpStatus().getCode()) {
+
+                    if (Session.getInstance().isLogged()) {
+
+                        getAPODRate(request, apod.getApod());
+                    } else {
+
+                        presenter.loadAPOD(apod.getApod());
+                        presenter.hideLoading();
+                    }
                 } else {
 
-                    getAPODRate(request, response);
+                    if (UNAVAILABLE_APOD == apod.getHttpStatus().getCode()) {
+
+                        presenter.onError(apod.getHttpStatus().getStatus());
+                    } else {
+
+                        presenter.onError();
+                    }
+                    presenter.hideLoading();
                 }
             }
 
@@ -73,13 +91,12 @@ public class APODInteractorImpl implements APODInteractor {
         });
     }
 
-    private void getAPODRate(APODRequest request, final Object APODResponse) {
+    private void getAPODRate(APODRequest request, final APOD apod) {
 
         this.repository.getAPODRate(request, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
 
-                APOD apod = ((APODResponse) APODResponse).getApod();
                 apod.setFavorite(((APODRateResponse) response).isFavorite());
 
                 presenter.loadAPOD(apod);

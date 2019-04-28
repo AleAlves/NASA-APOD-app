@@ -13,9 +13,6 @@ import br.com.aleson.nasa.apod.app.feature.login.repository.LoginRepositoryImpl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
-import com.github.android.aleson.slogger.SLogger;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -26,7 +23,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends BaseActivity implements LoginView {
@@ -97,20 +93,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
-
-        // Firebase sign out
-        firebaseAuth.signOut();
-
-        // Google sign out
-        googleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getBaseContext(), "signOut sucessed.", Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -123,7 +105,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_LONG).show();
+                showToast("Authentication Failed");
             }
         }
     }
@@ -137,17 +119,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            SLogger.d("signInWithCredential:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                            Toast.makeText(getBaseContext(), "Authentication sucessed." + user.getDisplayName(), Toast.LENGTH_LONG).show();
-
                             startLogin();
-
                         } else {
 
-                            SLogger.w("signInWithCredential:failure", task.getException());
-                            Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_LONG).show();
+                            showToast("Authentication Failed");
                         }
                     }
                 });

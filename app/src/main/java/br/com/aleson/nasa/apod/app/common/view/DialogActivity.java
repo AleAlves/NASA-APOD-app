@@ -140,13 +140,21 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     public void showDialog(DialogMessage dialogMessage, boolean cancelable, final DialogCallback callback) {
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialoglayout = inflater.inflate(R.layout.view_deafult_dialog, null);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        ((TextView) dialoglayout.findViewById(R.id.dialog_textview_message)).
+                setText(dialogMessage.getMessage());
+
+        builder.setView(dialoglayout);
 
         if (dialogMessage.getTitle() != null) {
             builder.setTitle(dialogMessage.getTitle());
         }
-
-        builder.setMessage(dialogMessage.getMessage());
 
         builder.setCancelable(cancelable);
 
@@ -154,7 +162,11 @@ public class DialogActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
-                ((DialogCallback.Buttons) callback).onPositiveAction();
+
+                if (callback instanceof DialogCallback.Buttons) {
+
+                    ((DialogCallback.Buttons) callback).onPositiveAction();
+                }
             }
         });
 
@@ -163,7 +175,11 @@ public class DialogActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.cancel();
-                    ((DialogCallback.Buttons) callback).onNegativeAction();
+
+                    if (callback instanceof DialogCallback.Buttons) {
+
+                        ((DialogCallback.Buttons) callback).onNegativeAction();
+                    }
                 }
             });
         }

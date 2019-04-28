@@ -9,7 +9,7 @@ public class BaseResponse {
     @SerializedName("status")
     private BaseResponseStatus status;
 
-    public BaseResponseStatus getStatus() {
+    public BaseResponseStatus getHttpStatus() {
         return status;
     }
 }

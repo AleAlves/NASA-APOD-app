@@ -11,5 +11,13 @@ public class BaseResponseStatus {
 
     @Expose
     @SerializedName("code")
-    private String code;
+    private int code;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public int getCode() {
+        return code;
+    }
 }

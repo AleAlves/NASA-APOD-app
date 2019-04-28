@@ -14,5 +14,11 @@ public class Constants {
         public static final String STORAGE_DIR = "NASA APOD App";
     }
 
+    public static final class HTTP_CODE {
+        public static final int SUCCESS = 200;
+        public static final int SERVER_ERROR = 500;
+        public static final int UNAVAILABLE_APOD = 601;
+    }
+
 
 }

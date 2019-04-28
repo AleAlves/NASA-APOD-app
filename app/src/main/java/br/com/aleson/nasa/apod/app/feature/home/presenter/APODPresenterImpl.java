@@ -46,4 +46,10 @@ public class APODPresenterImpl implements APODPresenter {
 
         this.view.onError();
     }
+
+    @Override
+    public void onError(String message) {
+
+        this.view.onError(message);
+    }
 }
