@@ -1,8 +1,8 @@
-package br.com.aleson.nasa.apod.app.feature.home.repository;
+package br.com.aleson.nasa.apod.app.feature.apod.repository;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRequest;
 
 public interface APODRepository {
 

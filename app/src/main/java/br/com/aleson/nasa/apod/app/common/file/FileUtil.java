@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import br.com.aleson.nasa.apod.app.common.constants.Constants;
-import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
+import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 
 
 public class FileUtil {

@@ -1,16 +1,8 @@
-package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
+package br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -26,19 +17,12 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
-import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.file.FileOperationCallback;
 import br.com.aleson.nasa.apod.app.common.file.FileUtil;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
@@ -47,10 +31,10 @@ import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
-import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
-import br.com.aleson.nasa.apod.app.feature.home.presentation.APODFullscreenActivity;
-import br.com.aleson.nasa.apod.app.feature.home.presentation.APODView;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
+import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODFullscreenActivity;
+import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODView;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
 
 public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerViewAdapter.APODViewHolder> {
 

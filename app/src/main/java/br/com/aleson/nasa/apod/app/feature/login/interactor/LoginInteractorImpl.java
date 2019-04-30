@@ -86,7 +86,8 @@ public class LoginInteractorImpl implements LoginInteractor {
             @Override
             public void onResponse(Object response) {
 
-                if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.SUCCESS) {
+                if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.CREATED ||
+                        ((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.ACCEPTED) {
 
                     registerValidToken((TokenResponse) response);
                     registerUser(user);

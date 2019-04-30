@@ -1,6 +1,5 @@
-package br.com.aleson.nasa.apod.app.feature.home.presentation.adapter;
+package br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter;
 
-import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;

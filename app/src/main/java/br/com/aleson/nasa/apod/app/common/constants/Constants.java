@@ -16,6 +16,8 @@ public class Constants {
 
     public static final class HTTP_CODE {
         public static final int SUCCESS = 200;
+        public static final int CREATED = 201;
+        public static final int ACCEPTED = 202;
         public static final int UNAVAILABLE_APOD = 601;
     }
 

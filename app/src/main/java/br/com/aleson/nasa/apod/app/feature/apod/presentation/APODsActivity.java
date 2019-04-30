@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.home.presentation;
+package br.com.aleson.nasa.apod.app.feature.apod.presentation;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -40,14 +40,14 @@ import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateUtil;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.favorite.presentation.FavoriteActivity;
-import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
-import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractor;
-import br.com.aleson.nasa.apod.app.feature.home.interactor.APODInteractorImpl;
-import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODGestureListener;
-import br.com.aleson.nasa.apod.app.feature.home.presentation.adapter.APODRecyclerViewAdapter;
-import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenterImpl;
-import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepositoryImpl;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
+import br.com.aleson.nasa.apod.app.feature.apod.interactor.APODInteractor;
+import br.com.aleson.nasa.apod.app.feature.apod.interactor.APODInteractorImpl;
+import br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter.APODGestureListener;
+import br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter.APODRecyclerViewAdapter;
+import br.com.aleson.nasa.apod.app.feature.apod.presenter.APODPresenterImpl;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.APODRepositoryImpl;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
 import br.com.aleson.nasa.apod.app.feature.login.presentation.LoginActivity;
 import br.com.aleson.nasa.apod.app.feature.profile.ProfileActivity;
 
@@ -62,6 +62,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private String apodMaxDate;
     private String lasSuccededDate;
     private DateUtil dateUtil;
+    private APOD curentAPOD;
     private APODInteractor interactor;
     private RecyclerView recyclerView;
     private APODRecyclerViewAdapter mAdapter;
@@ -201,6 +202,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     }
 
     private void init() {
+
         navigationView = findViewById(R.id.bottom_navigation_apod_menu);
         navigationView.setOnNavigationItemSelectedListener(this);
 
@@ -216,9 +218,11 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     @Override
     public void loadAPOD(APOD apod) {
 
-        lasSuccededDate = apodDate;
+        this.curentAPOD = apod;
 
-        apodList.add(apod);
+        this.lasSuccededDate = apodDate;
+
+        this.apodList.add(apod);
 
         Collections.sort(apodList, new Comparator<APOD>() {
             @Override
@@ -227,7 +231,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             }
         });
 
-        mAdapter.notifyDataSetChanged();
+        this.mAdapter.notifyDataSetChanged();
 
         if (currentAction > 0) {
             recyclerView.scrollToPosition(apodList.size());
@@ -238,8 +242,9 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     @Override
     public void onError() {
+
         showDialog();
-        apodDate = lasSuccededDate;
+        resetDateToPreviusSucessfulRequest();
         updateDate(Constants.SWIPE.IDLE);
     }
 
@@ -252,9 +257,14 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             @Override
             public void onDismiss() {
 
+                resetDateToPreviusSucessfulRequest();
                 updateDate(Constants.SWIPE.IDLE);
             }
         });
+    }
+
+    private void resetDateToPreviusSucessfulRequest() {
+        apodDate = lasSuccededDate;
     }
 
     @Override
@@ -271,6 +281,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     @Override
     public void askStoragePermission() {
+
         PermissionManager.askPermissionToStorage(APODsActivity.this);
     }
 

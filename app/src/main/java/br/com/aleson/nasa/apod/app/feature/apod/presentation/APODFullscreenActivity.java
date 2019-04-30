@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.home.presentation;
+package br.com.aleson.nasa.apod.app.feature.apod.presentation;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,9 +6,7 @@ import br.com.aleson.nasa.apod.app.R;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;

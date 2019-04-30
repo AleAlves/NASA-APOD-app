@@ -1,7 +1,7 @@
-package br.com.aleson.nasa.apod.app.feature.home.interactor;
+package br.com.aleson.nasa.apod.app.feature.apod.interactor;
 
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
 
 public interface APODInteractor {
 

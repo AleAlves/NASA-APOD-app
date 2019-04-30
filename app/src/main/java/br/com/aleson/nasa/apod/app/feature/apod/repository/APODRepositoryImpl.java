@@ -1,14 +1,14 @@
-package br.com.aleson.nasa.apod.app.feature.home.repository;
+package br.com.aleson.nasa.apod.app.feature.apod.repository;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.feature.home.repository.api.APODMethod;
-import br.com.aleson.nasa.apod.app.feature.home.repository.api.APODFavoritesMethod;
-import br.com.aleson.nasa.apod.app.feature.home.repository.api.APODRateMethod;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRequest;
-import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODRateResponse;
-import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODResponse;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.api.APODMethod;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.api.APODFavoritesMethod;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.api.APODRateMethod;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.response.APODRateResponse;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.response.APODResponse;
 import br.com.connector.aleson.android.connector.Connector;
 import retrofit2.Call;
 import retrofit2.Callback;

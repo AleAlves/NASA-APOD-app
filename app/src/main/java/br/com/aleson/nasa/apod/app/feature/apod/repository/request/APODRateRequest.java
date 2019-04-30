@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.home.repository.request;
+package br.com.aleson.nasa.apod.app.feature.apod.repository.request;
 
 public class APODRateRequest extends APODRequest {
 

@@ -1,7 +1,7 @@
-package br.com.aleson.nasa.apod.app.feature.home.repository.api;
+package br.com.aleson.nasa.apod.app.feature.apod.repository.api;
 
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
-import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODRateResponse;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.response.APODRateResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;

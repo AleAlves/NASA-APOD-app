@@ -1,17 +1,15 @@
-package br.com.aleson.nasa.apod.app.feature.home.interactor;
+package br.com.aleson.nasa.apod.app.feature.apod.interactor;
 
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
-import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
-import br.com.aleson.nasa.apod.app.feature.home.presenter.APODPresenter;
-import br.com.aleson.nasa.apod.app.feature.home.repository.APODRepository;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRequest;
-import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODRateResponse;
-import br.com.aleson.nasa.apod.app.feature.home.repository.response.APODResponse;
-import br.com.connector.aleson.android.connector.cryptography.domain.Safe;
+import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
+import br.com.aleson.nasa.apod.app.feature.apod.presenter.APODPresenter;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.APODRepository;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.response.APODRateResponse;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.response.APODResponse;
 
 import static br.com.aleson.nasa.apod.app.common.constants.Constants.HTTP_CODE.SUCCESS;
 import static br.com.aleson.nasa.apod.app.common.constants.Constants.HTTP_CODE.UNAVAILABLE_APOD;

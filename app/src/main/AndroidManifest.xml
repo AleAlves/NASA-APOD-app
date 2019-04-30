@@ -22,14 +22,14 @@
         <activity
             android:name=".feature.profile.ProfileActivity"
             android:label="Profile" />
-        <activity android:name=".feature.home.presentation.APODFullscreenActivity" />
+        <activity android:name=".feature.apod.presentation.APODFullscreenActivity" />
 
         <service
             android:name=".common.messaging.MessagingService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".feature.home.presentation.APODsActivity" />
+        <activity android:name=".feature.apod.presentation.APODsActivity" />
         <activity
             android:name=".feature.login.presentation.LoginActivity"
             android:label="NASA APOD App">

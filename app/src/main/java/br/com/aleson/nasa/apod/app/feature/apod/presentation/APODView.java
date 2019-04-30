@@ -1,9 +1,9 @@
-package br.com.aleson.nasa.apod.app.feature.home.presentation;
+package br.com.aleson.nasa.apod.app.feature.apod.presentation;
 
 import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.view.BaseView;
-import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
-import br.com.aleson.nasa.apod.app.feature.home.repository.request.APODRateRequest;
+import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
+import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
 
 public interface APODView extends BaseView {
 
