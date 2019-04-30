@@ -4,21 +4,21 @@
     <item
         android:id="@+id/apod_date_range"
         android:icon="@drawable/ic_date_range_24dp"
-        android:title="Calendar" />
+        android:title="@string/menu_item_label_calendar" />
 
     <item
         android:id="@+id/apod_random"
         android:icon="@drawable/ic_casino_24dp"
-        android:title="Random" />
+        android:title="@string/menu_item_label_random" />
 
     <item
         android:id="@+id/apod_fav_list"
         android:icon="@drawable/ic_favorite_24dp"
-        android:title="Favorites" />
+        android:title="@string/menu_item_label_favorites" />
 
     <item
         android:id="@+id/apod_account"
         android:icon="@drawable/ic_account_circle_24dp"
-        android:title="Profile" />
+        android:title="@string/menu_item_label_profile" />
 
 </menu>

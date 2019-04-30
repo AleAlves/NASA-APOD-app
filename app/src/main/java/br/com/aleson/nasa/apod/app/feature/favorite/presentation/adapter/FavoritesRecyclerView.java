@@ -33,6 +33,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     private List<FavoriteResponse> favorites;
 
     public FavoritesRecyclerView(Context context, List<FavoriteResponse> favorites) {
+
         this.context = context;
         this.favorites = favorites;
     }
@@ -40,6 +41,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     @NonNull
     @Override
     public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         return new FavoritesRecyclerView.FavoritesViewHolder(LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.view_favorite_adapter_item, parent, false));
     }
@@ -76,6 +78,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     }
 
     private void startAPODActivity(String date) {
+
         Intent intent = new Intent(context, APODsActivity.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -99,6 +102,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
         private ConstraintLayout constraintLayoutFavorite;
 
         public FavoritesViewHolder(@NonNull View itemView) {
+
             super(itemView);
             this.imageViewFavApodPic = itemView.findViewById(R.id.apod_adapter_apod_image);
             this.textViewFavApodDate = itemView.findViewById(R.id.favorite_apod_date);

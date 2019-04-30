@@ -9,13 +9,13 @@ public interface APODView extends BaseView {
 
     void loadAPOD(APOD apod);
 
-    void onError();
-
-    void onError(String message);
-
     void rate(APODRateRequest request, FavoriteCallback favoriteCallback);
 
     void exit();
 
     void askStoragePermission();
+
+    void onError();
+
+    void onError(String message);
 }

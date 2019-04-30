@@ -11,11 +11,11 @@ public class Session implements SessionDescription {
 
     private static SessionDescription sessionDescription;
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
-    GoogleSignInClient googleSignInClient;
+    private GoogleSignInClient googleSignInClient;
 
-    FirebaseUser firebaseUser;
+    private FirebaseUser firebaseUser;
 
     private User user;
 

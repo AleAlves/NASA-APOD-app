@@ -152,9 +152,9 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                 } else {
 
                     DialogMessage message = new DialogMessage();
-                    message.setMessage("Please  you need to login first");
-                    message.setPositiveButton("Login");
-                    message.setNegativeButton("Not now");
+                    message.setMessage(activity.getString(R.string.dialog_message_login_warn));
+                    message.setPositiveButton(activity.getString(R.string.dialog_button_login_positive));
+                    message.setNegativeButton(activity.getString(R.string.dialog_button_login_negative));
 
                     apodView.showDialog(message, false, new DialogCallback.Buttons() {
                         @Override

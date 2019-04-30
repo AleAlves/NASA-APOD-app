@@ -1,6 +1,5 @@
 package br.com.aleson.nasa.apod.app.feature.favorite.presenter;
 
-import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.feature.favorite.presentation.FavoriteView;
 import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.FavoritesResponse;
 
@@ -14,17 +13,22 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     @Override
     public void showLoading() {
-
+        this.view.showLoading();
     }
 
     @Override
     public void hideLoading() {
-
+        this.view.hideLoading();
     }
 
     @Override
-    public void showDialog(DialogMessage message) {
+    public void onError() {
+        this.view.showDialog();
+    }
 
+    @Override
+    public void onError(String message) {
+        this.view.showDialog();
     }
 
     @Override

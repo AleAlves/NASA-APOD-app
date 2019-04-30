@@ -248,7 +248,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         DialogMessage dialogMessage = new DialogMessage();
         dialogMessage.setMessage(message);
-        dialogMessage.setPositiveButton("Ok");
         showDialog(dialogMessage, true, new DialogCallback() {
             @Override
             public void onDismiss() {
@@ -367,9 +366,9 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private void loggInWarn() {
 
         DialogMessage message = new DialogMessage();
-        message.setMessage("Please  you need to login first");
-        message.setPositiveButton("Login");
-        message.setNegativeButton("Not now");
+        message.setMessage(getString(R.string.dialog_message_login_warn));
+        message.setPositiveButton(getString(R.string.dialog_button_login_positive));
+        message.setNegativeButton(getString(R.string.dialog_button_login_negative));
         showDialog(message, false, new DialogCallback.Buttons() {
             @Override
             public void onPositiveAction() {
@@ -396,7 +395,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         if (Session.getInstance().isLogged()) {
             if (onBackPressedCount == 1) {
 
-                showToast("Press again to leave");
+                showToast(getString(R.string.toast_message_leave_action));
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

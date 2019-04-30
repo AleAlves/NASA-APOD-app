@@ -110,9 +110,9 @@ public class ProfileActivity extends BaseActivity {
 
     private void exitDialog() {
         DialogMessage message = new DialogMessage();
-        message.setMessage("Do you want to logoff?");
-        message.setPositiveButton("Yes");
-        message.setNegativeButton("No");
+        message.setMessage(getString(R.string.dialog_message_logout_warn));
+        message.setPositiveButton(getString(R.string.dialog_button_default_positive));
+        message.setNegativeButton(getString(R.string.dialog_button_default_negative));
         showDialog(message, false, new DialogCallback.Buttons() {
             @Override
             public void onPositiveAction() {

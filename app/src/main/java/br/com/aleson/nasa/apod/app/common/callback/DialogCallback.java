@@ -4,10 +4,6 @@ public interface DialogCallback {
 
     void onDismiss();
 
-    interface Checkbox extends DialogCallback {
-        void onCheckedAction();
-    }
-
     interface Buttons extends DialogCallback {
 
         void onPositiveAction();

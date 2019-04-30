@@ -62,11 +62,11 @@ public class DialogActivity extends AppCompatActivity {
     public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Oops");
+        builder.setTitle(getString(R.string.dialog_title_default_error));
 
-        builder.setMessage("Houston, we have a problem...")
+        builder.setMessage(getString(R.string.dialog_message_default_error))
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.dialog_button_default_positive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -79,11 +79,11 @@ public class DialogActivity extends AppCompatActivity {
     public void showDialog(final DialogCallback callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Oops");
+        builder.setTitle(getString(R.string.dialog_title_default_error));
 
-        builder.setMessage("Houston, we have a problem...")
+        builder.setMessage(getString(R.string.dialog_message_default_error))
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.dialog_button_default_positive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -158,7 +158,13 @@ public class DialogActivity extends AppCompatActivity {
 
         builder.setCancelable(cancelable);
 
-        builder.setPositiveButton(dialogMessage.getPositiveButton(), new DialogInterface.OnClickListener() {
+
+        String positiveButton = getString(R.string.dialog_button_default_positive);
+        if (dialogMessage.getPositiveButton() != null) {
+            positiveButton = dialogMessage.getPositiveButton();
+        }
+
+        builder.setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();

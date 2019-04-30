@@ -28,12 +28,6 @@ import br.com.aleson.nasa.apod.app.feature.home.domain.APOD;
 
 public class FileUtil {
 
-    private static String SUCESS = "Image saved to Gallery";
-    private static String FAILED = "Download Failed";
-    private static String SAVED = "Image Already saved";
-    private static String DELETED = "File deleted";
-    private static String ERROR = "Something Went Wrong";
-
     public static boolean saveAPOD(Context context, APOD item, ImageView imageViewAPOD, FileOperationCallback callback) {
 
         Bitmap bitmap = (Bitmap) getBitmapFromView(imageViewAPOD);
@@ -45,7 +39,7 @@ public class FileUtil {
             String fname = item.getDate();
             File file = new File(mediaStorageDir, fname);
             if (file.exists()) {
-                callback.onFinish(SAVED);
+                callback.onFinish(Constants.FILE.OPERATIONS.SAVED);
                 return true;
             }
             if (file.createNewFile()) {
@@ -56,14 +50,14 @@ public class FileUtil {
                 out.flush();
                 out.close();
                 addImageToGallery(file.getAbsolutePath(), context);
-                callback.onFinish(SUCESS);
+                callback.onFinish(Constants.FILE.OPERATIONS.SUCESS);
                 return true;
             } else {
-                callback.onFinish(FAILED);
+                callback.onFinish(Constants.FILE.OPERATIONS.FAILED);
                 return false;
             }
         } catch (Exception e) {
-            callback.onFinish(FAILED);
+            callback.onFinish(Constants.FILE.OPERATIONS.FAILED);
             return false;
         }
     }
@@ -104,11 +98,11 @@ public class FileUtil {
             File file = new File(mediaStorageDir, fname);
             if (file.exists()) {
                 file.delete();
-                callback.onFinish(DELETED);
+                callback.onFinish(Constants.FILE.OPERATIONS.DELETED);
             }
         } catch (Exception e) {
             SLogger.e(e);
-            callback.onFinish(ERROR);
+            callback.onFinish(Constants.FILE.OPERATIONS.ERROR);
         }
     }
 

@@ -1,9 +1,5 @@
 package br.com.aleson.nasa.apod.app.feature.login.presenter;
 
-import com.github.android.aleson.slogger.SLogger;
-
-import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
-import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.feature.login.presentation.LoginView;
 
 public class LoginPresenterImpl implements LoginPresenter {
@@ -26,12 +22,13 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void showDialog(DialogMessage dialogMessage) {
-        if (dialogMessage == null) {
-            this.view.showDialog();
-        } else {
-            this.view.showDialog(dialogMessage, false);
-        }
+    public void onError() {
+        this.view.onError();
+    }
+
+    @Override
+    public void onError(String message) {
+        this.view.onError(message);
     }
 
     @Override

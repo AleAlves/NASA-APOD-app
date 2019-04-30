@@ -16,9 +16,22 @@ public class Constants {
 
     public static final class HTTP_CODE {
         public static final int SUCCESS = 200;
-        public static final int SERVER_ERROR = 500;
         public static final int UNAVAILABLE_APOD = 601;
     }
 
+    public static final class FIREBASE {
+        public static final String RQUEST_ID_TOKEN = "564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com";
+    }
 
+
+    public static final class FILE {
+        public static final class OPERATIONS {
+
+            public static final String SUCESS = "Image saved to Gallery";
+            public static final String FAILED = "Download Failed";
+            public static final String SAVED = "Image Already saved";
+            public static final String DELETED = "File deleted";
+            public static final String ERROR = "Something Went Wrong";
+        }
+    }
 }

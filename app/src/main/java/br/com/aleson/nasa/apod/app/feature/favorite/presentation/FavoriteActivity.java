@@ -3,6 +3,7 @@ package br.com.aleson.nasa.apod.app.feature.favorite.presentation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.favorite.interactor.FavoriteInteractor;
 import br.com.aleson.nasa.apod.app.feature.favorite.interactor.FavoriteInteractorImpl;
@@ -27,6 +28,7 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
         init();
@@ -46,8 +48,20 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
 
     @Override
     public void loadFavorite(FavoritesResponse favoritesResponse) {
+
         favoritesList.addAll(favoritesResponse.getFavorites());
         adapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void onError() {
+        showDialog();
+    }
+
+    @Override
+    public void onError(String message) {
+
+        DialogMessage dialogMessage = new DialogMessage();
+        showDialog(dialogMessage, false);
     }
 }

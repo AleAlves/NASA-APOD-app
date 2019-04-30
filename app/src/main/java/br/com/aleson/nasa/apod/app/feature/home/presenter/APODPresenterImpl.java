@@ -26,16 +26,6 @@ public class APODPresenterImpl implements APODPresenter {
     }
 
     @Override
-    public void showDialog(DialogMessage message) {
-
-        if (message == null) {
-            this.view.showDialog();
-        } else {
-            this.view.showDialog(message, false);
-        }
-    }
-
-    @Override
     public void loadAPOD(APOD apod) {
 
         this.view.loadAPOD(apod);

@@ -1,6 +1,8 @@
 package br.com.aleson.nasa.apod.app.feature.login.interactor;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
+import br.com.aleson.nasa.apod.app.common.response.BaseResponse;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.feature.login.domain.AESData;
 import br.com.aleson.nasa.apod.app.feature.login.domain.User;
@@ -35,8 +37,8 @@ public class LoginInteractorImpl implements LoginInteractor {
             @Override
             public void onFailure(Object response) {
 
+                presenter.onError();
                 presenter.hideLoading();
-                presenter.showDialog(null);
             }
 
         });
@@ -48,13 +50,23 @@ public class LoginInteractorImpl implements LoginInteractor {
         repository.getTicket(aesData, new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
-                token((TicketResponse) response);
+
+                if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.SUCCESS) {
+
+                    token((TicketResponse) response);
+                } else {
+
+                    presenter.onError(((BaseResponse) response).getHttpStatus().getStatus());
+                    presenter.hideLoading();
+                }
+
             }
 
             @Override
             public void onFailure(Object response) {
+
+                presenter.onError();
                 presenter.hideLoading();
-                presenter.showDialog(null);
             }
         });
     }
@@ -74,15 +86,22 @@ public class LoginInteractorImpl implements LoginInteractor {
             @Override
             public void onResponse(Object response) {
 
-                registerValidToken((TokenResponse) response);
-                registerUser(user);
-                presenter.startHome();
+                if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.SUCCESS) {
+
+                    registerValidToken((TokenResponse) response);
+                    registerUser(user);
+                    presenter.startHome();
+                } else {
+
+                    presenter.onError(((BaseResponse) response).getHttpStatus().getStatus());
+                    presenter.hideLoading();
+                }
             }
 
             @Override
             public void onFailure(Object response) {
 
-                presenter.showDialog(null);
+                presenter.onError();
                 presenter.hideLoading();
             }
 

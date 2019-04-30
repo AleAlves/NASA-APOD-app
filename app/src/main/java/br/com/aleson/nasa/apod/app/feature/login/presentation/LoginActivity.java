@@ -1,6 +1,8 @@
 package br.com.aleson.nasa.apod.app.feature.login.presentation;
 
 import androidx.annotation.NonNull;
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
+import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
@@ -13,6 +15,7 @@ import br.com.aleson.nasa.apod.app.feature.login.repository.LoginRepositoryImpl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,7 +33,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth firebaseAuth;
     private GoogleSignInClient googleSignInClient;
-
     private LoginInteractor interactor;
 
     @Override
@@ -65,7 +67,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private void startGoogleSignin() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com")
+                .requestIdToken(Constants.FIREBASE.RQUEST_ID_TOKEN)
                 .requestEmail()
                 .build();
 
@@ -105,7 +107,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                showToast("Authentication Failed");
+                showToast(getString(R.string.toast_message_auth_failed));
             }
         }
     }
@@ -122,7 +124,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                             startLogin();
                         } else {
 
-                            showToast("Authentication Failed");
+                            showToast(getString(R.string.toast_message_auth_failed));
                         }
                     }
                 });
@@ -144,5 +146,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     public void startHome() {
         startActivity(new Intent(this, APODsActivity.class));
+    }
+
+    @Override
+    public void onError() {
+        showLoading();
+    }
+
+    @Override
+    public void onError(String message) {
+        DialogMessage dialogMessage = new DialogMessage();
+        showDialog(dialogMessage, false);
     }
 }

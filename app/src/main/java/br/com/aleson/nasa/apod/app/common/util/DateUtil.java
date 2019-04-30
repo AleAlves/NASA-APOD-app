@@ -15,7 +15,6 @@ public class DateUtil {
         return generate();
     }
 
-    private String randomDateValue;
     private int[] monthRange = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private int todayDay;
     private int todayMonth;

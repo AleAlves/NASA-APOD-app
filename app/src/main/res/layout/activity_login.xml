@@ -22,9 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:background="@android:color/transparent"
-        android:text="SKIP"
-        android:textColor="@color/colorPrimary"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="@string/label_button_skip_potion"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

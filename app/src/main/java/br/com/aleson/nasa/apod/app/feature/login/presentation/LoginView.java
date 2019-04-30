@@ -6,4 +6,8 @@ public interface LoginView extends BaseView {
 
     void startHome();
 
+    void onError();
+
+    void onError(String message);
+
 }
