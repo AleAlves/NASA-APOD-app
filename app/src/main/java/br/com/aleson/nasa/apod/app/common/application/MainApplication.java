@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import com.github.android.aleson.slogger.SLogger;
 import com.google.firebase.FirebaseApp;
 
+import br.com.aleson.nasa.apod.app.common.firebase.FirebaseCloudMessaging;
 import br.com.connector.aleson.android.connector.Connector;
 
 public class MainApplication extends Application {
@@ -18,10 +19,20 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         FirebaseApp.initializeApp(this);
         SLogger.init(true);
         Connector.init("https://nasa-apod-server.herokuapp.com/");
+        verifyDailyNotificationsSubscribe();
+    }
 
+    private void verifyDailyNotificationsSubscribe() {
+
+        if (true) {
+            FirebaseCloudMessaging.subscribeDailyNotification();
+        } else {
+            FirebaseCloudMessaging.unsubscribeDailyNotification();
+        }
     }
 
 

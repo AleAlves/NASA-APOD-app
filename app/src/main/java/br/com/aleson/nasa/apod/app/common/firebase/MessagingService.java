@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.common.messaging;
+package br.com.aleson.nasa.apod.app.common.firebase;
 
 
 import com.google.firebase.messaging.FirebaseMessagingService;

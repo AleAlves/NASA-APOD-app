@@ -68,7 +68,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <Switch
+        <Switchd
+            android:id="@+id/switch_daily_notification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_switch_notifications"

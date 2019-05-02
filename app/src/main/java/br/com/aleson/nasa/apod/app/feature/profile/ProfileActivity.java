@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
+import br.com.aleson.nasa.apod.app.common.firebase.FirebaseCloudMessaging;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.feature.login.domain.User;
@@ -13,8 +14,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -38,6 +41,7 @@ public class ProfileActivity extends BaseActivity {
     private TextView profileEmail;
     private TextView textViewAppVersion;
     private ImageButton imageButtonLogout;
+    private Switch switchDailyNotifications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +87,24 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void init() {
+
         profilePic = findViewById(R.id.iamgeview_profile_pic);
         profileName = findViewById(R.id.textview_profile_name);
         profileEmail = findViewById(R.id.textview_profile_email);
         imageButtonLogout = findViewById(R.id.image_button_logout);
         textViewAppVersion = findViewById(R.id.textview_app_version);
+        switchDailyNotifications = findViewById(R.id.switch_daily_notification);
         imageButtonLogout.setOnClickListener(this);
+        switchDailyNotifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    FirebaseCloudMessaging.subscribeDailyNotification();
+                } else {
+                    FirebaseCloudMessaging.unsubscribeDailyNotification();
+                }
+            }
+        });
     }
 
     private void signOut() {

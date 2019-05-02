@@ -33,20 +33,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
@@ -67,6 +60,14 @@
           }
         },
         {
+          "client_id": "564935331593-tqd471ucrvrhq4bsgf7ci38quqjrmuic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleson.example.nasaapodapp",
+            "certificate_hash": "0d183ed144a48e5edd3c1e85759fa7afceaf1611"
+          }
+        },
+        {
           "client_id": "564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -77,20 +78,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
