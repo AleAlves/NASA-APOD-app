@@ -8,6 +8,8 @@
     <ImageView
         android:id="@+id/apod_fullscreen_imageview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="matrix"
+        android:scaleX="1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

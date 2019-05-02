@@ -150,7 +150,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void onError() {
-        showLoading();
+        showDialog();
     }
 
     @Override

@@ -129,7 +129,7 @@ public class FileUtil {
             FileOutputStream fo = new FileOutputStream(f);
             fo.write(bytes.toByteArray());
         } catch (IOException e) {
-            e.printStackTrace();
+            SLogger.e(e);
         }
         share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
         share.putExtra(Intent.EXTRA_TEXT, "\n" + title + "\n\n\n" + explanation);
