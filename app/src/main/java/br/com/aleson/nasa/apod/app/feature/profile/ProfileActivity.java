@@ -45,6 +45,7 @@ public class ProfileActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profile);
@@ -82,8 +83,7 @@ public class ProfileActivity extends BaseActivity {
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         return false;
                     }
-                })
-                .into(profilePic);
+                }).into(profilePic);
     }
 
     private void init() {
@@ -125,6 +125,7 @@ public class ProfileActivity extends BaseActivity {
 
 
     private void exitDialog() {
+
         DialogMessage message = new DialogMessage();
         message.setMessage(getString(R.string.dialog_message_logout_warn));
         message.setPositiveButton(getString(R.string.dialog_button_default_positive));
@@ -149,6 +150,7 @@ public class ProfileActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
+
         super.onClick(v);
         switch (v.getId()) {
             case R.id.image_button_logout:

@@ -6,10 +6,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class FirebaseCloudMessaging {
 
     public static void subscribeDailyNotification() {
-        FirebaseMessaging.getInstance().subscribeToTopic("apod");
+        FirebaseMessaging.getInstance().subscribeToTopic("DailyAPOD");
     }
 
     public static void unsubscribeDailyNotification() {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("apod");
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("DailyAPOD");
     }
 }
