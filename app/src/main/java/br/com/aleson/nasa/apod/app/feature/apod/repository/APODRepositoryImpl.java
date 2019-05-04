@@ -25,7 +25,14 @@ public class APODRepositoryImpl implements APODRepository {
         Connector.request().create(APODMethod.class).getAPOD(Session.getInstance().getToken(), request).enqueue(new Callback<APODResponse>() {
             @Override
             public void onResponse(Call<APODResponse> call, Response<APODResponse> response) {
-                responseCallback.onResponse(response.body());
+
+                if (response == null || response.body() == null) {
+
+                    responseCallback.onFailure(response);
+                } else {
+
+                    responseCallback.onResponse(response.body());
+                }
             }
 
             @Override
@@ -41,7 +48,13 @@ public class APODRepositoryImpl implements APODRepository {
             @Override
             public void onResponse(Call<APODRateResponse> call, Response<APODRateResponse> response) {
 
-                responseCallback.onResponse(response.body());
+                if (response == null || response.body() == null) {
+
+                    responseCallback.onFailure(response);
+                } else {
+
+                    responseCallback.onResponse(response.body());
+                }
             }
 
             @Override
@@ -58,7 +71,13 @@ public class APODRepositoryImpl implements APODRepository {
             @Override
             public void onResponse(Call<APODRateResponse> call, Response<APODRateResponse> response) {
 
-                responseCallback.onResponse(response.body());
+                if (response == null || response.body() == null) {
+
+                    responseCallback.onFailure(response);
+                } else {
+
+                    responseCallback.onResponse(response.body());
+                }
             }
 
             @Override

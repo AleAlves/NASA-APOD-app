@@ -3,6 +3,7 @@ package br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.github.android.aleson.slogger.SLogger;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.file.FileOperationCallback;
 import br.com.aleson.nasa.apod.app.common.file.FileUtil;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
@@ -30,7 +33,7 @@ import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.common.util.DateUtil;
+import br.com.aleson.nasa.apod.app.common.util.DateHelper;
 import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODFullscreenActivity;
 import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODView;
@@ -72,9 +75,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
         holder.textViewExplanation.setText(apodList.get(position).getExplanation());
 
-        holder.textViewDate.setText(DateUtil.parseDateToView(apodList.get(position).getDate()));
-
-        holder.progressBarImageLoading.setVisibility(View.VISIBLE);
+        holder.textViewDate.setText(DateHelper.parseDateToView(apodList.get(position).getDate()));
 
         holder.imageButtonDelete.setVisibility(View.GONE);
         holder.imageButtonDownload.setVisibility(View.VISIBLE);
@@ -87,30 +88,61 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
         final ProgressBar progressBar = holder.progressBarImageLoading;
 
-        Glide.with(activity)
-                .load(apodList.get(position).getUrl())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
+        if (Constants.MEDIA.VIDEO.equals(apodList.get(position).getMedia_type())) {
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            holder.progressBarImageLoading.setVisibility(View.GONE);
+            holder.imageViewVideoPlay.setVisibility(View.VISIBLE);
+            holder.imageViewAPOD.setVisibility(View.GONE);
+            holder.imageViewVideoPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(holder.imageViewAPOD);
+                    holder.imageViewAPOD.callOnClick();
+                }
+            });
+
+        } else {
+
+            holder.progressBarImageLoading.setVisibility(View.VISIBLE);
+            holder.imageViewVideoPlay.setVisibility(View.GONE);
+            holder.imageViewAPOD.setVisibility(View.VISIBLE);
+            Glide.with(activity)
+                    .load(apodList.get(position).getUrl())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(holder.imageViewAPOD);
+        }
 
         holder.imageViewAPOD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, APODFullscreenActivity.class);
-                intent.putExtra("url", apodList.get(position).getUrl());
-                activity.startActivity(intent);
+
+                if (Constants.MEDIA.VIDEO.equals(apodList.get(position).getMedia_type())) {
+
+                    try {
+
+                        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(apodList.get(position).getUrl())));
+                    } catch (Exception e) {
+                        SLogger.e(e);
+                    }
+
+                } else {
+                    Intent intent = new Intent(activity, APODFullscreenActivity.class);
+                    intent.putExtra("url", apodList.get(position).getUrl());
+                    activity.startActivity(intent);
+                }
             }
         });
 
@@ -149,12 +181,12 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
                         @Override
                         public void onNegativeAction() {
-                            //do nothing
+                            //TODO analytics tags
                         }
 
                         @Override
                         public void onDismiss() {
-                            //do nothing
+                            //TODO analytics tags
                         }
                     });
                 }
@@ -213,6 +245,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
 
     private void updateFavoriteButton(APODViewHolder holder, boolean favorite) {
+
         if (favorite) {
             holder.imageButtonFavorite.setImageDrawable(activity.getDrawable(R.drawable.ic_favorite_24dp));
         } else {
@@ -232,6 +265,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         private TextView textViewCopyrigth;
         private TextView textViewExplanation;
         private ImageView imageViewAPOD;
+        private ImageView imageViewVideoPlay;
         private ProgressBar progressBarImageLoading;
         private ImageButton imageButtonFavorite;
         private ImageButton imageButtonShare;
@@ -241,13 +275,14 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         public APODViewHolder(@NonNull View itemView) {
 
             super(itemView);
-            this.imageButtonDelete = itemView.findViewById(R.id.button_apod_delete);
             this.imageButtonShare = itemView.findViewById(R.id.button_apod_share);
+            this.imageButtonDelete = itemView.findViewById(R.id.button_apod_delete);
             this.textViewTitle = itemView.findViewById(R.id.apod_adapter_apod_title);
             this.imageViewAPOD = itemView.findViewById(R.id.apod_adapter_apod_image);
             this.textViewDate = itemView.findViewById(R.id.apod_adapter_textview_date);
             this.imageButtonDownload = itemView.findViewById(R.id.button_apod_download);
             this.imageButtonFavorite = itemView.findViewById(R.id.button_apod_favorite);
+            this.imageViewVideoPlay = itemView.findViewById(R.id.imageview_video_player);
             this.textViewCopyrigth = itemView.findViewById(R.id.apod_adapter_apod_copyright);
             this.textViewExplanation = itemView.findViewById(R.id.apod_adapter_apod_explanation);
             this.progressBarImageLoading = itemView.findViewById(R.id.apod_adapter_apod_image_loading);

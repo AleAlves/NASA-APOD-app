@@ -8,6 +8,7 @@ import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.application.MainApplication;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
+import br.com.aleson.nasa.apod.app.common.util.AndroidHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,6 +33,7 @@ public class BaseActivity extends DialogActivity implements BaseView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidHelper.currentContext = this;
     }
 
     @Override

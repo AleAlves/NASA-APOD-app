@@ -17,7 +17,13 @@ public class FavoriteRepositoryImpl implements FavoriteRespository {
             @Override
             public void onResponse(Call<FavoritesResponse> call, Response<FavoritesResponse> response) {
 
-                responseCallback.onResponse(response.body());
+                if (response == null) {
+
+                    responseCallback.onFailure(response);
+                } else {
+
+                    responseCallback.onResponse(response.body());
+                }
             }
 
             @Override

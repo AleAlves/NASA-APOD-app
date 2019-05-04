@@ -1,15 +1,10 @@
 package br.com.aleson.nasa.apod.app.common.util;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
-public class DateUtil {
+public class DateHelper {
 
     public String getRandomDate() {
         return generate();
@@ -21,7 +16,7 @@ public class DateUtil {
     private int todayYear;
 
 
-    public DateUtil(String date) {
+    public DateHelper(String date) {
         this.todayYear = Integer.parseInt(date.substring(0, 4));
         this.todayMonth = Integer.parseInt(date.substring(6, 7));
         this.todayDay = Integer.parseInt(date.substring(9, 10));

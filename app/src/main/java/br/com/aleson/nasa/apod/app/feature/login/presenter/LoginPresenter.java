@@ -1,8 +1,8 @@
 package br.com.aleson.nasa.apod.app.feature.login.presenter;
 
-import br.com.aleson.nasa.apod.app.common.view.BasePresenterView;
+import br.com.aleson.nasa.apod.app.common.callback.BasePresenter;
 
-public interface LoginPresenter extends BasePresenterView {
+public interface LoginPresenter extends BasePresenter {
 
     void startHome();
 }

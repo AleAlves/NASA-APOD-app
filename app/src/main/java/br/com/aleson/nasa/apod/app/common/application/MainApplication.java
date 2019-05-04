@@ -7,7 +7,10 @@ import android.content.res.Configuration;
 import com.github.android.aleson.slogger.SLogger;
 import com.google.firebase.FirebaseApp;
 
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.firebase.FirebaseCloudMessaging;
+import br.com.aleson.nasa.apod.app.common.util.AndroidHelper;
+import br.com.aleson.nasa.apod.app.common.util.StorageHelper;
 import br.com.connector.aleson.android.connector.Connector;
 
 public class MainApplication extends Application {
@@ -23,14 +26,17 @@ public class MainApplication extends Application {
         FirebaseApp.initializeApp(this);
         SLogger.init(true);
         Connector.init("https://nasa-apod-server.herokuapp.com/");
+        AndroidHelper.currentContext = this;
         verifyDailyNotificationsSubscribe();
     }
 
     private void verifyDailyNotificationsSubscribe() {
 
-        if (true) {
+        if (StorageHelper.readData(Constants.NOTIFICATIONS.DAILY_NOTIFICATION, true)) {
+
             FirebaseCloudMessaging.subscribeDailyNotification();
         } else {
+
             FirebaseCloudMessaging.unsubscribeDailyNotification();
         }
     }

@@ -3,7 +3,7 @@
 
     //Dialog
     <string name="dialog_title_default_error">Oops</string>
-    <string name="dialog_message_default_error">Houston, we have a problem(…, &#8230;)</string>
+    <string name="dialog_message_default_error">Houston, we have a problem...</string>
     <string name="dialog_button_default_positive">OK</string>
     <string name="dialog_button_default_negative">Cancel</string>
     <string name="dialog_button_login_positive">LOGIN</string>
@@ -24,6 +24,8 @@
 
     //Profile
     <string name="label_switch_notifications">Allow Notifications</string>
+    <string name="label_service_version">Service version:</string>
+    <string name="label_app_version">App version:</string>
 
     //Login
     <string name="label_button_skip_potion">SKIP</string>

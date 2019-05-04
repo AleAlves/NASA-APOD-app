@@ -1,6 +1,6 @@
-package br.com.aleson.nasa.apod.app.common.view;
+package br.com.aleson.nasa.apod.app.common.callback;
 
-public interface BasePresenterView {
+public interface BasePresenter {
 
     void showLoading();
 

@@ -37,9 +37,9 @@ import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.common.util.DateUtil;
+import br.com.aleson.nasa.apod.app.common.util.DateHelper;
+import br.com.aleson.nasa.apod.app.common.util.NavigationHelper;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
-import br.com.aleson.nasa.apod.app.feature.favorite.presentation.FavoriteActivity;
 import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.apod.interactor.APODInteractor;
 import br.com.aleson.nasa.apod.app.feature.apod.interactor.APODInteractorImpl;
@@ -49,7 +49,6 @@ import br.com.aleson.nasa.apod.app.feature.apod.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.apod.repository.APODRepositoryImpl;
 import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
 import br.com.aleson.nasa.apod.app.feature.login.presentation.LoginActivity;
-import br.com.aleson.nasa.apod.app.feature.profile.ProfileActivity;
 
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -61,7 +60,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private String apodDate;
     private String apodMaxDate;
     private String lasSuccededDate;
-    private DateUtil dateUtil;
+    private DateHelper dateHelper;
     private APOD curentAPOD;
     private APODInteractor interactor;
     private RecyclerView recyclerView;
@@ -89,7 +88,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         updateDate(Constants.SWIPE.IDLE);
 
-        dateUtil = new DateUtil(apodDate);
+        dateHelper = new DateHelper(apodDate);
     }
 
     private void handleExtras(Intent intent) {
@@ -291,7 +290,12 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         switch (menuItem.getItemId()) {
             case R.id.apod_account: {
 
-                gotToActivity(new Intent(context, ProfileActivity.class));
+                if (verifyLogged()) {
+
+                    NavigationHelper.navigateProfile();
+                } else {
+                    loggInWarn();
+                }
                 break;
             }
             case R.id.apod_random: {
@@ -306,7 +310,12 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             }
             case R.id.apod_fav_list: {
 
-                gotToActivity(new Intent(context, FavoriteActivity.class));
+                if (verifyLogged()) {
+
+                    NavigationHelper.navigateFavorites();
+                } else {
+                    loggInWarn();
+                }
                 break;
             }
         }
@@ -345,7 +354,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                apodDate = dateUtil.getRequestFormatedDate(year, month, dayOfMonth);
+                apodDate = dateHelper.getRequestFormatedDate(year, month, dayOfMonth);
                 clearDataLists();
                 updateDate(Constants.SWIPE.IDLE);
             }
@@ -355,7 +364,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private void getRandomAPOD() {
 
         clearDataLists();
-        apodDate = dateUtil.getRandomDate();
+        apodDate = dateHelper.getRandomDate();
         updateDate(Constants.SWIPE.IDLE);
     }
 
@@ -363,15 +372,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         apodList.clear();
         apodDatelist.clear();
-    }
-
-    private void gotToActivity(Intent intent) {
-
-        if (verifyLogged()) {
-            startActivity(intent);
-        } else {
-            loggInWarn();
-        }
     }
 
     private void loggInWarn() {
@@ -388,12 +388,12 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
             @Override
             public void onNegativeAction() {
-                //do nothing
+                //TODO analytics tag
             }
 
             @Override
             public void onDismiss() {
-                //do nothing
+                //TODO analytics tag
             }
         });
     }

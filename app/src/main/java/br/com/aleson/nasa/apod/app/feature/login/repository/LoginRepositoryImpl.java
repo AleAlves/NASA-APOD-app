@@ -30,14 +30,20 @@ public class LoginRepositoryImpl implements LoginRepository {
             public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
                 SLogger.d(response);
 
-                Session.getInstance().setPublicKey(response.body().getPublicKey());
+                if (response == null || response.body() == null) {
 
-                AESData AESData = new AESData();
-                AESData.setIv(Base64.encodeToString(Connector.crypto().getAes().getIv(), 0).replace("\n", ""));
-                AESData.setKey(Connector.crypto().getAes().getSecret());
-                AESData.setSalt(Connector.crypto().getAes().getSalt());
+                    responseCallback.onFailure(response);
+                } else {
 
-                responseCallback.onResponse(AESData);
+                    Session.getInstance().setPublicKey(response.body().getPublicKey());
+
+                    AESData AESData = new AESData();
+                    AESData.setIv(Base64.encodeToString(Connector.crypto().getAes().getIv(), 0).replace("\n", ""));
+                    AESData.setKey(Connector.crypto().getAes().getSecret());
+                    AESData.setSalt(Connector.crypto().getAes().getSalt());
+
+                    responseCallback.onResponse(AESData);
+                }
             }
 
             @Override
@@ -58,7 +64,14 @@ public class LoginRepositoryImpl implements LoginRepository {
             @Override
             public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
                 SLogger.d(response);
-                responseCallback.onResponse(response.body());
+
+                if (response == null || response.body() == null) {
+
+                    responseCallback.onFailure(response);
+                } else {
+
+                    responseCallback.onResponse(response.body());
+                }
             }
 
             @Override
@@ -81,7 +94,13 @@ public class LoginRepositoryImpl implements LoginRepository {
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 SLogger.d(response);
 
-                responseCallback.onResponse(response.body());
+                if (response == null || response.body() == null) {
+
+                    responseCallback.onFailure(response);
+                } else {
+
+                    responseCallback.onResponse(response.body());
+                }
             }
 
             @Override

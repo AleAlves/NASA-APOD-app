@@ -25,6 +25,10 @@ public class Constants {
         public static final String RQUEST_ID_TOKEN = "564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com";
     }
 
+    public static final class NOTIFICATIONS {
+        public static final String DAILY_NOTIFICATION = "DAILY_NOTIFICATION";
+
+    }
 
     public static final class FILE {
         public static final class OPERATIONS {
@@ -35,5 +39,11 @@ public class Constants {
             public static final String DELETED = "File deleted";
             public static final String ERROR = "Something Went Wrong";
         }
+    }
+
+    public static final class MEDIA {
+        public static final String IMAGE = "image";
+        public static final String GIF = "gif";
+        public static final String VIDEO = "video";
     }
 }

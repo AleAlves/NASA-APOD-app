@@ -3,6 +3,7 @@ package br.com.aleson.nasa.apod.app.feature.login.presentation;
 import androidx.annotation.NonNull;
 import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
+import br.com.aleson.nasa.apod.app.common.util.NavigationHelper;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
@@ -145,7 +146,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void startHome() {
-        startActivity(new Intent(this, APODsActivity.class));
+        NavigationHelper.navigateAPOD();
     }
 
     @Override

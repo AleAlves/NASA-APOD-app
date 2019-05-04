@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
-import br.com.aleson.nasa.apod.app.common.util.DateUtil;
+import br.com.aleson.nasa.apod.app.common.util.DateHelper;
 import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.FavoriteResponse;
 import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODsActivity;
 
@@ -49,7 +49,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     @Override
     public void onBindViewHolder(@NonNull final FavoritesViewHolder holder, final int position) {
 
-        holder.textViewFavApodDate.setText(DateUtil.parseDateToView(favorites.get(position).getDate()));
+        holder.textViewFavApodDate.setText(DateHelper.parseDateToView(favorites.get(position).getDate()));
         holder.textViewFavApodTitle.setText(favorites.get(position).getTitle());
 
         Glide.with(context)
