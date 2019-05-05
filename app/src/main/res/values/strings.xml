@@ -10,6 +10,8 @@
     <string name="dialog_button_login_negative">NOT NOW</string>
     <string name="dialog_message_logout_warn">Do you want to logout?</string>
     <string name="dialog_message_login_warn">Please, you need to login first</string>
+    <string name="calendar_title">Pick a date</string>
+    <string name="dialog_random_option">Random</string>
 
     //Toast
     <string name="toast_message_leave_action">Press again to leave</string>

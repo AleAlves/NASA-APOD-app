@@ -49,6 +49,7 @@ public class ProfileViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Call<ServiceVersionResponse> call, Throwable t) {
+
                 setLoading(false);
             }
         });

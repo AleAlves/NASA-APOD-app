@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -48,11 +47,9 @@ import br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter.APODRecycle
 import br.com.aleson.nasa.apod.app.feature.apod.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.apod.repository.APODRepositoryImpl;
 import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
-import br.com.aleson.nasa.apod.app.feature.login.presentation.LoginActivity;
 
 public class APODsActivity extends BaseActivity implements APODView, BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     private static int currentAction;
     private static int onBackPressedCount;
 
@@ -61,7 +58,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private String apodMaxDate;
     private String lasSuccededDate;
     private DateHelper dateHelper;
-    private APOD curentAPOD;
     private APODInteractor interactor;
     private RecyclerView recyclerView;
     private APODRecyclerViewAdapter mAdapter;
@@ -103,17 +99,19 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         currentAction = direction;
 
         try {
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-            apodMaxDate = simpleDateFormat.format(c.getTime());
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE.DEFAULT_DATE_FORMAT);
+            apodMaxDate = simpleDateFormat.format(calendar.getTime());
+
             if (apodDate == null) {
-                c.add(Calendar.DATE, direction);
+                calendar.add(Calendar.DATE, direction);
             } else {
-                c.setTime(simpleDateFormat.parse(apodDate));
-                c.add(Calendar.DATE, direction);
+                calendar.setTime(simpleDateFormat.parse(apodDate));
+                calendar.add(Calendar.DATE, direction);
             }
 
-            apodDate = simpleDateFormat.format(c.getTime());
+            apodDate = simpleDateFormat.format(calendar.getTime());
 
             if (isValidRange()) {
 
@@ -130,20 +128,22 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     private void initRecyclerView() {
 
-        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
         layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
-        recyclerView.setLayoutManager(layoutManager);
         mAdapter = new APODRecyclerViewAdapter(this, apodList, this);
+        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
+
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
+
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
+
         mGestureDetector = new GestureDetector(this, new APODGestureListener(recyclerView) {
             @Override
             public boolean onSwipeRight() {
 
                 updateDate(Constants.SWIPE.RIGHT);
-
                 return false;
             }
 
@@ -151,7 +151,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
             public boolean onSwipeLeft() {
 
                 updateDate(Constants.SWIPE.LEFT);
-
                 return false;
             }
 
@@ -171,29 +170,31 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     private boolean isValidRange() {
 
-        Calendar requestDate = Calendar.getInstance();
-        Calendar todayDate = Calendar.getInstance();
-        Calendar minimumDate = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
         try {
+            Calendar requestDate = Calendar.getInstance();
+            Calendar todayDate = Calendar.getInstance();
+            Calendar minimumDate = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE.DEFAULT_DATE_FORMAT);
+
             requestDate.setTime(simpleDateFormat.parse(apodDate));
             todayDate.setTime(minimumDate.getTime());
             minimumDate.setTime(simpleDateFormat.parse(Constants.BUSINESS.FIRST_APOD));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        if (!requestDate.before(minimumDate) && !requestDate.after(todayDate)) {
-            return true;
+
+            if (!requestDate.before(minimumDate) && !requestDate.after(todayDate)) {
+
+                return true;
+            }
+
+        } catch (Exception e) {
+            SLogger.e(e);
         }
         return false;
     }
 
     private void searchAPOD() {
 
-        if (apodDatelist.contains(apodDate)) {
-
-        } else {
+        if (!apodDatelist.contains(apodDate)) {
 
             apodDatelist.add(apodDate);
             interactor.getAPOD(apodDate);
@@ -217,24 +218,24 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     @Override
     public void loadAPOD(APOD apod) {
 
-        this.curentAPOD = apod;
-
         this.lasSuccededDate = apodDate;
 
         this.apodList.add(apod);
 
         Collections.sort(apodList, new Comparator<APOD>() {
             @Override
-            public int compare(APOD apod1, APOD apod2) {
-                return apod2.getDate().compareTo(apod1.getDate());
+            public int compare(APOD apod1, APOD apodProxy) {
+                return apodProxy.getDate().compareTo(apod1.getDate());
             }
         });
 
         this.mAdapter.notifyDataSetChanged();
 
         if (currentAction > 0) {
+
             recyclerView.scrollToPosition(apodList.size());
         } else if (currentAction < 0) {
+
             recyclerView.scrollToPosition(apodList.size() - 1);
         }
     }
@@ -262,7 +263,33 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         });
     }
 
+    @Override
+    public void onAPODUnavailable(String message) {
+
+        DialogMessage dialogMessage = new DialogMessage();
+        dialogMessage.setMessage(message);
+        dialogMessage.setNegativeButton(getString(R.string.dialog_random_option));
+        showDialog(dialogMessage, true, new DialogCallback.Buttons() {
+            @Override
+            public void onPositiveAction() {
+                //DO nothing
+            }
+
+            @Override
+            public void onNegativeAction() {
+
+                getRandomAPOD();
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+    }
+
     private void resetDateToPreviusSucessfulRequest() {
+
         apodDate = lasSuccededDate;
     }
 
@@ -324,28 +351,30 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     private void datePicker() {
 
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog dialog = new DatePickerDialog(
-                context,
-                dateListener(),
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
-        Date dateFormatInitial = null;
-        Date dateFormatFinal = null;
         try {
-            dateFormatInitial = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(apodMaxDate);
-            dateFormatFinal = new SimpleDateFormat(DEFAULT_DATE_FORMAT).parse(Constants.BUSINESS.FIRST_APOD);
+            Calendar calendar = Calendar.getInstance();
+            DatePickerDialog dialog = new DatePickerDialog(
+                    context,
+                    dateListener(),
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+
+            Date dateFormatInitial = new SimpleDateFormat(Constants.DATE.DEFAULT_DATE_FORMAT).parse(apodMaxDate);
+            Date dateFormatFinal = new SimpleDateFormat(Constants.DATE.DEFAULT_DATE_FORMAT).parse(Constants.BUSINESS.FIRST_APOD);
+
+
+            if (dateFormatInitial != null)
+                dialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
+            if (dateFormatFinal != null)
+                dialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
+            dialog.setTitle(getString(R.string.calendar_title));
+            dialog.show();
+
         } catch (ParseException e) {
-            Log.e("Error", e.toString());
+            SLogger.e(e);
         }
-        if (dateFormatInitial != null)
-            dialog.getDatePicker().setMaxDate(dateFormatInitial.getTime());
-        if (dateFormatFinal != null)
-            dialog.getDatePicker().setMinDate(dateFormatFinal.getTime());
-        dialog.setTitle("date");
-        dialog.show();
     }
 
     private DatePickerDialog.OnDateSetListener dateListener() {
@@ -404,27 +433,34 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         onBackPressedCount++;
 
         if (Session.getInstance().isLogged()) {
-            if (onBackPressedCount == 1) {
 
-                showToast(getString(R.string.toast_message_leave_action));
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        onBackPressedCount = 0;
-                    }
-                }, 2000);
-
-            } else if (onBackPressedCount == 2) {
-
-                onBackPressedCount = 0;
-
-                moveTaskToBack(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(1);
-            }
+            handleAppExit();
         } else {
-            startActivity(new Intent(context, LoginActivity.class));
+
+            NavigationHelper.navigateLogin();
+        }
+    }
+
+    private void handleAppExit() {
+
+        if (onBackPressedCount == 1) {
+
+            showToast(getString(R.string.toast_message_leave_action));
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onBackPressedCount = 0;
+                }
+            }, Constants.TIME_LAPSE.DEFAULT);
+
+        } else if (onBackPressedCount == 2) {
+
+            onBackPressedCount = 0;
+
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
         }
     }
 

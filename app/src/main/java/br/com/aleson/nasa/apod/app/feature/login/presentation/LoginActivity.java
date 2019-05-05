@@ -7,7 +7,6 @@ import br.com.aleson.nasa.apod.app.common.util.NavigationHelper;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODsActivity;
 import br.com.aleson.nasa.apod.app.feature.login.interactor.LoginInteractor;
 import br.com.aleson.nasa.apod.app.feature.login.interactor.LoginInteractorImpl;
 import br.com.aleson.nasa.apod.app.feature.login.presenter.LoginPresenterImpl;
@@ -38,7 +37,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         super.setContentView(R.layout.activity_login);
 
         findViewById(R.id.act_login_buttton_google_login).setOnClickListener(this);
@@ -146,16 +147,19 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void startHome() {
+
         NavigationHelper.navigateAPOD();
     }
 
     @Override
     public void onError() {
+
         showDialog();
     }
 
     @Override
     public void onError(String message) {
+
         DialogMessage dialogMessage = new DialogMessage();
         showDialog(dialogMessage, false);
     }

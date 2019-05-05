@@ -90,9 +90,10 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
         if (Constants.MEDIA.VIDEO.equals(apodList.get(position).getMedia_type())) {
 
+            holder.imageButtonDownload.setEnabled(false);
             holder.progressBarImageLoading.setVisibility(View.GONE);
             holder.imageViewVideoPlay.setVisibility(View.VISIBLE);
-            holder.imageViewAPOD.setVisibility(View.GONE);
+            holder.imageViewAPOD.setImageResource(0);
             holder.imageViewVideoPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -105,7 +106,6 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
             holder.progressBarImageLoading.setVisibility(View.VISIBLE);
             holder.imageViewVideoPlay.setVisibility(View.GONE);
-            holder.imageViewAPOD.setVisibility(View.VISIBLE);
             Glide.with(activity)
                     .load(apodList.get(position).getUrl())
                     .listener(new RequestListener<Drawable>() {

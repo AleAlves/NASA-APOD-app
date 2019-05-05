@@ -51,7 +51,7 @@ public class APODInteractorImpl implements APODInteractor {
 
                     if (UNAVAILABLE_APOD == apod.getHttpStatus().getCode()) {
 
-                        presenter.onError(apod.getHttpStatus().getStatus());
+                        presenter.onAPODUnavailable(apod.getHttpStatus().getStatus());
                     } else {
 
                         presenter.onError();

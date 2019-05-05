@@ -31,6 +31,12 @@ public class APODPresenterImpl implements APODPresenter {
     }
 
     @Override
+    public void onAPODUnavailable(String message) {
+
+        this.view.onAPODUnavailable(message);
+    }
+
+    @Override
     public void onError() {
 
         this.view.onError();

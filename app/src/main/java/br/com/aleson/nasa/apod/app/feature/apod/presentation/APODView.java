@@ -18,4 +18,6 @@ public interface APODView extends BaseView {
     void onError();
 
     void onError(String message);
+
+    void onAPODUnavailable(String message);
 }

@@ -46,4 +46,12 @@ public class Constants {
         public static final String GIF = "gif";
         public static final String VIDEO = "video";
     }
+
+    public static final class TIME_LAPSE {
+        public static final int DEFAULT = 2000;
+    }
+
+    public static final class DATE{
+        public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    }
 }
