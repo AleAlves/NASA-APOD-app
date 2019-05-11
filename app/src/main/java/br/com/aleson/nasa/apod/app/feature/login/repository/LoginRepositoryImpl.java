@@ -28,6 +28,7 @@ public class LoginRepositoryImpl implements LoginRepository {
         Connector.request().create(PublicKeyMethod.class).getPublicKey().enqueue(new Callback<PublicKeyResponse>() {
             @Override
             public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
+
                 SLogger.d(response);
 
                 if (response == null || response.body() == null) {
@@ -48,6 +49,7 @@ public class LoginRepositoryImpl implements LoginRepository {
 
             @Override
             public void onFailure(Call<PublicKeyResponse> call, Throwable t) {
+
                 SLogger.d(t);
                 responseCallback.onFailure(t);
             }
@@ -63,6 +65,7 @@ public class LoginRepositoryImpl implements LoginRepository {
         Connector.request().create(TicketMethod.class).token(safe).enqueue(new Callback<TicketResponse>() {
             @Override
             public void onResponse(Call<TicketResponse> call, Response<TicketResponse> response) {
+
                 SLogger.d(response);
 
                 if (response == null || response.body() == null) {
@@ -76,6 +79,7 @@ public class LoginRepositoryImpl implements LoginRepository {
 
             @Override
             public void onFailure(Call<TicketResponse> call, Throwable t) {
+
                 SLogger.d(t);
 
                 responseCallback.onFailure(t);
@@ -92,6 +96,7 @@ public class LoginRepositoryImpl implements LoginRepository {
         Connector.request().create(LoginMethod.class).login(ticketResponse.getTicket(), safe).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+
                 SLogger.d(response);
 
                 if (response == null || response.body() == null) {
@@ -105,6 +110,7 @@ public class LoginRepositoryImpl implements LoginRepository {
 
             @Override
             public void onFailure(Call<TokenResponse> call, Throwable t) {
+
                 SLogger.d(t);
                 responseCallback.onFailure(t);
             }

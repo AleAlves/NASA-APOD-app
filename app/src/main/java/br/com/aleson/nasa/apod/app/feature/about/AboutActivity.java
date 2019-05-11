@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.profile;
+package br.com.aleson.nasa.apod.app.feature.about;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,10 +13,10 @@ import br.com.aleson.nasa.apod.app.common.firebase.FirebaseCloudMessaging;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.StorageHelper;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
+import br.com.aleson.nasa.apod.app.feature.about.viewmodel.AboutViewModel;
 import br.com.aleson.nasa.apod.app.feature.login.domain.User;
 import br.com.aleson.nasa.apod.app.databinding.ActivityProfileBinding;
-import br.com.aleson.nasa.apod.app.feature.profile.model.ServiceVersionModel;
-import br.com.aleson.nasa.apod.app.feature.profile.viewmodel.ProfileViewModel;
+import br.com.aleson.nasa.apod.app.feature.about.model.ServiceVersionModel;
 
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
@@ -41,7 +41,7 @@ import com.google.android.gms.tasks.Task;
 
 //Small aproach to MVVM, just a POC.
 
-public class ProfileActivity extends BaseActivity {
+public class AboutActivity extends BaseActivity {
 
     private User user;
     private ImageView profilePic;
@@ -51,13 +51,13 @@ public class ProfileActivity extends BaseActivity {
     private ImageButton imageButtonLogout;
     private Switch switchDailyNotifications;
     private ActivityProfileBinding binding;
-    private ProfileViewModel viewModel;
+    private AboutViewModel viewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(AboutViewModel.class);
 
         super.onCreate(savedInstanceState);
 

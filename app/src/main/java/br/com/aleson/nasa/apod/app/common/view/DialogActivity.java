@@ -39,7 +39,7 @@ public class DialogActivity extends AppCompatActivity {
             if (dialog == null) {
                 create(this);
             }
-            if (loading && dialog != null) {
+            if (loading && dialog != null && !dialog.isShowing()) {
                 dialog.show();
             } else {
                 dialog.hide();

@@ -54,4 +54,8 @@ public class Constants {
     public static final class DATE{
         public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     }
+
+    public class SERVICE {
+        public static final String MAIN_SERVER = "https://nasa-apod-server.herokuapp.com/";
+    }
 }

@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -315,27 +316,19 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.apod_account: {
+            case R.id.apod_profile:
 
-                if (verifyLogged()) {
-
-                    NavigationHelper.navigateProfile();
-                } else {
-                    loggInWarn();
-                }
+                NavigationHelper.navigateProfile();
                 break;
-            }
-            case R.id.apod_random: {
+            case R.id.apod_random:
 
                 getRandomAPOD();
                 break;
-            }
-            case R.id.apod_date_range: {
+            case R.id.apod_date_range:
 
                 datePicker();
                 break;
-            }
-            case R.id.apod_fav_list: {
+            case R.id.apod_fav_list:
 
                 if (verifyLogged()) {
 
@@ -344,7 +337,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
                     loggInWarn();
                 }
                 break;
-            }
         }
         return true;
     }
