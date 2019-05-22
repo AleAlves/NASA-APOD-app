@@ -44,21 +44,19 @@ public abstract class APODGestureListener extends GestureDetector.SimpleOnGestur
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        if (!onScrolling) {
-            try {
-                if (e1.getX() < e2.getX()) {
+        try {
+            if (e1.getX() < e2.getX()) {
 
-                    return onSwipeRight();
-                }
-
-                if (e1.getX() > e2.getX()) {
-
-                    return onSwipeLeft();
-                }
-            } catch (Exception e) {
-
-                SLogger.e(e);
+                return onSwipeRight();
             }
+
+            if (e1.getX() > e2.getX()) {
+
+                return onSwipeLeft();
+            }
+        } catch (Exception e) {
+
+            SLogger.e(e);
         }
         return false;
     }

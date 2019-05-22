@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.about;
+package br.com.aleson.nasa.apod.app.feature.profile;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +13,13 @@ import br.com.aleson.nasa.apod.app.common.firebase.FirebaseCloudMessaging;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.StorageHelper;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
-import br.com.aleson.nasa.apod.app.feature.about.viewmodel.AboutViewModel;
+import br.com.aleson.nasa.apod.app.feature.profile.viewmodel.ProfileViewModel;
 import br.com.aleson.nasa.apod.app.feature.login.domain.User;
 import br.com.aleson.nasa.apod.app.databinding.ActivityProfileBinding;
-import br.com.aleson.nasa.apod.app.feature.about.model.ServiceVersionModel;
+import br.com.aleson.nasa.apod.app.feature.profile.model.ServiceVersionModel;
 
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -30,7 +31,10 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -41,7 +45,7 @@ import com.google.android.gms.tasks.Task;
 
 //Small aproach to MVVM, just a POC.
 
-public class AboutActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity {
 
     private User user;
     private ImageView profilePic;
@@ -51,13 +55,13 @@ public class AboutActivity extends BaseActivity {
     private ImageButton imageButtonLogout;
     private Switch switchDailyNotifications;
     private ActivityProfileBinding binding;
-    private AboutViewModel viewModel;
+    private ProfileViewModel viewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        viewModel = ViewModelProviders.of(this).get(AboutViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
         super.onCreate(savedInstanceState);
 
@@ -98,7 +102,6 @@ public class AboutActivity extends BaseActivity {
 
         Glide.with(this)
                 .load(user.getPic())
-                .apply(RequestOptions.circleCropTransform())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

@@ -1,7 +1,9 @@
 package br.com.aleson.nasa.apod.app.feature.favorite.presentation;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
@@ -14,6 +16,8 @@ import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.Favorite
 import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.FavoritesResponse;
 
 import android.os.Bundle;
+
+import com.github.android.aleson.slogger.SLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +41,12 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
     private void init() {
 
         recyclerView = findViewById(R.id.favorites_recyclerview);
-        layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        layoutManager.setSmoothScrollbarEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+        snapHelper.onFling(100, 0);
         adapter = new FavoritesRecyclerView(this, favoritesList);
         recyclerView.setAdapter(adapter);
 

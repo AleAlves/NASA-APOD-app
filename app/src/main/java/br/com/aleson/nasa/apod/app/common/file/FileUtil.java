@@ -15,14 +15,19 @@ import android.widget.ImageView;
 
 import com.github.android.aleson.slogger.SLogger;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Date;
 
 import br.com.aleson.nasa.apod.app.common.constants.Constants;
+import br.com.aleson.nasa.apod.app.common.util.AndroidHelper;
 import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 
 
@@ -134,5 +139,29 @@ public class FileUtil {
         share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
         share.putExtra(Intent.EXTRA_TEXT, "\n" + title + "\n\n\n" + explanation);
         context.startActivity(Intent.createChooser(share, "Share Image"));
+    }
+
+    public static String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = AndroidHelper.currentContext.getAssets().open("raw/client_oauth.json");
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
     }
 }

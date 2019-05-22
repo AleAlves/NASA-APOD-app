@@ -1,5 +1,6 @@
 package br.com.aleson.nasa.apod.app.common.constants;
 
+
 public class Constants {
 
 
@@ -22,7 +23,7 @@ public class Constants {
     }
 
     public static final class FIREBASE {
-        public static final String RQUEST_ID_TOKEN = "564935331593-788ive354t904oj80g8sqeum4a3krbcu.apps.googleusercontent.com";
+        public static final String RQUEST_ID_TOKEN = "918818046831-mt24tfnfgsrbd1o5rsf9l6ts2vb82h92.apps.googleusercontent.com";
     }
 
     public static final class NOTIFICATIONS {
@@ -51,7 +52,7 @@ public class Constants {
         public static final int DEFAULT = 2000;
     }
 
-    public static final class DATE{
+    public static final class DATE {
         public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     }
 

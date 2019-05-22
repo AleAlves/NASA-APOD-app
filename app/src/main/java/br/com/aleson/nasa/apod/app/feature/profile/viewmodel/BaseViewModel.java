@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.about.viewmodel;
+package br.com.aleson.nasa.apod.app.feature.profile.viewmodel;
 
 import android.app.Application;
 

@@ -20,7 +20,7 @@
             android:name=".feature.favorite.presentation.FavoriteActivity"
             android:label="Favorites" />
         <activity
-            android:name=".feature.about.AboutActivity"
+            android:name=".feature.profile.ProfileActivity"
             android:label="Profile" />
         <activity android:name=".feature.apod.presentation.APODFullscreenActivity" />
 

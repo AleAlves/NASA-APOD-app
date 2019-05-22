@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.about.model;
+package br.com.aleson.nasa.apod.app.feature.profile.model;
 
 public class ServiceVersionModel {
 

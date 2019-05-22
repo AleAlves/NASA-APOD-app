@@ -19,7 +19,7 @@
             android:id="@+id/favorites_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </ScrollView>
 
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

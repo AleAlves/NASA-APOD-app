@@ -1,23 +1,23 @@
-package br.com.aleson.nasa.apod.app.feature.about.viewmodel;
+package br.com.aleson.nasa.apod.app.feature.profile.viewmodel;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import br.com.aleson.nasa.apod.app.feature.about.api.ServiceVersionRequest;
-import br.com.aleson.nasa.apod.app.feature.about.api.ServiceVersionResponse;
-import br.com.aleson.nasa.apod.app.feature.about.model.ServiceVersionModel;
+import br.com.aleson.nasa.apod.app.feature.profile.api.ServiceVersionRequest;
+import br.com.aleson.nasa.apod.app.feature.profile.api.ServiceVersionResponse;
+import br.com.aleson.nasa.apod.app.feature.profile.model.ServiceVersionModel;
 import br.com.connector.aleson.android.connector.Connector;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AboutViewModel extends BaseViewModel {
+public class ProfileViewModel extends BaseViewModel {
 
     private MutableLiveData version;
 
-    public AboutViewModel(@NonNull Application application) {
+    public ProfileViewModel(@NonNull Application application) {
         super(application);
     }
 

@@ -1,4 +1,4 @@
-package br.com.aleson.nasa.apod.app.feature.about.api;
+package br.com.aleson.nasa.apod.app.feature.profile.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
