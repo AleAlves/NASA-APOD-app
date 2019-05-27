@@ -19,9 +19,9 @@ import br.com.aleson.nasa.apod.app.databinding.ActivityProfileBinding;
 import br.com.aleson.nasa.apod.app.feature.profile.model.ServiceVersionModel;
 
 import android.content.pm.PackageInfo;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,10 +31,7 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -52,6 +49,7 @@ public class ProfileActivity extends BaseActivity {
     private TextView profileName;
     private TextView profileEmail;
     private TextView textViewAppVersion;
+    private Button buttonDeleteAccount;
     private ImageButton imageButtonLogout;
     private Switch switchDailyNotifications;
     private ActivityProfileBinding binding;
@@ -102,6 +100,7 @@ public class ProfileActivity extends BaseActivity {
 
         Glide.with(this)
                 .load(user.getPic())
+                .apply(RequestOptions.circleCropTransform())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -122,7 +121,9 @@ public class ProfileActivity extends BaseActivity {
         profileEmail = findViewById(R.id.textview_profile_email);
         imageButtonLogout = findViewById(R.id.image_button_logout);
         textViewAppVersion = findViewById(R.id.textview_app_version);
+        buttonDeleteAccount = findViewById(R.id.button_delete_account);
         imageButtonLogout.setOnClickListener(this);
+        buttonDeleteAccount.setOnClickListener(this);
 
 
         switchDailyNotifications = findViewById(R.id.switch_daily_notification);
@@ -146,7 +147,6 @@ public class ProfileActivity extends BaseActivity {
     private void signOut() {
 
         Session.getInstance().firebaseAuth().signOut();
-
         Session.getInstance().googleSignInClient().signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
@@ -154,9 +154,21 @@ public class ProfileActivity extends BaseActivity {
                         finish();
                     }
                 });
-
         Session.getInstance().setLogged(false);
         Session.getInstance().setUser(null);
+    }
+
+
+    private void deleteAccount() {
+
+        viewModel.delete().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    signOut();
+                }
+            }
+        });
     }
 
 
@@ -184,6 +196,30 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    private void deleteAccountDialog() {
+
+        DialogMessage message = new DialogMessage();
+        message.setMessage(getString(R.string.dialog_message_delete_account));
+        message.setPositiveButton(getString(R.string.dialog_button_default_positive));
+        message.setNegativeButton(getString(R.string.dialog_button_default_negative));
+        showDialog(message, false, new DialogCallback.Buttons() {
+            @Override
+            public void onPositiveAction() {
+                deleteAccount();
+            }
+
+            @Override
+            public void onNegativeAction() {
+                //do nothing
+            }
+
+            @Override
+            public void onDismiss() {
+                //do nothing
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -192,6 +228,10 @@ public class ProfileActivity extends BaseActivity {
             case R.id.image_button_logout:
 
                 exitDialog();
+                break;
+            case R.id.button_delete_account:
+
+                deleteAccountDialog();
                 break;
             default:
                 break;

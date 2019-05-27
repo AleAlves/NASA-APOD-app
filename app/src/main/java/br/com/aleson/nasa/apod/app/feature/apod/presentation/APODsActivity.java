@@ -136,6 +136,8 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
+        snapHelper.onFling(100, 0);
+
 
         mGestureDetector = new GestureDetector(this, new APODGestureListener(recyclerView) {
             @Override
@@ -315,7 +317,11 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         switch (menuItem.getItemId()) {
             case R.id.apod_profile:
 
-                NavigationHelper.navigateProfile();
+                if (verifyLogged()) {
+                    NavigationHelper.navigateProfile();
+                } else {
+                    loggInWarn();
+                }
                 break;
             case R.id.apod_random:
 

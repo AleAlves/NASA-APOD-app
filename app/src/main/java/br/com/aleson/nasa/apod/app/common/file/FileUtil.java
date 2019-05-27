@@ -33,43 +33,44 @@ import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 
 public class FileUtil {
 
-    public static boolean saveAPOD(Context context, APOD item, ImageView imageViewAPOD, FileOperationCallback callback) {
+    private static File externalDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        Bitmap bitmap = (Bitmap) getBitmapFromView(imageViewAPOD);
+    public static void saveAPOD(Context context, APOD item, ImageView imageViewAPOD, FileOperationCallback callback) {
 
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Constants.BUSINESS.STORAGE_DIR);
+        Bitmap bitmap = getBitmapFromView(imageViewAPOD);
+
+        File mediaStorageDir = new File(externalDir, Constants.BUSINESS.STORAGE_DIR);
+
         if (!mediaStorageDir.exists())
             mediaStorageDir.mkdirs();
         try {
-            String fname = item.getDate();
-            File file = new File(mediaStorageDir, fname);
+            File file = new File(mediaStorageDir, getFileNamePng(item.getDate()));
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+
             if (file.exists()) {
-                callback.onFinish(Constants.FILE.OPERATIONS.SAVED);
-                return true;
+                callback.onFinish(true, Constants.FILE.OPERATIONS.SAVED);
             }
             if (file.createNewFile()) {
-                Date currentTime = Calendar.getInstance().getTime();
-                file.setLastModified(currentTime.getTime());
-                FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                out.flush();
-                out.close();
-                addImageToGallery(file.getAbsolutePath(), context);
-                callback.onFinish(Constants.FILE.OPERATIONS.SUCESS);
-                return true;
+
+                FileOutputStream fo = new FileOutputStream(file);
+                fo.write(bytes.toByteArray());
+                fo.close();
+
+                addImageToGallery(file, context);
+
+                callback.onFinish(true, Constants.FILE.OPERATIONS.SUCESS);
             } else {
-                callback.onFinish(Constants.FILE.OPERATIONS.FAILED);
-                return false;
+                callback.onFinish(false, Constants.FILE.OPERATIONS.ERROR);
             }
         } catch (Exception e) {
-            callback.onFinish(Constants.FILE.OPERATIONS.FAILED);
-            return false;
+            callback.onFinish(false, Constants.FILE.OPERATIONS.ERROR);
         }
     }
 
     public static boolean savedImageExists(String date) {
 
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Constants.BUSINESS.STORAGE_DIR);
+        File mediaStorageDir = new File(externalDir, Constants.BUSINESS.STORAGE_DIR);
         if (!mediaStorageDir.exists())
             mediaStorageDir.mkdirs();
         try {
@@ -94,74 +95,56 @@ public class FileUtil {
         return returnedBitmap;
     }
 
-    public static void delete(String date, FileOperationCallback callback) {
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Constants.BUSINESS.STORAGE_DIR);
+    public static void delete(Context context, String date, FileOperationCallback callback) {
+        File mediaStorageDir = new File(externalDir, Constants.BUSINESS.STORAGE_DIR);
         if (!mediaStorageDir.exists())
             mediaStorageDir.mkdirs();
         try {
-            String fname = date;
-            File file = new File(mediaStorageDir, fname);
+            File file = new File(mediaStorageDir, getFileNamePng(date));
             if (file.exists()) {
                 file.delete();
-                callback.onFinish(Constants.FILE.OPERATIONS.DELETED);
+                callback.onFinish(true, Constants.FILE.OPERATIONS.DELETED);
+                addImageToGallery(file, context);
             }
         } catch (Exception e) {
             SLogger.e(e);
-            callback.onFinish(Constants.FILE.OPERATIONS.ERROR);
+            callback.onFinish(false, Constants.FILE.OPERATIONS.ERROR);
         }
     }
 
-    private static void addImageToGallery(final String filePath, final Context context) {
-
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
-        values.put(MediaStore.MediaColumns.DATE_MODIFIED, filePath);
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    private static void addImageToGallery(final File file, final Context context) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
     }
 
     public static void sharing(Context context, ImageView imageViewAPOD, String title, String explanation) {
 
-        Bitmap apod = (Bitmap) getBitmapFromView(imageViewAPOD);
+        Bitmap bitmap = getBitmapFromView(imageViewAPOD);
 
         Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/*");
+        share.setType("image/png");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        apod.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+
+        File mediaStorageDir = new File(externalDir, Constants.BUSINESS.STORAGE_DIR);
+
+        File file = new File(mediaStorageDir, getFileNamePng("temp"));
         try {
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
+            file.createNewFile();
+            FileOutputStream fo = new FileOutputStream(file);
             fo.write(bytes.toByteArray());
+            fo.close();
         } catch (IOException e) {
             SLogger.e(e);
         }
-        share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+        share.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getPath()));
         share.putExtra(Intent.EXTRA_TEXT, "\n" + title + "\n\n\n" + explanation);
         context.startActivity(Intent.createChooser(share, "Share Image"));
     }
 
-    public static String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = AndroidHelper.currentContext.getAssets().open("raw/client_oauth.json");
-
-            int size = is.available();
-
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-
+    private static String getFileNamePng(String date) {
+        return date + ".png";
     }
 }

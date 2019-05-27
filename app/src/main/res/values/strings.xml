@@ -8,10 +8,12 @@
     <string name="dialog_button_default_negative">Cancel</string>
     <string name="dialog_button_login_positive">LOGIN</string>
     <string name="dialog_button_login_negative">NOT NOW</string>
+    <string name="dialog_message_delete_account">Do you want to delete your account?</string>
     <string name="dialog_message_logout_warn">Do you want to logout?</string>
     <string name="dialog_message_login_warn">Please, you need to login first</string>
     <string name="calendar_title">Pick a date</string>
     <string name="dialog_random_option">Random</string>
+
 
     //Toast
     <string name="toast_message_leave_action">Press again to leave</string>
@@ -23,16 +25,13 @@
     <string name="menu_item_label_favorites">Favorites</string>
     <string name="menu_item_label_profile">Profile</string>
 
-
     //Profile
     <string name="label_switch_notifications">Allow Notifications</string>
+    <string name="button_delete_account">Delete Account</string>
     <string name="label_service_version">Service version:</string>
     <string name="label_app_version">App version:</string>
 
     //Login
     <string name="label_button_skip_potion">SKIP</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

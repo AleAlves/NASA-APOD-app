@@ -69,7 +69,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
                 })
                 .into(holder.imageViewFavApodPic);
 
-        holder.imageViewFavApodPic.setOnClickListener(new View.OnClickListener() {
+        holder.constraintLayoutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startAPODActivity(favorites.get(position).getDate());
@@ -99,10 +99,12 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
         private TextView textViewFavApodDate;
         private TextView textViewFavApodTitle;
         private ProgressBar progressBarLoading;
+        private ConstraintLayout constraintLayoutCard;
 
         public FavoritesViewHolder(@NonNull View itemView) {
 
             super(itemView);
+            this.constraintLayoutCard = itemView.findViewById(R.id.constraintLayout_favorite_card);
             this.imageViewFavApodPic = itemView.findViewById(R.id.apod_adapter_apod_image);
             this.textViewFavApodDate = itemView.findViewById(R.id.favorite_apod_date);
             this.textViewFavApodTitle = itemView.findViewById(R.id.favorite_apod_title);

@@ -90,7 +90,7 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
 
         if (Constants.MEDIA.VIDEO.equals(apodList.get(position).getMedia_type())) {
 
-            holder.imageButtonDownload.setEnabled(false);
+            holder.imageButtonDownload.setVisibility(View.GONE);
             holder.progressBarImageLoading.setVisibility(View.GONE);
             holder.imageViewVideoPlay.setVisibility(View.VISIBLE);
             holder.imageViewAPOD.setImageResource(0);
@@ -200,10 +200,12 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
                 if (PermissionManager.verfyStoragePermission(activity)) {
                     FileUtil.saveAPOD(activity, apodList.get(position), holder.imageViewAPOD, new FileOperationCallback() {
                         @Override
-                        public void onFinish(String message) {
+                        public void onFinish(boolean success, String message) {
 
-                            holder.imageButtonDelete.setVisibility(View.VISIBLE);
-                            holder.imageButtonDownload.setVisibility(View.GONE);
+                            if (success) {
+                                holder.imageButtonDelete.setVisibility(View.VISIBLE);
+                                holder.imageButtonDownload.setVisibility(View.GONE);
+                            }
 
                             apodView.showToast(message);
                         }
@@ -218,12 +220,14 @@ public class APODRecyclerViewAdapter extends RecyclerView.Adapter<APODRecyclerVi
         holder.imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileUtil.delete(apodList.get(position).getDate(), new FileOperationCallback() {
+                FileUtil.delete(activity, apodList.get(position).getDate(), new FileOperationCallback() {
                     @Override
-                    public void onFinish(String message) {
+                    public void onFinish(boolean success, String message) {
 
-                        holder.imageButtonDelete.setVisibility(View.GONE);
-                        holder.imageButtonDownload.setVisibility(View.VISIBLE);
+                        if (success) {
+                            holder.imageButtonDelete.setVisibility(View.GONE);
+                            holder.imageButtonDownload.setVisibility(View.VISIBLE);
+                        }
 
                         apodView.showToast(message);
                     }

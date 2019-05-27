@@ -46,7 +46,6 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
         recyclerView.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
-        snapHelper.onFling(100, 0);
         adapter = new FavoritesRecyclerView(this, favoritesList);
         recyclerView.setAdapter(adapter);
 

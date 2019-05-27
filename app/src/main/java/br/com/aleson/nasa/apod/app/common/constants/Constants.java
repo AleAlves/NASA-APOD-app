@@ -39,6 +39,7 @@ public class Constants {
             public static final String SAVED = "Image Already saved";
             public static final String DELETED = "File deleted";
             public static final String ERROR = "Something Went Wrong";
+            public static final String FOLDER = "NASA%APOD%App/";
         }
     }
 

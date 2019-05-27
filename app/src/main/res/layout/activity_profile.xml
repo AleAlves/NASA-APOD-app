@@ -19,6 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -39,6 +40,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="20dp"
+                android:importantForAccessibility="no"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +53,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="40dp"
                 android:gravity="center"
+                android:importantForAccessibility="no"
                 android:text="Aleson Alves"
                 app:layout_constraintStart_toEndOf="@+id/iamgeview_profile_pic"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -62,6 +65,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
+                android:importantForAccessibility="no"
                 android:text="aleson.a.s@gmail.com"
                 app:layout_constraintStart_toEndOf="@+id/iamgeview_profile_pic"
                 app:layout_constraintTop_toBottomOf="@+id/textview_profile_name" />
@@ -72,6 +76,7 @@
                 android:layout_height="48dp"
                 android:layout_margin="10dp"
                 android:background="@null"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_exit_to_app_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textview_profile_name" />
@@ -88,6 +93,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_delete_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:text="@string/button_delete_account"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_daily_notification" />
 
         <TextView
             android:id="@+id/textview_label_api_version"
