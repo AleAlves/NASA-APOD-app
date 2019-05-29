@@ -1,5 +1,6 @@
 package br.com.aleson.nasa.apod.app.feature.favorite.presentation;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,14 +42,11 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
     private void init() {
 
         recyclerView = findViewById(R.id.favorites_recyclerview);
-        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         layoutManager.setSmoothScrollbarEnabled(true);
-        recyclerView.setLayoutManager(layoutManager);
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new FavoritesRecyclerView(this, favoritesList);
         recyclerView.setAdapter(adapter);
-
         interactor = new FavoriteInteractorImpl(new FavoritePresenterImpl(this), new FavoriteRepositoryImpl());
         interactor.getFavorites();
     }

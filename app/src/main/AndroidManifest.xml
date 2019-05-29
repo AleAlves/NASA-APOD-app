@@ -11,9 +11,9 @@
     <application
         android:name=".common.application.MainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icone"
         android:label="NASA-APOD-APP"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icone"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -29,6 +29,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/android_icon" />
 
         <activity android:name=".feature.apod.presentation.APODsActivity" />
         <activity

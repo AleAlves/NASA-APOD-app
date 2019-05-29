@@ -50,7 +50,6 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
     public void onBindViewHolder(@NonNull final FavoritesViewHolder holder, final int position) {
 
         holder.textViewFavApodDate.setText(DateHelper.parseDateToView(favorites.get(position).getDate()));
-        holder.textViewFavApodTitle.setText(favorites.get(position).getTitle());
 
         Glide.with(context)
                 .load(favorites.get(position).getPic())
@@ -97,7 +96,6 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
 
         private ImageView imageViewFavApodPic;
         private TextView textViewFavApodDate;
-        private TextView textViewFavApodTitle;
         private ProgressBar progressBarLoading;
         private ConstraintLayout constraintLayoutCard;
 
@@ -107,7 +105,6 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
             this.constraintLayoutCard = itemView.findViewById(R.id.constraintLayout_favorite_card);
             this.imageViewFavApodPic = itemView.findViewById(R.id.apod_adapter_apod_image);
             this.textViewFavApodDate = itemView.findViewById(R.id.favorite_apod_date);
-            this.textViewFavApodTitle = itemView.findViewById(R.id.favorite_apod_title);
             this.progressBarLoading = itemView.findViewById(R.id.favorite_adapter_apod_image_loading);
         }
     }

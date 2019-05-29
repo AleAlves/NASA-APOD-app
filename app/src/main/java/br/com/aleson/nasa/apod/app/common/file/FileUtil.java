@@ -74,8 +74,7 @@ public class FileUtil {
         if (!mediaStorageDir.exists())
             mediaStorageDir.mkdirs();
         try {
-            String fname = date;
-            File file = new File(mediaStorageDir, fname);
+            File file = new File(mediaStorageDir, getFileNamePng(date));
             return file.exists();
         } catch (Exception e) {
             return false;
