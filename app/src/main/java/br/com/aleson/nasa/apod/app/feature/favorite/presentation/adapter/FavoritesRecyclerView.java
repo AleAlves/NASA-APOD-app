@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.aleson.nasa.apod.app.R;
+import br.com.aleson.nasa.apod.app.common.util.CustomTransformation;
 import br.com.aleson.nasa.apod.app.common.util.DateHelper;
 import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.FavoriteResponse;
 import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODsActivity;
@@ -53,6 +54,7 @@ public class FavoritesRecyclerView extends RecyclerView.Adapter<FavoritesRecycle
 
         Glide.with(context)
                 .load(favorites.get(position).getPic())
+                .transform(new CustomTransformation(context))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
