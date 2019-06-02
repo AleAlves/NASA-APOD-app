@@ -34,4 +34,7 @@
     //Login
     <string name="label_button_skip_potion">SKIP</string>
 
+    //Favorites
+    <string name="label_empty_favorites">No favorites yet,\n but you can give your ♥\nto a nice APOD anytime</string>
+
 </resources>

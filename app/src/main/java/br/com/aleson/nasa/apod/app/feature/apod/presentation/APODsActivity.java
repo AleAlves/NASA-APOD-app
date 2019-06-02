@@ -268,17 +268,16 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
         DialogMessage dialogMessage = new DialogMessage();
         dialogMessage.setMessage(message);
-        dialogMessage.setNegativeButton(getString(R.string.dialog_random_option));
+        dialogMessage.setPositiveButton(getString(R.string.dialog_random_option));
         showDialog(dialogMessage, true, new DialogCallback.Buttons() {
             @Override
             public void onPositiveAction() {
-                //DO nothing
+                getRandomAPOD();
             }
 
             @Override
             public void onNegativeAction() {
 
-                getRandomAPOD();
             }
 
             @Override

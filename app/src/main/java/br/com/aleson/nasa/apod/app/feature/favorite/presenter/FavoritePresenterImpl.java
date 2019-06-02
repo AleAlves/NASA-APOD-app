@@ -35,4 +35,9 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     public void loadFavorite(FavoritesResponse favoritesResponse) {
         this.view.loadFavorite(favoritesResponse);
     }
+
+    @Override
+    public void emptyFavorite() {
+        this.view.emptyFavorites();
+    }
 }

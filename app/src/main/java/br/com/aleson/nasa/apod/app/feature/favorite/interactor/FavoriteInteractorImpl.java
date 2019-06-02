@@ -29,8 +29,14 @@ public class FavoriteInteractorImpl implements FavoriteInteractor {
 
                 if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.SUCCESS) {
 
-                    presenter.loadFavorite((FavoritesResponse) response);
+                    FavoritesResponse favoritesResponse = (FavoritesResponse) response;
 
+                    if (favoritesResponse == null || favoritesResponse.getFavorites().isEmpty()){
+                        presenter.emptyFavorite();
+                    }
+                    else{
+                        presenter.loadFavorite((FavoritesResponse) response);
+                    }
                 } else {
 
                     presenter.onError(((BaseResponse) response).getHttpStatus().getStatus());

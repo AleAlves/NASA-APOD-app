@@ -6,4 +6,6 @@ import br.com.aleson.nasa.apod.app.feature.favorite.repository.response.Favorite
 public interface FavoritePresenter extends BasePresenter {
 
     void loadFavorite(FavoritesResponse favoritesResponse);
+
+    void emptyFavorite();
 }

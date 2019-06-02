@@ -33,7 +33,6 @@ import br.com.aleson.nasa.apod.app.common.callback.FavoriteCallback;
 import br.com.aleson.nasa.apod.app.common.domain.DialogMessage;
 import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
-import br.com.aleson.nasa.apod.app.common.util.CustomTransformation;
 import br.com.aleson.nasa.apod.app.common.util.DateHelper;
 import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.apod.presentation.APODFullscreenActivity;

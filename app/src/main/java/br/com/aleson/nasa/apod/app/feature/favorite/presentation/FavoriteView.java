@@ -10,4 +10,6 @@ public interface FavoriteView extends BaseView {
     void onError();
 
     void onError(String message);
+
+    void emptyFavorites();
 }
