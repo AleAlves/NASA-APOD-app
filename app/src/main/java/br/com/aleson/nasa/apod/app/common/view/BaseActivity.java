@@ -79,4 +79,5 @@ public class BaseActivity extends DialogActivity implements BaseView {
     public void onClick(View v) {
         SLogger.d(v.getId());
     }
+
 }

@@ -1,8 +1,11 @@
 package br.com.aleson.nasa.apod.app.feature.apod.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class APOD {
+public class APOD implements Parcelable {
 
 
     @SerializedName("copyright")
@@ -27,6 +30,33 @@ public class APOD {
     private String url;
 
     private boolean like;
+
+    protected APOD(Parcel in) {
+        copyright = in.readString();
+        date = in.readString();
+        explanation = in.readString();
+        hdurl = in.readString();
+        media_type = in.readString();
+        title = in.readString();
+        url = in.readString();
+        like = in.readByte() != 0;
+    }
+
+    public APOD() {
+
+    }
+
+    public static final Creator<APOD> CREATOR = new Creator<APOD>() {
+        @Override
+        public APOD createFromParcel(Parcel in) {
+            return new APOD(in);
+        }
+
+        @Override
+        public APOD[] newArray(int size) {
+            return new APOD[size];
+        }
+    };
 
     public boolean isFavorite() {
         return like;
@@ -62,5 +92,22 @@ public class APOD {
 
     public String getUrl() {
         return url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(copyright);
+        dest.writeString(date);
+        dest.writeString(explanation);
+        dest.writeString(hdurl);
+        dest.writeString(media_type);
+        dest.writeString(title);
+        dest.writeString(url);
+        dest.writeByte((byte) (like ? 1 : 0));
     }
 }

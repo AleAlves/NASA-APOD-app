@@ -7,6 +7,8 @@ public interface LoginInteractor {
 
     void login();
 
+    void getPublicKey();
+
     void ticket(AESData aesData);
 
     void token(TicketResponse ticketResponse);

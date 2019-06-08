@@ -5,7 +5,9 @@ import android.util.Base64;
 import com.github.android.aleson.slogger.SLogger;
 
 import br.com.aleson.nasa.apod.app.common.callback.ResponseCallback;
+import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.session.Session;
+import br.com.aleson.nasa.apod.app.common.util.StorageHelper;
 import br.com.aleson.nasa.apod.app.feature.login.domain.AESData;
 import br.com.aleson.nasa.apod.app.feature.login.domain.User;
 import br.com.aleson.nasa.apod.app.feature.login.repository.api.LoginMethod;
@@ -21,6 +23,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginRepositoryImpl implements LoginRepository {
+
+    @Override
+    public void verifyToken(ResponseCallback responseCallback) {
+
+        responseCallback.onResponse(StorageHelper.readStringData(Constants.TOKEN_KEY));
+    }
+
+    @Override
+    public void saveToken(String token) {
+        StorageHelper.saveData(Constants.TOKEN_KEY, token);
+    }
 
     @Override
     public void getPublicKey(final ResponseCallback responseCallback) {

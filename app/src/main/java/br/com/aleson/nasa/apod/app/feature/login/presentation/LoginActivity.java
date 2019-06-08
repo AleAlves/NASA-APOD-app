@@ -78,9 +78,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private void startLogin() {
 
-        this.interactor.login();
+        this.initSession();
 
-        initSession();
+        this.interactor.login();
     }
 
 

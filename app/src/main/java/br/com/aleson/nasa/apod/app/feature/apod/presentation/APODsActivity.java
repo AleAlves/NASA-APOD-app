@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.DatePicker;
 
 import com.github.android.aleson.slogger.SLogger;
@@ -24,11 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 import br.com.aleson.nasa.apod.app.R;
 import br.com.aleson.nasa.apod.app.common.constants.Constants;
 import br.com.aleson.nasa.apod.app.common.callback.DialogCallback;
@@ -38,12 +31,14 @@ import br.com.aleson.nasa.apod.app.common.permission.PermissionManager;
 import br.com.aleson.nasa.apod.app.common.session.Session;
 import br.com.aleson.nasa.apod.app.common.util.DateHelper;
 import br.com.aleson.nasa.apod.app.common.util.NavigationHelper;
+import br.com.aleson.nasa.apod.app.common.view.APODViewPager;
 import br.com.aleson.nasa.apod.app.common.view.BaseActivity;
+import br.com.aleson.nasa.apod.app.common.view.UiPagerAdapter;
 import br.com.aleson.nasa.apod.app.feature.apod.domain.APOD;
 import br.com.aleson.nasa.apod.app.feature.apod.interactor.APODInteractor;
 import br.com.aleson.nasa.apod.app.feature.apod.interactor.APODInteractorImpl;
-import br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter.APODGestureListener;
-import br.com.aleson.nasa.apod.app.feature.apod.presentation.adapter.APODRecyclerViewAdapter;
+import br.com.aleson.nasa.apod.app.common.view.GestureListener;
+import br.com.aleson.nasa.apod.app.feature.apod.presentation.fragment.APODFragment;
 import br.com.aleson.nasa.apod.app.feature.apod.presenter.APODPresenterImpl;
 import br.com.aleson.nasa.apod.app.feature.apod.repository.APODRepositoryImpl;
 import br.com.aleson.nasa.apod.app.feature.apod.repository.request.APODRateRequest;
@@ -59,13 +54,13 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     private String lasSuccededDate;
     private DateHelper dateHelper;
     private APODInteractor interactor;
-    private RecyclerView recyclerView;
-    private APODRecyclerViewAdapter mAdapter;
-    private GestureDetector mGestureDetector;
-    private RecyclerView.LayoutManager layoutManager;
     private List<APOD> apodList = new ArrayList<>();
     private List<String> apodDatelist = new ArrayList<>();
     private BottomNavigationView navigationView;
+    private GestureListener gestureListener;
+    private int index;
+    private UiPagerAdapter uiPagerAdapter;
+    private APODViewPager apodViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +74,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         handleExtras(getIntent());
 
         init();
-
-        initRecyclerView();
 
         updateDate(Constants.SWIPE.IDLE);
 
@@ -126,48 +119,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         }
     }
 
-    private void initRecyclerView() {
-
-        layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, true);
-        mAdapter = new APODRecyclerViewAdapter(this, apodList, this);
-        recyclerView = findViewById(R.id.act_apod_recyclerview_adapter);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mAdapter);
-
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
-        snapHelper.onFling(100, 0);
-
-
-        mGestureDetector = new GestureDetector(this, new APODGestureListener(recyclerView) {
-            @Override
-            public boolean onSwipeRight() {
-
-                updateDate(Constants.SWIPE.RIGHT);
-                return false;
-            }
-
-            @Override
-            public boolean onSwipeLeft() {
-
-                updateDate(Constants.SWIPE.LEFT);
-                return false;
-            }
-
-            @Override
-            public boolean onTouch() {
-                return false;
-            }
-        });
-
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return mGestureDetector.onTouchEvent(event);
-            }
-        });
-    }
-
     private boolean isValidRange() {
 
         try {
@@ -203,7 +154,39 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     private void init() {
 
+        gestureListener = new GestureListener(APODsActivity.this) {
+            @Override
+            public boolean onSwipeRight() {
+                if (apodViewPager.getCurrentItem() == 0) {
+                    updateDate(Constants.SWIPE.RIGHT);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeLeft() {
+                if ((apodViewPager.getCurrentItem() == 0 && apodList.size() == 0) ||
+                        apodViewPager.getCurrentItem() == apodList.size() - 1) {
+                    updateDate(Constants.SWIPE.LEFT);
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onTouch() {
+                return false;
+            }
+        };
+
+        apodViewPager = findViewById(R.id.viewpager_apods);
+
+        uiPagerAdapter = new UiPagerAdapter(getSupportFragmentManager());
+
+        apodViewPager.setAdapter(uiPagerAdapter);
+
         navigationView = findViewById(R.id.bottom_navigation_apod_menu);
+
         navigationView.setOnNavigationItemSelectedListener(this);
 
         this.interactor = new APODInteractorImpl(new APODPresenterImpl(this), new APODRepositoryImpl());
@@ -225,19 +208,25 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         Collections.sort(apodList, new Comparator<APOD>() {
             @Override
             public int compare(APOD apod1, APOD apodProxy) {
-                return apodProxy.getDate().compareTo(apod1.getDate());
+                return apod1.getDate().compareTo(apodProxy.getDate());
             }
         });
 
-        this.mAdapter.notifyDataSetChanged();
+        uiPagerAdapter.clear();
 
-        if (currentAction > 0) {
-
-            recyclerView.scrollToPosition(apodList.size());
-        } else if (currentAction < 0) {
-
-            recyclerView.scrollToPosition(apodList.size() - 1);
+        for (APOD apod1 : apodList) {
+            this.uiPagerAdapter.add(APODFragment.newInstance(apod1));
         }
+
+        this.uiPagerAdapter.notifyDataSetChanged();
+        this.apodViewPager.setAdapter(uiPagerAdapter);
+
+        if (apodList.size() == 1 && currentAction != 1) {
+            this.apodViewPager.setCurrentItem(0);
+        } else if (currentAction == 1) {
+            this.apodViewPager.setCurrentItem(apodList.size() - 1);
+        }
+
     }
 
     @Override
@@ -310,39 +299,6 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         PermissionManager.askPermissionToStorage(APODsActivity.this);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-        switch (menuItem.getItemId()) {
-            case R.id.apod_profile:
-
-                if (verifyLogged()) {
-                    NavigationHelper.navigateProfile();
-                } else {
-                    loggInWarn();
-                }
-                break;
-            case R.id.apod_random:
-
-                getRandomAPOD();
-                break;
-            case R.id.apod_date_range:
-
-                datePicker();
-                break;
-            case R.id.apod_fav_list:
-
-                if (verifyLogged()) {
-
-                    NavigationHelper.navigateFavorites();
-                } else {
-                    loggInWarn();
-                }
-                break;
-        }
-        return true;
-    }
-
     private void datePicker() {
 
         try {
@@ -393,8 +349,12 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
 
     private void clearDataLists() {
 
+        index = 0;
         apodList.clear();
         apodDatelist.clear();
+        uiPagerAdapter.clear();
+        uiPagerAdapter.notifyDataSetChanged();
+        apodViewPager.setAdapter(uiPagerAdapter);
     }
 
     private void loggInWarn() {
@@ -406,7 +366,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         showDialog(message, false, new DialogCallback.Buttons() {
             @Override
             public void onPositiveAction() {
-                finish();
+                NavigationHelper.navigateLogin();
             }
 
             @Override
@@ -458,9 +418,58 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case R.id.apod_profile:
+
+                if (verifyLogged()) {
+                    NavigationHelper.navigateProfile();
+                } else {
+                    loggInWarn();
+                }
+                break;
+            case R.id.apod_random:
+
+                getRandomAPOD();
+                break;
+            case R.id.apod_date_range:
+
+                datePicker();
+                break;
+            case R.id.apod_fav_list:
+
+                if (verifyLogged()) {
+
+                    NavigationHelper.navigateFavorites();
+                } else {
+                    loggInWarn();
+                }
+                break;
+        }
+        return true;
+    }
 
     private boolean verifyLogged() {
 
         return Session.getInstance().isLogged();
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent me) {
+        return gestureListener.onTouchEvent(me);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        try {
+            super.dispatchTouchEvent(ev);
+        } catch (Exception e) {
+            SLogger.e(e);
+        }
+        return gestureListener.dispatchTouchEvent(ev);
+    }
+
+
 }

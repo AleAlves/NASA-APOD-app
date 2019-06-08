@@ -27,6 +27,32 @@ public class LoginInteractorImpl implements LoginInteractor {
 
         presenter.showLoading();
 
+        repository.verifyToken(new ResponseCallback() {
+            @Override
+            public void onResponse(Object response) {
+
+                String token = (String) response;
+
+                if (token == null || token.isEmpty()) {
+                    
+                    getPublicKey();
+                } else {
+
+                    registerUser(getUser());
+                    registerValidToken(token);
+                    presenter.startHome();
+                }
+            }
+
+            @Override
+            public void onFailure(Object response) {
+                getPublicKey();
+            }
+        });
+    }
+
+    @Override
+    public void getPublicKey() {
         repository.getPublicKey(new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
@@ -74,13 +100,7 @@ public class LoginInteractorImpl implements LoginInteractor {
     @Override
     public void token(TicketResponse ticketResponse) {
 
-        final User user = new User();
-
-        user.setUid(Session.getInstance().firebaseAuth().getCurrentUser().getUid());
-        user.setEmail(Session.getInstance().firebaseAuth().getCurrentUser().getEmail());
-        user.setName(Session.getInstance().firebaseAuth().getCurrentUser().getDisplayName());
-        user.setPic(Session.getInstance().firebaseAuth().getCurrentUser().getPhotoUrl().toString());
-
+        final User user = getUser();
 
         repository.registerLogin(user, ticketResponse, new ResponseCallback() {
             @Override
@@ -89,7 +109,8 @@ public class LoginInteractorImpl implements LoginInteractor {
                 if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.CREATED ||
                         ((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.ACCEPTED) {
 
-                    registerValidToken((TokenResponse) response);
+                    registerValidToken(((TokenResponse) response).getToken());
+                    saveToken(((TokenResponse) response).getToken());
                     registerUser(user);
                     presenter.startHome();
                 } else {
@@ -110,9 +131,24 @@ public class LoginInteractorImpl implements LoginInteractor {
     }
 
 
-    private void registerValidToken(TokenResponse response) {
+    private void registerValidToken(String token) {
 
-        Session.getInstance().setToken(response.getToken());
+        Session.getInstance().setToken(token);
+    }
+
+
+    private void saveToken(String token) {
+        repository.saveToken(token);
+    }
+
+    private User getUser() {
+
+        User user = new User();
+        user.setUid(Session.getInstance().firebaseAuth().getCurrentUser().getUid());
+        user.setEmail(Session.getInstance().firebaseAuth().getCurrentUser().getEmail());
+        user.setName(Session.getInstance().firebaseAuth().getCurrentUser().getDisplayName());
+        user.setPic(Session.getInstance().firebaseAuth().getCurrentUser().getPhotoUrl().toString());
+        return user;
     }
 
     private void registerUser(User user) {

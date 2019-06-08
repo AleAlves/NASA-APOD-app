@@ -13,4 +13,7 @@ public interface LoginRepository {
 
     void registerLogin(User user, TicketResponse ticketResponse, ResponseCallback responseCallback);
 
+    void saveToken(String token);
+
+    void verifyToken(ResponseCallback responseCallback);
 }

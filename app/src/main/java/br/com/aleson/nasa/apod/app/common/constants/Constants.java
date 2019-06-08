@@ -3,6 +3,7 @@ package br.com.aleson.nasa.apod.app.common.constants;
 
 public class Constants {
 
+    public static final String TOKEN_KEY = "TOKEN_KEY";
 
     public static final class SWIPE {
         public static int LEFT = 1;
@@ -50,7 +51,7 @@ public class Constants {
     }
 
     public static final class TIME_LAPSE {
-        public static final int DEFAULT = 2000;
+        public static final int DEFAULT = 1000;
     }
 
     public static final class DATE {
