@@ -23,12 +23,12 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     @Override
     public void onError() {
-        this.view.showDialog();
+        this.view.showDialog(true);
     }
 
     @Override
     public void onError(String message) {
-        this.view.showDialog();
+        this.view.showDialog(true);
     }
 
     @Override

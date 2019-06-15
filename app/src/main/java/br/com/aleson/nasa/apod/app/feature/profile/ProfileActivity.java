@@ -156,6 +156,8 @@ public class ProfileActivity extends BaseActivity {
                 });
         Session.getInstance().setLogged(false);
         Session.getInstance().setUser(null);
+        Session.getInstance().getToken();
+        StorageHelper.saveData(Constants.TOKEN_KEY, "");
     }
 
 

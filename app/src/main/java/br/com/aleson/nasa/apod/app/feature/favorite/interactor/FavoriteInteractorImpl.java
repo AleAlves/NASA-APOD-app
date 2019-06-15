@@ -26,15 +26,17 @@ public class FavoriteInteractorImpl implements FavoriteInteractor {
         this.respository.getFavorites(new ResponseCallback() {
             @Override
             public void onResponse(Object response) {
+                if (response == null) {
 
-                if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.SUCCESS) {
+                    presenter.onError();
+
+                } else if (((BaseResponse) response).getHttpStatus().getCode() == Constants.HTTP_CODE.SUCCESS) {
 
                     FavoritesResponse favoritesResponse = (FavoritesResponse) response;
 
-                    if (favoritesResponse == null || favoritesResponse.getFavorites().isEmpty()){
+                    if (favoritesResponse == null || favoritesResponse.getFavorites().isEmpty()) {
                         presenter.emptyFavorite();
-                    }
-                    else{
+                    } else {
                         presenter.loadFavorite((FavoritesResponse) response);
                     }
                 } else {

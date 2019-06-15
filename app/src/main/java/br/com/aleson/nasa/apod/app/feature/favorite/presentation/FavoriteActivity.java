@@ -66,7 +66,7 @@ public class FavoriteActivity extends BaseActivity implements FavoriteView {
 
     @Override
     public void onError() {
-        showDialog();
+        showDialog(true);
     }
 
     @Override

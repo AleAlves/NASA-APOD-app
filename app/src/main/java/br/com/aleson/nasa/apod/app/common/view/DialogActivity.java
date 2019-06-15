@@ -39,7 +39,7 @@ public class DialogActivity extends AppCompatActivity {
             if (dialog == null) {
                 create(this);
             }
-            if (loading && dialog != null ) {
+            if (loading && dialog != null) {
                 dialog.show();
             } else {
                 dialog.hide();
@@ -59,7 +59,7 @@ public class DialogActivity extends AppCompatActivity {
         return dialog;
     }
 
-    public void showDialog() {
+    public void showDialog(final boolean finish) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getString(R.string.dialog_title_default_error));
@@ -70,6 +70,9 @@ public class DialogActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        if(finish){
+                            finish();
+                        }
                     }
                 });
 

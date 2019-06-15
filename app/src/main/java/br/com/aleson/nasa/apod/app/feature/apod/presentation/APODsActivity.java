@@ -232,7 +232,7 @@ public class APODsActivity extends BaseActivity implements APODView, BottomNavig
     @Override
     public void onError() {
 
-        showDialog();
+        showDialog(false);
         resetDateToPreviusSucessfulRequest();
         updateDate(Constants.SWIPE.IDLE);
     }
