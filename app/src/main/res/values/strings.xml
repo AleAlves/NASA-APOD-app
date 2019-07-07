@@ -1,11 +1,43 @@
 <resources>
-    <string name="app_name">NASA APOD App</string>
-    <string-array name="languages_array">
-        <item>English</item>
-        <item>Português</item>
-        <item>Français</item>
-        <item>Español</item>
-        <item>Deutsch</item>
-        <item>русский</item>
-    </string-array>
+    <string name="app_name">NASA APOD app</string>
+
+    //Dialog
+    <string name="dialog_title_default_error">Oops</string>
+    <string name="dialog_message_default_error">Houston, we have a problem...</string>
+    <string name="dialog_button_default_positive">OK</string>
+    <string name="dialog_button_default_negative">Cancel</string>
+    <string name="dialog_button_login_positive">LOGIN</string>
+    <string name="dialog_button_login_negative">NOT NOW</string>
+    <string name="dialog_message_delete_account">Do you want to delete your account?</string>
+    <string name="dialog_message_logout_warn">Do you want to logout?</string>
+    <string name="dialog_message_login_warn">Please, you need to login first</string>
+    <string name="calendar_title">Pick a date</string>
+    <string name="dialog_random_option">Random</string>
+
+
+    //Toast
+    <string name="toast_message_leave_action">Press again to leave</string>
+    <string name="toast_message_auth_failed">Authentication Failed</string>
+
+    //Menu
+    <string name="menu_item_label_calendar">Calendar</string>
+    <string name="menu_item_label_random">Random</string>
+    <string name="menu_item_label_favorites">Favorites</string>
+    <string name="menu_item_label_profile">Profile</string>
+
+    //Profile
+    <string name="label_switch_notifications">Allow Notifications</string>
+    <string name="button_delete_account">Delete Account</string>
+    <string name="label_service_version">Service version:</string>
+    <string name="label_app_version">App version:</string>
+
+    //Login
+    <string name="label_button_skip_potion">SKIP</string>
+
+    //Favorites
+    <string name="label_empty_favorites">No favorites yet,\n but you can give your ♥\nto a nice APOD anytime</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
