@@ -1,84 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.aleson.example.nasaapodapp">
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="br.com.aleson.nasa.apod.app">
 
-    <dependency>
-        <groupId>
-            com.squareup.retrofit2
-        </groupId>
+    <dist:module dist:instant="true" />
 
-        <artifactId>
-            retrofit
-        </artifactId>
-
-        <version>
-            2.3.0
-        </version>
-    </dependency>
-    <dependency>
-        <groupId>
-            com.squareup.retrofit2
-        </groupId>
-
-        <artifactId>
-            converter-gson
-        </artifactId>
-
-        <version>
-            2.3.0
-        </version>
-    </dependency>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <permission
-        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
-        android:protectionLevel="signature" />
 
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name=".common.application.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icone"
-        android:label="@string/app_name"
+        android:label="NASA-APOD-APP"
         android:roundIcon="@mipmap/icone"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:icon">
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".apod.presentation.MainActivity"
-            android:screenOrientation="user">
+            android:name=".feature.favorite.presentation.FavoriteActivity"
+            android:label="Favorites" />
+        <activity
+            android:name=".feature.profile.ProfileActivity"
+            android:label="Profile" />
+        <activity android:name=".feature.apod.presentation.APODFullscreenActivity" />
+
+        <service android:name=".common.firebase.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/android_icon" />
+
+        <activity android:name=".feature.apod.presentation.APODsActivity" />
+        <activity
+            android:name=".feature.login.presentation.LoginActivity"
+            android:label="NASA APOD App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="213ccff95dc9bde44881cbdbc4b495f2b0f3aa35" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/android_icon" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorPrimary" />
-
-        <activity
-            android:name=".favorites.presentation.FavoritesActivity"
-            android:screenOrientation="user" />
-        <activity
-            android:name=".top.presentation.TopRatedActivity"
-            android:screenOrientation="user" />
-        <activity android:name=".settings.SettingsActivity" />
-        <activity android:name=".about.presentation.AboutActivity" />
-        <activity android:name=".apod.presentation.FullScreenActivity"/>
     </application>
 
 </manifest>
