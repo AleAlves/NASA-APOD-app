@@ -14,12 +14,12 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_apod_menu">
 
-        <br.com.aleson.nasa.apod.app.common.view.APODViewPager
+        <com.aleson.example.nasaapodapp.common.view.APODViewPager
             android:id="@+id/viewpager_apods"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </br.com.aleson.nasa.apod.app.common.view.APODViewPager>
+        </com.aleson.example.nasaapodapp.common.view.APODViewPager>
 
     </ScrollView>
 

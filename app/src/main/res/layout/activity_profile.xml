@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="br.com.aleson.nasa.apod.app.feature.profile.viewmodel.ProfileViewModel" />
+            type="com.aleson.example.nasaapodapp.feature.profile.viewmodel.ProfileViewModel" />
 
         <variable
             name="onServiceVersionLoaded"
