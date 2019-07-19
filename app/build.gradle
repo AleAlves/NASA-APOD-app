@@ -3,19 +3,31 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/Santander/Documents/KeystoreNASA-APOD-APP/Keystore')
+            storePassword 'bAdge1247#'
+            keyAlias = 'key0'
+            keyPassword 'bAdge1247#'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "br.com.aleson.nasa.apod.app"
+        applicationId "com.aleson.example.nasaapodapp"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 300
         versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
         }
     }
 
