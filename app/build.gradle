@@ -3,21 +3,13 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('/Users/Santander/Documents/KeystoreNASA-APOD-APP/Keystore')
-            storePassword 'bAdge1247#'
-            keyAlias = 'key0'
-            keyPassword 'bAdge1247#'
-        }
-    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.aleson.example.nasaapodapp"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 300
-        versionName "3.0.0"
+        versionCode 301
+        versionName "3.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
     }
